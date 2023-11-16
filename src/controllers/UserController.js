@@ -48,9 +48,32 @@ const loginUser = async (req, res) => {
             })
         }
         const response = await UserService.loginUser(req.body)
-        return res.status(200).json(response)
+
+        const { refresh_token, ...newReponse } = response//destructuring
+        res.cookie('refresh_token', refresh_token, {//set cookie
+            httpOnly: true,//client ko thể access cookie
+            secure: false,//https
+            sameSite: 'strict',//ngăn chặn việc truyền cookie giữa các domain khác nhau
+            path: '/',//path
+        })
+        
+        return res.status(200).json({...newReponse, refresh_token})//return response
     } catch (e) {
         return res.status(404).json({ 
+            message: e
+        })
+    }
+}
+
+const logoutUser = async (req, res) => {
+    try {
+        res.clearCookie('refresh_token')
+        return res.status(200).json({
+            status: 'OK',
+            message: 'Logout successfully'
+        })
+    } catch (e) {
+        return res.status(404).json({
             message: e
         })
     }
@@ -146,12 +169,32 @@ const refreshToken = async (req, res) => {
     }
 }
 
+const deleteMany = async (req, res) => {
+    try {
+        const ids = req.body.ids
+        if (!ids) {
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'The ids is required'
+            })
+        }
+        const response = await UserService.deleteManyUser(ids)
+        return res.status(200).json(response)
+    } catch (e) {
+        return res.status(404).json({
+            message: e
+        })
+    }
+}
+
 module.exports = {
     createUser,
     loginUser,
+    logoutUser,
     updateUser,
     deleteUser,
     getAllUser,
     getDetailsUser,
-    refreshToken
+    refreshToken,
+    deleteMany
 }

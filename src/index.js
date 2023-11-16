@@ -4,6 +4,7 @@ const {default : mongoose } = require('mongoose');
 const routes = require('./routes');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser')
 dotenv.config();
 
 const port = process.env.PORT || 3001;
@@ -11,13 +12,17 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.urlencoded({ limit: '50mb' }));
+app.use(bodyParser.json())
+app.use(cookieParser())
 
 routes(app);
-
+ 
 mongoose.connect(process.env.MONGODB_URI)
 .then(() => { 
-    console.log('Connected to the database!');
+    console.log('Connected to the database!'); 
 }) 
+
 .catch((err) => {
     console.log('Cannot connect to the database!', err);
     process.exit();///ấdsad
