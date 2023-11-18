@@ -66,16 +66,16 @@ const loginUser = (userLogin) => {
                 isAdmin : checkUser.isAdmin
             });
 
-            const refresh_token = await generalRefreshToken({
-                id: checkUser._id, 
-                isAdmin : checkUser.isAdmin
-            });
+            // const refresh_token = await generalRefreshToken({
+            //     id: checkUser._id, 
+            //     isAdmin : checkUser.isAdmin
+            // });
 
                 resolve({
                     status: 'success',
                     message: 'User login successfully',
                     access_token,
-                    refresh_token
+                    //refresh_token
                 })
         }catch(error){
             reject(error)

@@ -48,16 +48,7 @@ const loginUser = async (req, res) => {
             })
         }
         const response = await UserService.loginUser(req.body)
-
-        const { refresh_token, ...newReponse } = response//destructuring
-        res.cookie('refresh_token', refresh_token, {//set cookie
-            httpOnly: true,//client ko thể access cookie
-            secure: false,//https
-            sameSite: 'strict',//ngăn chặn việc truyền cookie giữa các domain khác nhau
-            path: '/',//path
-        })
-        
-        return res.status(200).json({...newReponse, refresh_token})//return response
+        return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({ 
             message: e
