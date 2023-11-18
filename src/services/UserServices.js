@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { generalAccessToken, generalRefreshToken } = require('./JwtService');
+const { generalAccessToken } = require('./JwtService');
 
 const createUser = (newUser) => {
     return new Promise(async (resolve, reject) => {
@@ -170,6 +170,46 @@ const getDetailsUser = (id) => {
             })
         }catch(error){
             reject(error) 
+        }
+    })
+}
+const createProduct = (newProduct) => {
+    return new Promise(async (resolve, reject) => {
+        const {name, description, new_price, old_price, image, type, countInStock, rating, discount, selled} = newProduct
+
+        try{
+            const checkProduct = await Product.findOne({
+                name:name
+            });
+
+            if(checkProduct !== null){
+                resolve({
+                    status: 'error',
+                    message: 'Name Product already exists'
+                })
+            }            
+
+            const newProduct = await Product.create({
+                name, 
+                description, 
+                new_price, 
+                old_price, 
+                image, 
+                type, 
+                countInStock: Number(countInStock), 
+                rating, 
+                discount: Number(discount),
+                selled
+            })
+            if(newProduct){
+                resolve({
+                    status: 'success',
+                    message: 'User created successfully',
+                    data: newProduct
+                })
+            }
+        }catch(error){
+            reject(error)
         }
     })
 }
