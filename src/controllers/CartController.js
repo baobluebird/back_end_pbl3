@@ -19,17 +19,17 @@ const addToCart = async (req, res) => {
     }
   };
 
-const getDetailItemOrder = async (req, res) => {
+const getDetailsCart = async (req, res) => {
     try {
-      const name = req.params.name;
-      if (!cartId) {
+      const userId = req.params.id;
+      console.log(userId)
+      if (!userId) {
         return res.status(400).json({
           status: 'ERR',
           message: 'Cart id not found.',
         });
       }
-  
-      const response = await CartService.getDetailItemOrder(cartId);
+      const response = await CartService.getDetailsCart(userId);
       return res.status(200).json(response);
     } catch (e) {
         return res.status(404).json({ 
@@ -38,17 +38,24 @@ const getDetailItemOrder = async (req, res) => {
     }
   };
 
-const deleteItem = async (req, res) => {
+const removeItemFromCart = async (req, res) => {
     try {
-      const itemId = req.params.id;
+      const { cartId, itemId } = req.query
+      console.log(req.query)
+      if (!itemId) {
+        return res.status(400).json({
+          status: 'ERR',
+          message: 'Cart id item not found.',
+        });
+      }
       if (!cartId) {
         return res.status(400).json({
           status: 'ERR',
-          message: 'Cart id not found.',
+          message: 'Cart id cart not found.',
         });
       }
   
-      const response = await CartService.deleteCart(itemId);
+      const response = await CartService.removeItemFromCart(itemId, cartId);
       return res.status(200).json(response);
     } catch (e) {
         return res.status(404).json({ 
@@ -58,5 +65,7 @@ const deleteItem = async (req, res) => {
   };
 module.exports = {
     addToCart,
-    deleteItem,
+    removeItemFromCart,
+    getDetailsCart
 }
+ 

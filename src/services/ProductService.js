@@ -33,7 +33,7 @@ const createProduct = (newProduct) => {
             if(newProduct){
                 resolve({
                     status: 'success',
-                    message: 'User created successfully',
+                    message: 'Product created successfully',
                     data: newProduct
                 })
             }

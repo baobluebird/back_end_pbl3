@@ -1,3 +1,4 @@
+const { resolve } = require("path");
 const Cart = require("../models/CartModel");
 const Product = require("../models/ProductModel");
 const User = require("../models/UserModel");
@@ -77,28 +78,61 @@ const addToCart = ({ newCart }) => {
 };
 
 
-const deleteCart = async (cartId) => {
+const removeItemFromCart = async (itemId, cartId) => {
+    console.log("cartId", cartId);
+    console.log("itemId", itemId);
     try {
-        const cart = await Cart.findById(cartId);
+      const updatedCart = await Cart.findByIdAndUpdate(
+        cartId,
+        {
+          $pull: { orderItems: { _id: itemId } },
+        },
+        { new: true }
+      );
+  
+      if (!updatedCart) {
+        console.log("Cart not found");
+        return {
+            status: "error",
+            message: "Cart not found",
+        };
+      }
+  
+      console.log("Item removed from cart:", updatedCart);
+      return {
+        status: "success",
+        message: "Item removed from cart successfully",
+        updatedCart
+    };
+    } catch (e) {
+        throw e;
+    }
+  };
 
-        if (!cart) {
+
+const getDetailsCart = (id) => {
+return new Promise(async (resolve, reject) => {
+    try {
+        const cart = await Cart.findOne({user : id});
+        if (cart==null) {
             resolve({
                 status: 'error',
                 message: 'Not found user or product'
             })
         }
-
-
-        return {
+        console.log('cart',cart)
+        resolve ({
             status: "success",
-            message: "Cart deleted successfully",
-        };
+            message: "Cart details",
+            data: cart
+        });
     } catch (error) {
         reject(error)
     }
+    })
 }
-
 module.exports = {
     addToCart,
-    deleteCart,
+    removeItemFromCart,
+    getDetailsCart
 };
