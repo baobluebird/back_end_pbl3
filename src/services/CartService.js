@@ -10,7 +10,7 @@ const addToCart = ({ newCart }) => {
 
             const user = await User.findById(userID);
             const product = await Product.findById(productID);
-
+            console.log("product", product);
             if (!user) {
                 reject({
                     status: 'error',
@@ -34,9 +34,11 @@ const addToCart = ({ newCart }) => {
                 name: product.name,
                 amount: 1,
                 image: product.image,
+                new_price: product.new_price,
                 price: product.new_price,
+                old_price: product.old_price,
                 discount: product.discount,
-                product: productID,
+                product: product,
             };
 
             let userOrder = await Cart.findOne({ user: userID });
