@@ -22,7 +22,7 @@ const createUser = (newUser) => {
             
 
             const createUser = await User.create({
-                name, 
+                name,  
                 email,
                 password: hashPassword,
                 confirmPassword: hashPassword,
@@ -173,46 +173,7 @@ const getDetailsUser = (id) => {
         }
     })
 }
-const createProduct = (newProduct) => {
-    return new Promise(async (resolve, reject) => {
-        const {name, description, new_price, old_price, image, type, countInStock, rating, discount, selled} = newProduct
 
-        try{
-            const checkProduct = await Product.findOne({
-                name:name
-            });
-
-            if(checkProduct !== null){
-                resolve({
-                    status: 'error',
-                    message: 'Name Product already exists'
-                })
-            }            
-
-            const newProduct = await Product.create({
-                name, 
-                description, 
-                new_price, 
-                old_price, 
-                image, 
-                type, 
-                countInStock: Number(countInStock), 
-                rating, 
-                discount: Number(discount),
-                selled
-            })
-            if(newProduct){
-                resolve({
-                    status: 'success',
-                    message: 'User created successfully',
-                    data: newProduct
-                })
-            }
-        }catch(error){
-            reject(error)
-        }
-    })
-}
 
 const deleteManyUser = (ids) => {
     return new Promise(async (resolve, reject) => {
