@@ -89,10 +89,30 @@ const addItemFromCart = async (req, res) => {
       })
   }
 };
+
+const deleteCart = async (req, res) => {
+  try {
+    const cartId = req.params.id;
+    console.log(cartId)
+    if (!cartId) {
+      return res.status(400).json({
+        status: 'ERR',
+        message: 'Cart id not found.',
+      });
+    }
+    const response = await CartService.deleteCart(cartId);
+    return res.status(200).json(response);
+  } catch (e) {
+      return res.status(404).json({ 
+          message: e
+      })
+  }
+};
 module.exports = {
     addToCart,
     removeItemFromCart,
     addItemFromCart,
-    getDetailsCart
+    getDetailsCart,
+    deleteCart
 }
  
