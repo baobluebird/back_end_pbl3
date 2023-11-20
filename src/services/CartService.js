@@ -175,7 +175,6 @@ const deleteItemFromCart = async (cartId, productId) => {
     try {
         const cart = await Cart.findById(cartId);
         const itemIndex = cart.orderItems.findIndex(item => item.product.toString() === productId);
-        console.log('itemIndex',itemIndex)
         if (itemIndex === -1) {
             reject({
                 status: "error",
@@ -224,7 +223,6 @@ const getDetailsCart = (id) => {
                 return;
             }
 
-            console.log('cart', cart);
             resolve({
                 status: 'success',
                 message: 'Cart details',

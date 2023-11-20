@@ -1,0 +1,98 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Product</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <div class="topnav">
+        <a href="/admin/user">Home</a>
+        <a href="/admin/user/create">Create Users</a>
+        <a href="/admin/product/">Home Products</a>
+        <a class="active" href="/admin/product/create">Create Product</a>
+    </div>
+    <div class="form-add-new">
+        <form action="/admin/product/create-product" method="post">
+            <fieldset>
+                <legend>Add new Product:</legend>
+                <div class="input-group">
+                    <label>
+                        Name:
+                    </label>
+                    <input type="text" name="name" />
+                </div>
+
+                <div class="input-group">
+                    <label>
+                        Description:
+                    </label>
+                    <input type="text" name="description" />
+                </div>
+
+                <div class="input-group">
+                    <label>
+                        New price:
+                    </label>
+                    <input type="text" name="new_price" />
+                </div>
+
+                <div class="input-group">
+                    <label>
+                        Old Price:
+                    </label>
+                    <input type="text" name="old_price" />
+                </div>
+
+                <div class="input-group">
+                    <label>
+                        Image:
+                    </label>
+                    <input type="text" name="image" />
+                </div>
+
+                <div class="input-group">
+                    <label>
+                        Type:
+                    </label>
+                    <input type="text" name="type" />
+                </div>
+
+                <div class="input-group">
+                    <label>
+                        Count In Stock:
+                    </label>
+                    <input type="text" name="countInStock" />
+                </div>
+
+                <div class="input-group">
+                    <label>
+                        Rating:
+                    </label>
+                    <input type="text" name="rating" />
+                </div>
+
+                <div class="input-group">
+                    <label>
+                        Discount:
+                    </label>
+                    <input type="text" name="discount" />
+                </div>
+
+                <div class="input-group">
+                    <label>
+                        Selled:
+                    </label>
+                    <input type="text" name="selled" />
+                </div>
+                <div>
+                    <button onclick="alert('Create product successfully')"> Save </button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</body>
+
+</html>

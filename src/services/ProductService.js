@@ -30,6 +30,7 @@ const createProduct = (newProduct) => {
                 discount: Number(discount),
                 selled
             })
+            
             if(newProduct){
                 resolve({
                     status: 'success',

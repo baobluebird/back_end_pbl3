@@ -1,0 +1,143 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update A Product</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <div class="topnav">
+        <a href="/admin/user">Home</a>
+        <a href="/admin/user/create">Create Users</a>
+        <a href="/admin/product">Home Products</a>
+        <a href="/admin/product/create">Create Product</a>
+    </div>
+    <div class="form-add-new">
+        <form action="/admin/product/update-product" method="post">
+            <fieldset>
+                <legend>Update Product:</legend>
+
+                <div class="input-group d-none">
+                    <label>
+                        ID:
+                    </label>
+                    <input 
+                    type="text" 
+                    name="productId" 
+                    value="<%= productEdit.id %>"
+                    />
+                </div>
+
+                <div class="input-group">
+                    <label>
+                        Name:
+                    </label>
+                    <input 
+                    type="text" 
+                    name="name" 
+                    value="<%= productEdit.name %>"
+                    />
+                </div>
+
+                <div class="input-group">
+                    <label>
+                        Description:
+                    </label>
+                    <input 
+                    type="text" 
+                    name="description" 
+                    value="<%= productEdit.description %>"
+                    />
+                </div>
+                <div class="input-group">
+                    <label>
+                        New Price:
+                    </label>
+                    <input 
+                    type="text" 
+                    name="new_price" 
+                    value="<%= productEdit.new_price %>"
+                    />
+                </div>
+                <div class="input-group">
+                    <label>
+                        Old Price:
+                    </label>
+                    <input 
+                    type="text" 
+                    name="old_price" 
+                    value="<%= productEdit.old_price %>"
+                    />
+                </div>
+                <div class="input-group">
+                    <label>
+                        Image:
+                    </label>
+                    <input 
+                    type="text" 
+                    name="image" 
+                    value="<%= productEdit.image %>"
+                    />
+                </div>
+                <div class="input-group">
+                    <label>
+                        Type:
+                    </label>
+                    <input 
+                    type="text" 
+                    name="type" 
+                    value="<%= productEdit.type %>"
+                    />
+                </div>
+                <div class="input-group">
+                    <label>
+                        Count In Stock:
+                    </label>
+                    <input 
+                    type="text" 
+                    name="countInStock" 
+                    value="<%= productEdit.countInStock %>"
+                    />
+                </div>
+                <div class="input-group">
+                    <label>
+                        Rating:
+                    </label>
+                    <input 
+                    type="text" 
+                    name="rating" 
+                    value="<%= productEdit.rating %>"
+                    />
+                </div>
+                <div class="input-group">
+                    <label>
+                        Discount:
+                    </label>
+                    <input 
+                    type="text" 
+                    name="discount" 
+                    value="<%= productEdit.discount %>"
+                    />
+                </div>
+                <div class="input-group">
+                    <label>
+                        Selled:
+                    </label>
+                    <input 
+                    type="text" 
+                    name="selled" 
+                    value="<%= productEdit.selled %>"
+                    />
+                </div>
+                
+                <div>
+                    <button onclick="alert('Update product successfully')"> Save </button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</body>
+
+</html>

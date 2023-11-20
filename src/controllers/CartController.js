@@ -22,7 +22,6 @@ const addToCart = async (req, res) => {
 const getDetailsCart = async (req, res) => {
     try {
       const userId = req.params.id;
-      console.log(userId)
       if (!userId) {
         return res.status(400).json({
           status: 'ERR',
@@ -94,8 +93,6 @@ const deleteItemFromCart = async (req, res) => {
   try {
     const cartId = req.params.id
     const productId = req.body.productId  
-    console.log(cartId)
-    console.log(productId)
     if (!productId) {
       return res.status(400).json({
         status: 'ERR',
@@ -121,7 +118,6 @@ const deleteItemFromCart = async (req, res) => {
 const deleteCart = async (req, res) => {
   try {
     const cartId = req.params.id;
-    console.log(cartId)
     if (!cartId) {
       return res.status(400).json({
         status: 'ERR',

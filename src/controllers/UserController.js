@@ -3,10 +3,10 @@ const JwtService = require('../services/JwtService');
 
 const createUser = async (req, res) => {
     try {
-        const { name, email, password, confirmPassword, phone } = req.body
+        const { name, email, password, confirmPassword, phone,address } = req.body
         const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
         const isCheckEmail = reg.test(email)
-        if (!name || !email || !password || !confirmPassword || !phone) {
+        if (!name || !email || !password || !confirmPassword || !phone || !address) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The input is required'
@@ -80,7 +80,6 @@ const updateUser = async (req, res) => {
                 message: 'The input is required'
             })
         }
-        console.log('userId', userId)
         const response = await UserService.updateUser(userId, data)
         return res.status(200).json(response)
     } catch (e) {
@@ -99,7 +98,6 @@ const deleteUser = async (req, res) => {
                 message: 'The input is required'
             })
         }
-        console.log('Delete userId:', userId)
         const response = await UserService.deleteUser(userId)
         return res.status(200).json(response)
     } catch (e) {
@@ -132,6 +130,26 @@ const getDetailsUser = async (req, res) => {
         }
 
         const response = await UserService.getDetailsUser(userId)
+        return res.status(200).json(response)
+    } catch (e) {
+        return res.status(404).json({ 
+            message: e
+        })
+    }
+}
+
+const getDetailsUserWithCart = async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        if(!userId){
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'The input is required'
+            })
+        }
+
+        const response = await UserService.getDetailsUserWithCart(userId)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({ 
@@ -187,5 +205,6 @@ module.exports = {
     getAllUser,
     getDetailsUser,
     refreshToken,
-    deleteMany
+    deleteMany,
+    getDetailsUserWithCart
 }

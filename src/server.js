@@ -6,6 +6,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 dotenv.config();
 
+const configViewEngine = require('./config/viewEngine');
 const port = process.env.PORT || 3001;
 const app = express();
 
@@ -15,11 +16,13 @@ app.use(express.urlencoded({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
+app.use(express.static('public'))
+configViewEngine(app); 
 
 routes(app);
- 
-mongoose.connect(process.env.MONGODB_URI)
-.then(() => { 
+
+mongoose.connect(process.env.MONGODB_URI) 
+.then(() => {  
     console.log('Connected to the database!'); 
 }) 
 
@@ -32,4 +35,4 @@ mongoose.connect(process.env.MONGODB_URI)
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}.`);
-});    
+});     

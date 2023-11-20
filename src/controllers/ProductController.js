@@ -4,7 +4,6 @@ const createProduct = async (req, res) => {
     try {
         const {name, description, new_price, old_price, image, type, countInStock, rating, discount, selled} = req.body
 
-        console.log('req.body', req.body)
 
         if (!name || !description || !new_price || !old_price || !image || !type || !countInStock || !rating || !discount || !selled) {
             return res.status(200).json({
@@ -14,7 +13,6 @@ const createProduct = async (req, res) => {
         }
         
         const response = await ProductService.createProduct(req.body)
-        console.log('response', response)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({ 
@@ -33,7 +31,6 @@ const updateProduct = async (req, res) => {
                 message: 'The input is required'
             })
         }
-        console.log('userId', productId)
         const response = await ProductService.updateProduct(productId, data)
         return res.status(200).json(response)
     } catch (e) {
@@ -72,7 +69,6 @@ const deleteProduct = async (req, res) => {
                 message: 'The input is required'
             })
         }
-        console.log('productId', productId)
         const response = await ProductService.deleteProduct(productId)
         return res.status(200).json(response)
     } catch (e) {

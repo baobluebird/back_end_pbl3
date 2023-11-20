@@ -2,12 +2,11 @@ const User = require('../models/UserModel');
 const dotenv = require('dotenv');
 dotenv.config();
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const { generalAccessToken } = require('./JwtService');
 
-const createUser = (newUser) => {
-    return new Promise(async (resolve, reject) => {
-        const {name, email, password, confirmPassword, phone, address} = newUser;
+const createUser = async (newUser) => {
+
+        const {name, email, password, confirmPassword, phone} = newUser;
 
         try{
             const checkUser = await User.findOne({email:email});
@@ -17,29 +16,18 @@ const createUser = (newUser) => {
                     message: 'Email already exists'
                 })
             }
-
             const hashPassword = await bcrypt.hash(password, 10);
-            
- 
-            const createUser = await User.create({
+            await User.create({
                 name,  
                 email,
                 password: hashPassword,
                 confirmPassword: hashPassword,
-                phone,
-                address
+                phone
             })
-            if(createUser){
-                resolve({
-                    status: 'success',
-                    message: 'User created successfully',
-                    data: createUser
-                })
-            }
+
         }catch(error){
-            reject(error)
+           return error
         }
-    })
 }
 
 const loginUser = (userLogin) => {
@@ -84,66 +72,28 @@ const loginUser = (userLogin) => {
     })
 }
 
-const updateUser = (id,data) => {
-    return new Promise(async (resolve, reject) => {
+const updateUser = async (id,data) => {
         try{
-            const checkUser = await User.findOne({
-                _id:id
-            })
-
-            if(checkUser == null){
-                resolve({
-                    status: 'error',
-                    message: 'The user is not exist'
-                })
-            }
-
-            const updatedUser = await User.findByIdAndUpdate(id,data, {new: true})
-                resolve({
-                    status: 'success',
-                    message: 'User update successfully',
-                    data: updatedUser
-                })
+        await User.findByIdAndUpdate(id,data, {new: true})
         }catch(error){
-            reject(error) 
+            return error
         }
-    })
 }
 
-const deleteUser = (id) => {
-    return new Promise(async (resolve, reject) => {
-        try{
-            const checkUser = await User.findOne({
-                _id:id
-            })
-
-            if(checkUser == null){
-                resolve({
-                    status: 'error',
-                    message: 'The user is not exist'
-                })
-            }
-
-            await User.findByIdAndDelete(id)
-                resolve({
-                    status: 'success',
-                    message: 'User delete successfully',
-                })
-        }catch(error){
-            reject(error) 
-        }
-    })
+const deleteUser = async (id) => {
+    try{
+     await User.findByIdAndDelete(id)
+    }
+    catch(error){
+        return error
+    }
 }
 
 const getAllUser = () => {
     return new Promise(async (resolve, reject) => {
         try{
             const allUser = await User.find()
-                resolve({
-                    status: 'success',
-                    message: 'Get all user successfully',
-                    data: allUser
-                })
+                resolve(allUser)
         }catch(error){
             reject(error) 
         }
@@ -164,47 +114,13 @@ const getDetailsUser = (id) => {
                 })
             }
 
-            resolve({
-                status: 'success',
-                message: 'Get detail user id:' + id +  ' successfully',
-                data: user
-            })
+            resolve(user)
         }catch(error){
             reject(error) 
         }
     })
 }
 
-const getDetailsUserWithCart = async (id) => {
-    try {
-        const userWithCarts = await User.findById(id).populate({
-            path: 'carts',
-            populate: {
-                path: 'orderItems.product',
-                model: 'Product'
-            }
-        });
-
-        if (!userWithCarts) {
-            return {
-                status: 'error',
-                message: 'The user does not exist',
-            };
-        }
-
-        return {
-            status: 'success',
-            message: `Get detail user id: ${id} successfully`,
-            data: userWithCarts.carts,
-        };
-    } catch (error) {
-        return {
-            status: 'error',
-            message: 'An error occurred while fetching user details',
-            error: error.message,
-        };
-    }
-};
 
 const deleteManyUser = (ids) => {
     return new Promise(async (resolve, reject) => {
@@ -228,6 +144,5 @@ module.exports = {
     deleteUser,
     getAllUser,
     getDetailsUser,
-    deleteManyUser,
-    getDetailsUserWithCart
+    deleteManyUser
 }
