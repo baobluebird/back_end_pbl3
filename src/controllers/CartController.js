@@ -41,8 +41,8 @@ const getDetailsCart = async (req, res) => {
 const removeItemFromCart = async (req, res) => {
     try {
       const cartId = req.params.id
-      const itemId = req.body.itemId  
-      if (!itemId) {
+      const productId = req.body.productId  
+      if (!productId) {
         return res.status(400).json({
           status: 'ERR',
           message: 'Cart id item not found.',
@@ -55,7 +55,7 @@ const removeItemFromCart = async (req, res) => {
         });
       }
   
-      const response = await CartService.removeItemFromCart(itemId, cartId);
+      const response = await CartService.removeItemFromCart(productId, cartId);
       return res.status(200).json(response);
     } catch (e) {
         return res.status(404).json({ 

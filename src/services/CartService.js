@@ -38,7 +38,7 @@ const addToCart = ({ newCart }) => {
                 price: product.new_price,
                 old_price: product.old_price,
                 discount: product.discount,
-                product: product,
+                product: product._id,
             };
 
             let userOrder = await Cart.findOne({ user: userID });
@@ -80,7 +80,7 @@ const addToCart = ({ newCart }) => {
 };
 
 
-const removeItemFromCart = async (itemId, cartId) => {
+const removeItemFromCart = async (productId, cartId) => {
     return new Promise(async (resolve, reject) => {
     try {
         const cart = await Cart.findById(cartId);
@@ -92,8 +92,7 @@ const removeItemFromCart = async (itemId, cartId) => {
             });
         }
 
-        const itemIndex = cart.orderItems.findIndex(item => item._id.toString() === itemId);
-
+        const itemIndex = cart.orderItems.findIndex(item => item.product.toString() === productId);
         if (itemIndex === -1) {
             reject({
                 status: "error",
@@ -221,4 +220,4 @@ module.exports = {
     addItemFromCart,
     getDetailsCart,
     deleteCart
-};
+}; 
