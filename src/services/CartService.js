@@ -172,11 +172,8 @@ const increaseAmountItemFromCart = async (cartId, productId) => {
 
 const deleteItemFromCart = async (cartId, productId) => {
     return new Promise(async (resolve, reject) => {
-        console.log('cartId',cartId)
-        console.log('productId',productId)
     try {
         const cart = await Cart.findById(cartId);
-        console.log('cart',cart)    
         const itemIndex = cart.orderItems.findIndex(item => item.product.toString() === productId);
         console.log('itemIndex',itemIndex)
         if (itemIndex === -1) {
@@ -210,12 +207,24 @@ const getDetailsCart = (id) => {
 return new Promise(async (resolve, reject) => { 
     try {
         const cart = await Cart.findOne({user : id});
+
         if (cart==null) {
             resolve({
                 status: 'error',
                 message: 'User not have a cart'
             })
         }
+
+        const itemIndex = cart.orderItems.findIndex(item => item.product.toString() === productId);
+        console.log('itemIndex',itemIndex)
+        if (itemIndex === -1) {
+            reject({
+                status: "error",
+                message: "Empty cart",
+            });
+        }
+
+       
         console.log('cart',cart)
         resolve ({
             status: "success",
