@@ -38,7 +38,7 @@ const getDetailsCart = async (req, res) => {
     }
   };
 
-const removeItemFromCart = async (req, res) => {
+const decreaseAmountItemFromCart = async (req, res) => {
     try {
       const cartId = req.params.id
       const productId = req.body.productId  
@@ -55,7 +55,7 @@ const removeItemFromCart = async (req, res) => {
         });
       }
   
-      const response = await CartService.removeItemFromCart(productId, cartId);
+      const response = await CartService.decreaseAmountItemFromCart(cartId,productId);
       return res.status(200).json(response);
     } catch (e) {
         return res.status(404).json({ 
@@ -64,11 +64,11 @@ const removeItemFromCart = async (req, res) => {
     }
 };
 
-const addItemFromCart = async (req, res) => {
+const increaseAmountItemFromCart = async (req, res) => {
   try {
     const cartId = req.params.id
-    const itemId = req.body.itemId  
-    if (!itemId) {
+    const productId = req.body.productId  
+    if (!productId) {
       return res.status(400).json({
         status: 'ERR',
         message: 'Cart id item not found.',
@@ -81,7 +81,35 @@ const addItemFromCart = async (req, res) => {
       });
     }
 
-    const response = await CartService.addItemFromCart(itemId, cartId);
+    const response = await CartService.increaseAmountItemFromCart(cartId,productId);
+    return res.status(200).json(response);
+  } catch (e) {
+      return res.status(404).json({ 
+          message: e
+      })
+  }
+};
+
+const deleteItemFromCart = async (req, res) => {
+  try {
+    const cartId = req.params.id
+    const productId = req.body.productId  
+    console.log(cartId)
+    console.log(productId)
+    if (!productId) {
+      return res.status(400).json({
+        status: 'ERR',
+        message: 'Cart id item not found.',
+      });
+    }
+    if (!cartId) {
+      return res.status(400).json({
+        status: 'ERR',
+        message: 'Cart id cart not found.',
+      });
+    }
+
+    const response = await CartService.deleteItemFromCart( cartId, productId);
     return res.status(200).json(response);
   } catch (e) {
       return res.status(404).json({ 
@@ -110,8 +138,9 @@ const deleteCart = async (req, res) => {
 };
 module.exports = {
     addToCart,
-    removeItemFromCart,
-    addItemFromCart,
+    decreaseAmountItemFromCart,
+    increaseAmountItemFromCart,
+    deleteItemFromCart,
     getDetailsCart,
     deleteCart
 }

@@ -4,8 +4,9 @@ const CartController = require('../../controllers/CartController');
 //const { authMiddleware, authUserMiddleware} = require('../middleware/authMiddleware');
 
 router.post('/add-to-cart', CartController.addToCart);
-router.delete('/delete-item/:id', CartController.removeItemFromCart);
-router.put('/add-item/:id', CartController.addItemFromCart);
+router.delete('/decrease-amount/:id', CartController.decreaseAmountItemFromCart);
+router.put('/increase-amount/:id', CartController.increaseAmountItemFromCart);
+router.delete('/delete-item/:id', CartController.deleteItemFromCart);
 router.get('/get-details-cart/:id', CartController.getDetailsCart);
 router.delete('/delete-cart/:id', CartController.deleteCart);
 

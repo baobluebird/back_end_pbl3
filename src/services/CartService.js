@@ -80,7 +80,7 @@ const addToCart = ({ newCart }) => {
 };
 
 
-const removeItemFromCart = async (productId, cartId) => {
+const decreaseAmountItemFromCart = async (cartId, productId) => {
     return new Promise(async (resolve, reject) => {
     try {
         const cart = await Cart.findById(cartId);
@@ -127,7 +127,7 @@ const removeItemFromCart = async (productId, cartId) => {
     });
 };
 
-const addItemFromCart = async (itemId, cartId) => {
+const increaseAmountItemFromCart = async (cartId, productId) => {
     return new Promise(async (resolve, reject) => {
     try {
         const cart = await Cart.findById(cartId);
@@ -139,7 +139,7 @@ const addItemFromCart = async (itemId, cartId) => {
             });
         }
 
-        const itemIndex = cart.orderItems.findIndex(item => item._id.toString() === itemId);
+        const itemIndex = cart.orderItems.findIndex(item => item.product.toString() === productId);
 
         if (itemIndex === -1) {
             reject({
@@ -170,6 +170,42 @@ const addItemFromCart = async (itemId, cartId) => {
     });
 };
 
+const deleteItemFromCart = async (cartId, productId) => {
+    return new Promise(async (resolve, reject) => {
+        console.log('cartId',cartId)
+        console.log('productId',productId)
+    try {
+        const cart = await Cart.findById(cartId);
+        console.log('cart',cart)    
+        const itemIndex = cart.orderItems.findIndex(item => item.product.toString() === productId);
+        console.log('itemIndex',itemIndex)
+        if (itemIndex === -1) {
+            reject({
+                status: "error",
+                message: "Product not found in the cart",
+            });
+        }
+        cart.orderItems.splice(itemIndex, 1);
+
+        cart.totalItems = cart.orderItems.reduce((total, item) => total + item.amount, 0);
+        cart.itemsPrice = cart.orderItems.reduce((total, item) => total + item.new_price * item.amount, 0);
+        cart.totalPrice = cart.orderItems.reduce((total, item) => {
+            const itemTotalPrice = item.new_price * item.amount * ((100 - item.discount) / 100);
+            return isNaN(itemTotalPrice) ? total : total + itemTotalPrice;
+        }, 0);
+        await cart.save();
+        resolve({ 
+            status: "success",
+            message: "Item removed from cart successfully",
+            updatedCart: cart,
+        });
+    } catch (error) {
+        reject(error)
+    }
+});
+}
+
+
 const getDetailsCart = (id) => {
 return new Promise(async (resolve, reject) => { 
     try {
@@ -177,7 +213,7 @@ return new Promise(async (resolve, reject) => {
         if (cart==null) {
             resolve({
                 status: 'error',
-                message: 'Not found user or product'
+                message: 'User not have a cart'
             })
         }
         console.log('cart',cart)
@@ -216,8 +252,9 @@ const deleteCart = (id) => {
 
 module.exports = {
     addToCart,
-    removeItemFromCart,
-    addItemFromCart,
+    decreaseAmountItemFromCart,
+    increaseAmountItemFromCart,
+    deleteItemFromCart,
     getDetailsCart,
     deleteCart
 }; 
