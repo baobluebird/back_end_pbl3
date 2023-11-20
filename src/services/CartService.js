@@ -34,9 +34,11 @@ const addToCart = ({ newCart }) => {
                 name: product.name,
                 amount: 1,
                 image: product.image,
+                new_price: product.new_price,
                 price: product.new_price,
+                old_price: product.old_price,
                 discount: product.discount,
-                product: productID,
+                product: product,
             };
 
             let userOrder = await Cart.findOne({ user: userID });
@@ -79,39 +81,98 @@ const addToCart = ({ newCart }) => {
 
 
 const removeItemFromCart = async (itemId, cartId) => {
-    console.log("cartId", cartId);
-    console.log("itemId", itemId);
+    return new Promise(async (resolve, reject) => {
     try {
-      const updatedCart = await Cart.findByIdAndUpdate(
-        cartId,
-        {
-          $pull: { orderItems: { _id: itemId } },
-        },
-        { new: true }
-      );
-  
-      if (!updatedCart) {
-        console.log("Cart not found");
-        return {
-            status: "error",
-            message: "Cart not found",
-        };
-      }
-  
-      console.log("Item removed from cart:", updatedCart);
-      return {
-        status: "success",
-        message: "Item removed from cart successfully",
-        updatedCart
-    };
-    } catch (e) {
-        throw e;
-    }
-  };
+        const cart = await Cart.findById(cartId);
 
+        if (!cart) {
+            reject({
+                status: "error",
+                message: "Cart not found",
+            });
+        }
+
+        const itemIndex = cart.orderItems.findIndex(item => item._id.toString() === itemId);
+
+        if (itemIndex === -1) {
+            reject({
+                status: "error",
+                message: "Item not found in the cart",
+            });
+        }
+
+        if (cart.orderItems[itemIndex].amount > 1) {
+            cart.orderItems[itemIndex].amount -= 1;
+        } else {
+            cart.orderItems.splice(itemIndex, 1);
+        }
+
+        cart.totalItems = cart.orderItems.reduce((total, item) => total + item.amount, 0);
+        cart.itemsPrice = cart.orderItems.reduce((total, item) => total + item.new_price * item.amount, 0);
+
+        cart.totalPrice = cart.orderItems.reduce((total, item) => {
+            const itemTotalPrice = item.new_price * item.amount * ((100 - item.discount) / 100);
+            return isNaN(itemTotalPrice) ? total : total + itemTotalPrice;
+        }, 0);
+
+        await cart.save();
+
+        resolve({
+            status: "success",
+            message: "Item removed from cart successfully",
+            updatedCart: cart,
+        });
+    } catch (error) {
+        reject(error)
+    }
+    });
+};
+
+const addItemFromCart = async (itemId, cartId) => {
+    return new Promise(async (resolve, reject) => {
+    try {
+        const cart = await Cart.findById(cartId);
+
+        if (!cart) {
+            reject({
+                status: "error",
+                message: "Cart not found",
+            });
+        }
+
+        const itemIndex = cart.orderItems.findIndex(item => item._id.toString() === itemId);
+
+        if (itemIndex === -1) {
+            reject({
+                status: "error",
+                message: "Item not found in the cart",
+            });
+        }
+
+        cart.orderItems[itemIndex].amount += 1;
+        cart.totalItems = cart.orderItems.reduce((total, item) => total + item.amount, 0);
+        cart.itemsPrice = cart.orderItems.reduce((total, item) => total + item.new_price * item.amount, 0);
+
+        cart.totalPrice = cart.orderItems.reduce((total, item) => {
+            const itemTotalPrice = item.new_price * item.amount * ((100 - item.discount) / 100);
+            return isNaN(itemTotalPrice) ? total : total + itemTotalPrice;
+        }, 0);
+
+        await cart.save();
+
+        resolve({
+            status: "success",
+            message: "Item removed from cart successfully",
+            updatedCart: cart,
+        });
+    } catch (error) {
+        reject(error)
+    }
+    });
+};
 
 const getDetailsCart = (id) => {
-return new Promise(async (resolve, reject) => {
+return new Promise(async (resolve, reject) => { 
     try {
         const cart = await Cart.findOne({user : id});
         if (cart==null) {
@@ -130,9 +191,34 @@ return new Promise(async (resolve, reject) => {
         reject(error)
     }
     })
-}
+};
+
+const deleteCart = (id) => {
+    return new Promise(async (resolve, reject) => { 
+        try {
+            const cart = await Cart.findOne({_id : id});
+            if (cart==null) {
+                resolve({
+                    status: 'error',
+                    message: 'Not found cart'
+                })
+            }
+            await Cart.findByIdAndDelete(id)
+            resolve ({
+                status: "success",
+                message: "Cart details",
+                data: cart
+            });
+        } catch (error) {
+            reject(error)
+        }
+        })
+};
+
 module.exports = {
     addToCart,
     removeItemFromCart,
-    getDetailsCart
+    addItemFromCart,
+    getDetailsCart,
+    deleteCart
 };
