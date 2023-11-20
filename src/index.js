@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const {default : mongoose } = require('mongoose');
-const routes = require('./routes/api');
+const routes = require('./routes/api/api');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 dotenv.config();
