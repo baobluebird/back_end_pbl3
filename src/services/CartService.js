@@ -204,38 +204,38 @@ const deleteItemFromCart = async (cartId, productId) => {
 
 
 const getDetailsCart = (id) => {
-return new Promise(async (resolve, reject) => { 
-    try {
-        const cart = await Cart.findOne({user : id});
+    return new Promise(async (resolve, reject) => {
+        try {
+            const cart = await Cart.findOne({ user: id });
 
-        if (cart==null) {
+            if (!cart) {
+                resolve({
+                    status: 'error',
+                    message: 'User does not have a cart',
+                });
+                return;
+            }
+
+            if (!cart.orderItems || cart.orderItems.length === 0) {
+                resolve({
+                    status: 'error',
+                    message: 'Empty cart',
+                });
+                return;
+            }
+
+            console.log('cart', cart);
             resolve({
-                status: 'error',
-                message: 'User not have a cart'
-            })
-        }
-
-        const itemIndex = cart.orderItems.findIndex(item => item.product.toString() === productId);
-        console.log('itemIndex',itemIndex)
-        if (itemIndex === -1) {
-            reject({
-                status: "error",
-                message: "Empty cart",
+                status: 'success',
+                message: 'Cart details',
+                data: cart,
             });
+        } catch (error) {
+            reject(error);
         }
-
-       
-        console.log('cart',cart)
-        resolve ({
-            status: "success",
-            message: "Cart details",
-            data: cart
-        });
-    } catch (error) {
-        reject(error)
-    }
-    })
+    });
 };
+
 
 const deleteCart = (id) => {
     return new Promise(async (resolve, reject) => { 
