@@ -112,7 +112,6 @@ const createOrder = (userId, newOrder) => {
         }
     })
 }
-
 // const deleteManyProduct = (ids) => {
 //     return new Promise(async (resolve, reject) => {
 //         try {
@@ -156,7 +155,7 @@ const getOrderDetails = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
             const order = await Order.findById({
-                user: id
+                _id: id
             })
             if (order === null) {
                 resolve({
@@ -177,11 +176,25 @@ const getOrderDetails = (id) => {
     })
 }
 
-const cancelOrderDetails = (id, data) => {
+const cancelOrderDetails = (orderId, userId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let order = []
-            const promises = data.map(async (order) => {
+            const cart = await Cart.findOne({ user: userId });
+            if(!cart){
+                reject({
+                    status:'error',
+                    message:'This user dont have a cart'
+                })
+            }
+            const orderItems = cart.orderItems
+
+            if(orderItems.length === 0){
+                reject({
+                    status:'error',
+                    message:'This user have not oder items'
+                })
+            }
+            const promises = orderItems.map(async (order) => {
                 const productData = await Product.findOneAndUpdate(
                     {
                     _id: order.product,
@@ -194,18 +207,11 @@ const cancelOrderDetails = (id, data) => {
                     {new: true}
                 )
                 if(productData) {
-                    order = await Order.findByIdAndDelete(id)
-                    if (order === null) {
-                        resolve({
-                            status: 'ERR',
-                            message: 'The order is not defined'
-                        })
-                    }
+                    await Order.findByIdAndDelete(orderId)
                 } else {
                     return{
                         status: 'OK',
                         message: 'ERR',
-                        id: order.product
                     }
                 }
             })
@@ -220,8 +226,8 @@ const cancelOrderDetails = (id, data) => {
             }
             resolve({
                 status: 'OK',
-                message: 'success',
-                data: order
+                message: 'successfully cancel order',
+                //data: order
             })
         } catch (e) {
             reject(e)
