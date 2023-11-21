@@ -4,6 +4,8 @@ dotenv.config()
 var inlineBase64 = require('nodemailer-plugin-inline-base64');
 
 const sendEmailCreateOrder = async (email,orderItems) => {
+  console.log(process.env.MAIL_ACCOUNT)
+  console.log(process.env.MAIL_PASSWORD)
   let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,

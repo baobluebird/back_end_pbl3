@@ -5,14 +5,14 @@ const createOrder = async (req, res) => {
         const userId = req.params.id
         const {fullname , addressUser, email, phone, noteUser, shippingMethod, addressShipping, cityShipping, AddressShop, CityShop, noteShipping} = req.body
         if(shippingMethod === "nhan tai cua hang"){
-            if (!fullname || !addressUser || !email || !phone || !noteUser || !shippingMethod ||!AddressShop ||!CityShop || !noteShipping) {
+            if (!fullname || !addressUser || !email || !phone || !shippingMethod ||!AddressShop ||!CityShop) {
                 return res.status(200).json({
                     status: 'ERR',
                     message: 'The input is required'
                 })
             }
         }else{
-            if (!fullname || !addressUser || !email || !phone || !noteUser || !shippingMethod || !addressShipping || !cityShipping || !noteShipping) {
+            if (!fullname || !addressUser || !email || !phone || !shippingMethod || !addressShipping || !cityShipping ) {
                 return res.status(200).json({
                     status: 'ERR',
                     message: 'The input is required'
