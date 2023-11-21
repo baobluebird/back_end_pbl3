@@ -30,7 +30,7 @@ const createProduct = (newProduct) => {
                 discount: Number(discount),
                 selled
             })
-            
+
             if(newProduct){
                 resolve({
                     status: 'success',
@@ -173,8 +173,8 @@ const getAllProduct = async (limit, page, sort, filter) => {
         }
 
         return {
-            status: 'OK',
-            message: 'Success',
+            status: 'success',
+            message: 'Successfully get all product',
             data: allProduct,
             total: totalProduct,
             pageCurrent: Number(page + 1),
@@ -191,8 +191,8 @@ const getAllType = () => {
         try {
             const allType = await Product.distinct('type')
             resolve({
-                status: 'OK',
-                message: 'Success',
+                status: 'success',
+                message: 'Successfully get all type product',
                 data: allType,
             })
         } catch (e) {

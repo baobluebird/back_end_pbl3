@@ -20,7 +20,6 @@ const createUser = (newUser) => {
 
             const hashPassword = await bcrypt.hash(password, 10);
             
- 
             const createUser = await User.create({
                 name,  
                 email,
@@ -72,12 +71,12 @@ const loginUser = (userLogin) => {
             //     isAdmin : checkUser.isAdmin
             // });
 
-                resolve({
-                    status: 'success',
-                    message: 'User login successfully',
-                    access_token,
-                    //refresh_token
-                })
+            resolve({
+                status: 'success',
+                message: 'User login successfully',
+                access_token,
+                //refresh_token
+            })
         }catch(error){
             reject(error)
         }
@@ -95,6 +94,16 @@ const updateUser = (id,data) => {
                 resolve({
                     status: 'error',
                     message: 'The user is not exist'
+                })
+            }
+            const hashPassword = await bcrypt.hash(data.password, 10);
+            data.password = hashPassword;
+            data.confirmPassword = hashPassword;
+
+            if(data.password != data.confirmPassword){
+                resolve({
+                    status: 'error',
+                    message: 'The password is not match confirmPassword'
                 })
             }
 
@@ -212,7 +221,7 @@ const deleteManyUser = (ids) => {
 
             await User.deleteMany({ _id: ids })
             resolve({
-                status: 'OK',
+                status: 'success',
                 message: 'Delete user success',
             })
         } catch (e) {

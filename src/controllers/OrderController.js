@@ -2,15 +2,28 @@ const OrderService = require('../services/OrderService')
 
 const createOrder = async (req, res) => {
     try { 
+        
         console.log(req.body)
-        const { paymentMethod, itemsPrice, shippingPrice, totalPrice, fullName, address, city, phone } = req.body
-        if (!paymentMethod || !itemsPrice || !shippingPrice || !totalPrice || !fullName || !address || !city || !phone) {
-            return res.status(200).json({
-                status: 'ERR',
-                message: 'The input is required'
-            })
+        console.log(req.params.id)
+        const cartId = req.params.id
+        const {fullname , addressUser, email, phone, noteUser, shippingMethod, addressShipping, cityShipping, noteShipping,shopAddress} = req.body
+        if(shippingMethod === "nhan tai cua hang"){
+            if (!fullname || !addressUser || !email || !phone || !noteUser || !shippingMethod || !addressShipping || !cityShipping || !noteShipping ||!shopAddress) {
+                return res.status(200).json({
+                    status: 'ERR',
+                    message: 'The input is required'
+                })
+            }
+        }else{
+            if (!fullname || !addressUser || !email || !phone || !noteUser || !shippingMethod || !addressShipping || !cityShipping || !noteShipping) {
+                return res.status(200).json({
+                    status: 'ERR',
+                    message: 'The input is required'
+                })
+            }
         }
-        const response = await OrderService.createOrder(req.body)
+        const data = req.body;
+        const response = await OrderService.createOrder(cartId, data)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({

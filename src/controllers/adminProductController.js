@@ -1,4 +1,5 @@
 const CRUDProductService = require('../services/CRUDProductService');  
+
 const getHomepage = async (req, res) => {
     try {
         const listProducts = await CRUDProductService.getAllProduct();

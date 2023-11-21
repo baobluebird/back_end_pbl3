@@ -11,7 +11,6 @@ const getHomepage = async (req, res) => {
 }
 
 const postCreateUser = async (req, res) => {
-    console.log(req.body);
     await CRUDUserService.createUser(req.body); 
     res.redirect('/admin/user/');
 }

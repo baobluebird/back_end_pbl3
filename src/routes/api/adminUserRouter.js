@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { getHomepage, getCreateUser, getUpdatePage, postCreateUser, postUpdateUser, postDeleteUser, postHandleRemoveUser } = require('../../controllers/adminUserController');
+const { authMiddleware} = require('../../middleware/authMiddleware');
 
 router.get('/', getHomepage);
 

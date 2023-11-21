@@ -1,11 +1,16 @@
-const Order = require("../models/OrderProduct")
+const Order = require("../models/OrderModel")
 const Product = require("../models/ProductModel")
+const Cart = require("../models/CartModel")
 const EmailService = require("../services/EmailService")
 
-const createOrder = (newOrder) => {
+const createOrder = (cartId, newOrder) => {
     return new Promise(async (resolve, reject) => {
-        const { orderItems,paymentMethod, itemsPrice, shippingPrice, totalPrice, fullName, address, city, phone,user, isPaid, paidAt,email } = newOrder
+
+        const {fullname , addressUser, email, phone, noteUser, shippingMethod, addressShipping, cityShipping, noteShipping,shopAddress} = newOrder
+        
         try {
+            const cart = await Cart.findById(cartId)
+            const orderItems = cart.orderItems
             const promises = orderItems.map(async (order) => {
                 const productData = await Product.findOneAndUpdate(
                     {
@@ -49,22 +54,30 @@ const createOrder = (newOrder) => {
                 const createdOrder = await Order.create({
                     orderItems,
                     shippingAddress: {
-                        fullName,
-                        address,
-                        city, phone
+                        fullname,
+                        addressShipping,
+                        cityShipping,
+                        noteShipping,
+                        phone,
+                        shopAddress
                     },
-                    paymentMethod,
-                    itemsPrice,
-                    shippingPrice,
-                    totalPrice,
-                    user: user,
-                    isPaid, paidAt
+                    email,
+                    addressUser,
+                    noteUser,
+                    shippingMethod,
+                    itemsPrice: cart.itemsPrice,
+                    shippingPrice:30000,
+                    totalPrice: cart.totalPrice,
+                    user: cart.user,
                 })
                 if (createdOrder) {
-                    await EmailService.sendEmailCreateOrder(email,orderItems)
+                    //await EmailService.sendEmailCreateOrder(email,orderItems)
                     resolve({
                         status: 'OK',
-                        message: 'success'
+                        message: 'success',
+                        itemsPrice: cart.itemsPrice,
+                        shippingPrice:30000,
+                        totalPrice: cart.totalPrice,
                     })
                 }
             }

@@ -30,47 +30,6 @@ const createUser = async (newUser) => {
         }
 }
 
-const loginUser = (userLogin) => {
-    return new Promise(async (resolve, reject) => {
-        const { email, password} = userLogin;
-
-        try{
-            const checkUser = await User.findOne({email:email});
-            if(checkUser == null){
-                resolve({
-                    status: 'error',
-                    message: 'The user is not exist'
-                })
-            }
-            const comparePassword = await bcrypt.compareSync(password, checkUser.password);
-            if(!comparePassword){
-                resolve({
-                    status: 'error',
-                    message: 'The password is incorrect'
-                })
-            }
-            
-            const access_token = await generalAccessToken({
-                id: checkUser._id, 
-                isAdmin : checkUser.isAdmin
-            });
-
-            // const refresh_token = await generalRefreshToken({
-            //     id: checkUser._id, 
-            //     isAdmin : checkUser.isAdmin
-            // });
-
-                resolve({
-                    status: 'success',
-                    message: 'User login successfully',
-                    access_token,
-                    //refresh_token
-                })
-        }catch(error){
-            reject(error)
-        }
-    })
-}
 
 const updateUser = async (id,data) => {
         try{
@@ -139,7 +98,6 @@ const deleteManyUser = (ids) => {
 
 module.exports = {
     createUser,
-    loginUser,
     updateUser,
     deleteUser,
     getAllUser,
