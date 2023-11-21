@@ -24,6 +24,7 @@ const orderSchema = new mongoose.Schema({
         noteShipping: { type: String },
         phone: { type: Number, required: true },
         shopAddress: { type: String },
+        shopCity: { type: String },
     },
     email: { type: String },
     addressUser: { type: String, required: true },
