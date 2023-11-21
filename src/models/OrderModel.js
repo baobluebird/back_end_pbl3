@@ -17,14 +17,14 @@ const orderSchema = new mongoose.Schema({
         },
     ],
     shopAddress: {
-        fullname: { type: String },
+        fullName: { type: String },
         phone: { type: Number},
-        AddressShop: { type: String },
-        CityShop: { type: String },
+        addressShop: { type: String },
+        cityShop: { type: String },
         noteShipping: { type: String },
     },
     shippingAddress: {
-        fullname: { type: String },
+        fullName: { type: String },
         phone: { type: Number},
         addressShipping: { type: String },
         cityShipping: { type: String },

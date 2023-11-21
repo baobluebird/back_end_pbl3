@@ -6,7 +6,7 @@ const EmailService = require("../services/EmailService")
 const createOrder = (userId, newOrder) => {
     return new Promise(async (resolve, reject) => {
 
-        const {fullname , addressUser, email, phone, noteUser, shippingMethod, addressShipping, cityShipping,AddressShop,CityShop, noteShipping} = newOrder
+        const {fullName , addressUser, email, phone, noteUser, shippingMethod, addressShipping, cityShipping,addressShop,cityShop, noteShipping} = newOrder
         console.log('newOrder', newOrder)   
         try {
             const cart = await Cart.findOne({ user: userId });
@@ -78,15 +78,15 @@ const createOrder = (userId, newOrder) => {
 
                 if (shippingMethod === 'nhan tai cua hang') {
                     orderDetails.shopAddress = {
-                        fullname,
+                        fullName,
                         phone,
-                        AddressShop,
-                        CityShop,
+                        addressShop,
+                        cityShop,
                         noteShipping
                     };
                 } else {
                     orderDetails.shippingAddress = {
-                        fullname,
+                        fullName,
                         phone,
                         addressShipping,
                         cityShipping,

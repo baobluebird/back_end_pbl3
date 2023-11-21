@@ -3,16 +3,16 @@ const OrderService = require('../services/OrderService')
 const createOrder = async (req, res) => {
     try { 
         const userId = req.params.id
-        const {fullname , addressUser, email, phone, noteUser, shippingMethod, addressShipping, cityShipping, AddressShop, CityShop, noteShipping} = req.body
+        const {fullName , addressUser, email, phone, noteUser, shippingMethod, addressShipping, cityShipping, addressShop, cityShop, noteShipping} = req.body
         if(shippingMethod === "nhan tai cua hang"){
-            if (!fullname || !addressUser || !email || !phone || !shippingMethod ||!AddressShop ||!CityShop) {
+            if (!fullName || !addressUser || !email || !phone || !shippingMethod ||!addressShop ||!cityShop) {
                 return res.status(200).json({
                     status: 'ERR',
                     message: 'The input is required'
                 })
             }
         }else{
-            if (!fullname || !addressUser || !email || !phone || !shippingMethod || !addressShipping || !cityShipping ) {
+            if (!fullName || !addressUser || !email || !phone || !shippingMethod || !addressShipping || !cityShipping ) {
                 return res.status(200).json({
                     status: 'ERR',
                     message: 'The input is required'
