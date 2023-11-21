@@ -3,9 +3,9 @@ const OrderService = require('../services/OrderService')
 const createOrder = async (req, res) => {
     try { 
         const userId = req.params.id
-        const {fullname , addressUser, email, phone, noteUser, shippingMethod, addressShipping, cityShipping, noteShipping,shopAddress,shopCity} = req.body
+        const {fullname , addressUser, email, phone, noteUser, shippingMethod, addressShipping, cityShipping, AddressShop, CityShop, noteShipping} = req.body
         if(shippingMethod === "nhan tai cua hang"){
-            if (!fullname || !addressUser || !email || !phone || !noteUser || !shippingMethod || !addressShipping || !cityShipping || !noteShipping ||!shopAddress ||!shopCity) {
+            if (!fullname || !addressUser || !email || !phone || !noteUser || !shippingMethod ||!AddressShop ||!CityShop || !noteShipping) {
                 return res.status(200).json({
                     status: 'ERR',
                     message: 'The input is required'
@@ -50,14 +50,14 @@ const getAllOrderDetails = async (req, res) => {
 
 const getDetailsOrder = async (req, res) => {
     try {
-        const orderId = req.params.id
-        if (!orderId) {
+        const userId = req.params.id
+        if (!userId) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The userId is required'
             })
         }
-        const response = await OrderService.getOrderDetails(orderId)
+        const response = await OrderService.getOrderDetails(userId)
         return res.status(200).json(response)
     } catch (e) {
         // console.log(e)

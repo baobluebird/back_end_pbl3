@@ -6,8 +6,8 @@ const EmailService = require("../services/EmailService")
 const createOrder = (userId, newOrder) => {
     return new Promise(async (resolve, reject) => {
 
-        const {fullname , addressUser, email, phone, noteUser, shippingMethod, addressShipping, cityShipping, noteShipping,shopAddress} = newOrder
-        
+        const {fullname , addressUser, email, phone, noteUser, shippingMethod, addressShipping, cityShipping,AddressShop,CityShop, noteShipping} = newOrder
+        console.log('newOrder', newOrder)   
         try {
             const cart = await Cart.findOne({ user: userId });
             if(!cart){
@@ -64,32 +64,44 @@ const createOrder = (userId, newOrder) => {
                     message: `San pham voi id: ${arrId.join(',')} khong du hang`
                 })
             } else {
-                const createdOrder = await Order.create({
+                const orderDetails = {
                     orderItems,
-                    shippingAddress: {
-                        fullname,
-                        addressShipping,
-                        cityShipping,
-                        noteShipping,
-                        phone,
-                        shopAddress
-                    },
                     email,
                     addressUser,
                     noteUser,
                     shippingMethod,
                     itemsPrice: cart.itemsPrice,
-                    shippingPrice: shopAddress ? 0 : 30000,
+                    shippingPrice: (shippingMethod === 'nhan tai cua hang') ? 0 : 30000,
                     totalPrice: cart.totalPrice,
-                    user: cart.user,
-                })
+                    user: cart.user
+                };
+
+                if (shippingMethod === 'nhan tai cua hang') {
+                    orderDetails.shopAddress = {
+                        fullname,
+                        phone,
+                        AddressShop,
+                        CityShop,
+                        noteShipping
+                    };
+                } else {
+                    orderDetails.shippingAddress = {
+                        fullname,
+                        phone,
+                        addressShipping,
+                        cityShipping,
+                        noteShipping
+                    };
+                }
+
+                const createdOrder = await Order.create(orderDetails);
                 if (createdOrder) {
                     //await EmailService.sendEmailCreateOrder(email,orderItems)
                     resolve({
                         status: 'success',
                         message: 'Successfully create order',
                         itemsPrice: cart.itemsPrice,
-                        shippingPrice:shopAddress ? 0 : 30000,
+                        shippingPrice:(shippingMethod === 'nhan tai cua hang') ? 0 : 30000,
                         totalPrice: cart.totalPrice,
                     })
                 }
@@ -144,7 +156,7 @@ const getOrderDetails = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
             const order = await Order.findById({
-                _id: id
+                user: id
             })
             if (order === null) {
                 resolve({
