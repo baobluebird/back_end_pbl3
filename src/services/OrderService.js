@@ -3,14 +3,27 @@ const Product = require("../models/ProductModel")
 const Cart = require("../models/CartModel")
 const EmailService = require("../services/EmailService")
 
-const createOrder = (cartId, newOrder) => {
+const createOrder = (userId, newOrder) => {
     return new Promise(async (resolve, reject) => {
 
         const {fullname , addressUser, email, phone, noteUser, shippingMethod, addressShipping, cityShipping, noteShipping,shopAddress} = newOrder
         
         try {
-            const cart = await Cart.findById(cartId)
+            const cart = await Cart.findOne({ user: userId });
+            if(!cart){
+                reject({
+                    status:'error',
+                    message:'This user dont have a cart'
+                })
+            }
             const orderItems = cart.orderItems
+
+            if(orderItems.length === 0){
+                reject({
+                    status:'error',
+                    message:'This user have not oder items'
+                })
+            }
             const promises = orderItems.map(async (order) => {
                 const productData = await Product.findOneAndUpdate(
                     {
@@ -25,13 +38,13 @@ const createOrder = (cartId, newOrder) => {
                 )
                 if(productData) {
                     return {
-                        status: 'OK',
+                        status: 'success',
                         message: 'SUCCESS'
                     }
                 }
                  else {
                     return{
-                        status: 'OK',
+                        status: 'error',
                         message: 'ERR',
                         id: order.product
                     }
@@ -47,7 +60,7 @@ const createOrder = (cartId, newOrder) => {
                     arrId.push(item.id)
                 })
                 resolve({
-                    status: 'ERR',
+                    status: 'error',
                     message: `San pham voi id: ${arrId.join(',')} khong du hang`
                 })
             } else {
@@ -66,17 +79,17 @@ const createOrder = (cartId, newOrder) => {
                     noteUser,
                     shippingMethod,
                     itemsPrice: cart.itemsPrice,
-                    shippingPrice:30000,
+                    shippingPrice: shopAddress ? 0 : 30000,
                     totalPrice: cart.totalPrice,
                     user: cart.user,
                 })
                 if (createdOrder) {
                     //await EmailService.sendEmailCreateOrder(email,orderItems)
                     resolve({
-                        status: 'OK',
-                        message: 'success',
+                        status: 'success',
+                        message: 'Successfully create order',
                         itemsPrice: cart.itemsPrice,
-                        shippingPrice:30000,
+                        shippingPrice:shopAddress ? 0 : 30000,
                         totalPrice: cart.totalPrice,
                     })
                 }

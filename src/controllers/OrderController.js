@@ -2,10 +2,7 @@ const OrderService = require('../services/OrderService')
 
 const createOrder = async (req, res) => {
     try { 
-        
-        console.log(req.body)
-        console.log(req.params.id)
-        const cartId = req.params.id
+        const userId = req.params.id
         const {fullname , addressUser, email, phone, noteUser, shippingMethod, addressShipping, cityShipping, noteShipping,shopAddress} = req.body
         if(shippingMethod === "nhan tai cua hang"){
             if (!fullname || !addressUser || !email || !phone || !noteUser || !shippingMethod || !addressShipping || !cityShipping || !noteShipping ||!shopAddress) {
@@ -23,7 +20,7 @@ const createOrder = async (req, res) => {
             }
         }
         const data = req.body;
-        const response = await OrderService.createOrder(cartId, data)
+        const response = await OrderService.createOrder(userId, data)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
