@@ -111,20 +111,27 @@ const getDetailCoupon = (id) => {
     })
 }
 
-const getAllCoupon = () => {
+const getAllCoupon = (data) => {
     return new Promise(async (resolve, reject) => {
-        try{
-            const allCoupon = await Coupon.find()
-                resolve({
-                    status: 'success',
-                    message: 'Get all coupon successfully',
-                    data: allCoupon
-                })
-        }catch(error){
-            reject(error) 
+        try {
+            let allCoupon;
+            if (data.method === "nhan tai cua hang") {
+                allCoupon = await Coupon.find({ methodDiscount: "price" });
+            } else {
+                allCoupon = await Coupon.find();
+            }
+
+            resolve({
+                status: 'success',
+                message: 'Get all coupons successfully',
+                data: allCoupon
+            });
+        } catch (error) {
+            console.error('Error getting all coupons:', error);
+            reject(error);
         }
-    })
-}
+    });
+};
 
 module.exports = {
     createCoupon,

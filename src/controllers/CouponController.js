@@ -79,7 +79,15 @@ const getDetailCoupon = async (req, res) => {
 
 const getAllCoupon = async (req, res) => {
     try {
-        const response = await CouponService.getAllCoupon()
+        const method = req.body;
+        if(!method){
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'The input is required'
+            })
+        }
+        console.log(method)
+        const response = await CouponService.getAllCoupon(method)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({ 

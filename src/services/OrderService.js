@@ -7,76 +7,97 @@ const EmailService = require("../services/EmailService")
 const createOrder = (userId, newOrder) => {
     return new Promise(async (resolve, reject) => {
 
-        const {fullName , addressUser, email, phone, noteUser, shippingMethod, addressShipping, cityShipping,addressShop,cityShop, noteShipping, idCoupon} = newOrder
-        
+        const { fullName, addressUser, email, phone, noteUser, shippingMethod, addressShipping, cityShipping, addressShop, cityShop, noteShipping, idCoupon } = newOrder;
+        console.log('idCoupon', idCoupon);
         let valuePriceCoupon = 0;
         let valueShippingCoupon = 0;
-        if (Object.keys(idCoupon).length !== 0) {
-            if (shippingMethod === 'nhan tai cua hang' && idCoupon) {
-                const couponData = await Coupon.findOne({ _id: idCoupon.idPrice });
+
+        try {
+            const { idPrice, idShipping } = idCoupon;
+
+            if (idPrice) {
+                const couponData = await Coupon.findOne({ _id: idPrice });
+
                 if (couponData) {
-                    valuePriceCoupon = couponData;
+                    valuePriceCoupon = couponData.value;
                 } else {
-                    console.error('Coupon not found for id:', idCoupon.idPrice);
+                    console.error(`Coupon not found for id: ${idPrice}`);
                 }
             }
-        }
 
-        console.log(valuePriceCoupon.value);
-        
-        try {
+            if (idShipping) {
+                const couponData = await Coupon.findOne({ _id: idShipping });
+
+                if (couponData) {
+                    valueShippingCoupon = couponData.value;
+                } else {
+                    console.error(`Coupon not found for id: ${idShipping}`);
+                }
+            }
+
+            console.log('valuePriceCoupon', valuePriceCoupon / 100);
+            console.log('valueShippingCoupon', valueShippingCoupon);
+
             const cart = await Cart.findOne({ user: userId });
-            if(!cart){
-                reject({
-                    status:'error',
-                    message:'This user dont have a cart'
-                })
-            }
-            const orderItems = cart.orderItems
 
-            if(orderItems.length === 0){
+            if (!cart) {
                 reject({
-                    status:'error',
-                    message:'This user have not oder items'
-                })
+                    status: 'error',
+                    message: 'This user does not have a cart'
+                });
             }
+
+            const orderItems = cart.orderItems;
+
+            if (orderItems.length === 0) {
+                reject({
+                    status: 'error',
+                    message: 'This user does not have order items'
+                });
+            }
+
             const promises = orderItems.map(async (order) => {
                 const productData = await Product.findOneAndUpdate(
                     {
-                    _id: order.product,
-                    countInStock: {$gte: order.amount}
+                        _id: order.product,
+                        countInStock: { $gte: order.amount }
                     },
-                    {$inc: {
-                        countInStock: -order.amount,
-                        selled: +order.amount
-                    }},
-                    {new: true}
-                )
-                if(productData) {
+                    {
+                        $inc: {
+                            countInStock: -order.amount,
+                            selled: +order.amount
+                        }
+                    },
+                    { new: true }
+                );
+
+                if (productData) {
                     return {
                         status: 'success',
                         message: 'SUCCESS'
-                    }
-                }
-                 else {
-                    return{
+                    };
+                } else {
+                    return {
                         status: 'error',
                         message: 'ERR',
                         id: order.product
-                    }
+                    };
                 }
-            })
-            const results = await Promise.all(promises)
-            const newData = results && results.filter((item) => item.id)
-            if(newData.length) {
-                const arrId = []
+            });
+
+            const results = await Promise.all(promises);
+            const newData = results && results.filter((item) => item.id);
+
+            if (newData.length) {
+                const arrId = [];
                 newData.forEach((item) => {
-                    arrId.push(item.id)
-                })
+                    arrId.push(item.id);
+                });
+
                 resolve({
                     status: 'error',
-                    message: `San pham voi id: ${arrId.join(',')} khong du hang`
-                })
+                    message: `Product(s) with id(s): ${arrId.join(',')} do not have enough stock`
+                });
             } else {
                 const orderDetails = {
                     orderItems,
@@ -84,10 +105,13 @@ const createOrder = (userId, newOrder) => {
                     addressUser,
                     noteUser,
                     shippingMethod,
-                    idCoupon,
+                    coupon: {
+                        couponShipping: valueShippingCoupon,
+                        couponPrice: valuePriceCoupon
+                    },
                     itemsPrice: cart.itemsPrice,
-                    shippingPrice: (shippingMethod === 'nhan tai cua hang') ? 0 : 30000,
-                    totalPrice: cart.totalPrice,
+                    shippingPrice: (shippingMethod === 'nhan tai cua hang') ? 0 : valueShippingCoupon,
+                    totalPrice: cart.totalPrice - (cart.totalPrice * valuePriceCoupon / 100) - valueShippingCoupon,
                     user: cart.user
                 };
 
@@ -110,23 +134,26 @@ const createOrder = (userId, newOrder) => {
                 }
 
                 const createdOrder = await Order.create(orderDetails);
+
                 if (createdOrder) {
-                    //await EmailService.sendEmailCreateOrder(email,orderItems,createdOrder,newOrder)
+                    //await EmailService.sendEmailCreateOrder(email, orderItems, createdOrder, newOrder)
                     resolve({
                         status: 'success',
                         message: 'Successfully create order',
                         itemsPrice: cart.itemsPrice,
-                        shippingPrice:(shippingMethod === 'nhan tai cua hang') ? 0 : 30000,
-                        totalPrice: cart.totalPrice,
-                    })
+                        coupon: `${valuePriceCoupon}%`,
+                        shippingPrice: (shippingMethod === 'nhan tai cua hang') ? 0 : valueShippingCoupon,
+                        totalPrice: cart.totalPrice - (cart.totalPrice * valuePriceCoupon / 100) - valueShippingCoupon,
+                    });
                 }
             }
         } catch (e) {
-        //   console.log('e', e)
-            reject(e)
+            console.error('Error creating order:', e);
+            reject(e);
         }
-    })
-}
+    });
+};
+
 // const deleteManyProduct = (ids) => {
 //     return new Promise(async (resolve, reject) => {
 //         try {
