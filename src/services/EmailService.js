@@ -25,6 +25,7 @@ const sendEmailCreateOrder = async (email,orderItems,createdOrder, newOrder) => 
     listItem += `<div>
     <div>
       Bạn đã đặt sản phẩm <b>${order.name}</b> với số lượng: <b>${order.amount}</b> và giá là: <b>${order.new_price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })} </b></div>
+      <div><b>Phiếu giảm giá: ${order.discount}%</b></div>
     </div>`
     attachImage.push({path: order.image})
   })
