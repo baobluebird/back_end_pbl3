@@ -7,7 +7,6 @@ const createOrder = (userId, newOrder) => {
     return new Promise(async (resolve, reject) => {
 
         const {fullName , addressUser, email, phone, noteUser, shippingMethod, addressShipping, cityShipping,addressShop,cityShop, noteShipping} = newOrder
-        console.log('newOrder', newOrder)   
         try {
             const cart = await Cart.findOne({ user: userId });
             if(!cart){
@@ -50,8 +49,6 @@ const createOrder = (userId, newOrder) => {
                     }
                 }
             })
-            console.log('promises', promises)
-            console.log('orderItems', orderItems)
             const results = await Promise.all(promises)
             const newData = results && results.filter((item) => item.id)
             if(newData.length) {
@@ -96,7 +93,7 @@ const createOrder = (userId, newOrder) => {
 
                 const createdOrder = await Order.create(orderDetails);
                 if (createdOrder) {
-                    //await EmailService.sendEmailCreateOrder(email,orderItems)
+                    await EmailService.sendEmailCreateOrder(email,orderItems,createdOrder,newOrder)
                     resolve({
                         status: 'success',
                         message: 'Successfully create order',

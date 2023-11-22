@@ -74,10 +74,10 @@
                         <%= product.description %>
                     </td>
                     <td>
-                        <%= product.new_price %>
+                        <%= product.new_price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) %>
                     </td>
                     <td>
-                        <%= product.old_price %>
+                        <%= product.old_price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) %>
                     </td>
                     <td>
                         <%= product.type %>
@@ -89,7 +89,7 @@
                         <%= product.rating %>
                     </td>
                     <td>
-                        <%= product.discount %>
+                        <%= `${product.discount}%` %>
                     </td>
                     <td>
                         <%= product.image %>
