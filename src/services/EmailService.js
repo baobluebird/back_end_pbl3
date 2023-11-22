@@ -40,8 +40,8 @@ const sendEmailCreateOrder = async (email,orderItems,createdOrder, newOrder) => 
     <div><b>Thông tin người đặt hàng:</b> ${fullName}, ${addressUser}, ${phone}, ${noteU}</div>
     <div><b>Phương thức nhận hàng: ${phuongThuc}</b></div>
     <div><b>Phí vận chuyển (nếu có): ${createdOrder.shippingPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</b></div>
+    ${listItem}
     <div><b>Tổng tiền: ${(createdOrder.totalPrice + createdOrder.shippingPrice).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</b></div>
-     ${listItem}
      <div>Bên dưới là hình ảnh của sản phẩm</div>
      `,
     attachments: attachImage, 

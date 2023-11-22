@@ -82,41 +82,60 @@ const loginUser = (userLogin) => {
     })
 }
 
-const updateUser = (id,data) => {
+const updateUser = (id, data) => {
     return new Promise(async (resolve, reject) => {
-        try{
-            const checkUser = await User.findOne({
-                _id:id
-            })
+        try {
+            const checkUser = await User.findOne({ _id: id });
+            const checkEmail = await User.findOne({ email: data.email });
 
-            if(checkUser == null){
-                resolve({
+            if (checkEmail) {
+                return resolve({
                     status: 'error',
-                    message: 'The user is not exist'
-                })
-            }
-            const hashPassword = await bcrypt.hash(data.password, 10);
-            data.password = hashPassword;
-            data.confirmPassword = hashPassword;
-
-            if(data.password != data.confirmPassword){
-                resolve({
-                    status: 'error',
-                    message: 'The password is not match confirmPassword'
-                })
+                    message: 'Email already exists',
+                });
             }
 
-            const updatedUser = await User.findByIdAndUpdate(id,data, {new: true})
-                resolve({
-                    status: 'success',
-                    message: 'User update successfully',
-                    data: updatedUser
-                })
-        }catch(error){
-            reject(error) 
+            if (!checkUser) {
+                return resolve({
+                    status: 'error',
+                    message: 'The user is not exist',
+                });
+            }
+
+            if (data.password && data.oldPassword) {
+                if (data.password === data.oldPassword) {
+                    return reject({
+                        status: 'error',
+                        message: 'The new password must be different from the old password',
+                    });
+                }
+
+                const comparePassword = await bcrypt.compare(data.oldPassword, checkUser.password);
+
+                if (!comparePassword) {
+                    return reject({
+                        status: 'error',
+                        message: 'The old password is incorrect',
+                    });
+                }
+
+                const hashPassword = await bcrypt.hash(data.password, 10);
+                data.password = hashPassword;
+            }
+
+            const updatedUser = await User.findByIdAndUpdate(id, data, { new: true });
+            resolve({
+                status: 'success',
+                message: 'User updated successfully',
+                data: updatedUser,
+            });
+        } catch (error) {
+            console.error('Error updating user:', error);
+            reject(error);
         }
-    })
-}
+    });
+};
+
 
 const deleteUser = (id) => {
     return new Promise(async (resolve, reject) => {

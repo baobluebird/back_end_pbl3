@@ -4,7 +4,7 @@ dotenv.config();
 
 const createProduct = (newProduct) => {
     return new Promise(async (resolve, reject) => {
-        const {name, description, new_price, old_price, image, type, countInStock, rating, discount, selled} = newProduct
+        const {name, description, new_price, old_price, image, type, countInStock, rating, selled} = newProduct
 
         try{
             const checkProduct = await Product.findOne({
@@ -27,7 +27,6 @@ const createProduct = (newProduct) => {
                 type, 
                 countInStock: Number(countInStock), 
                 rating, 
-                discount: Number(discount),
                 selled
             })
 
@@ -154,7 +153,7 @@ const getAllProduct = async (limit, page, sort, filter) => {
             const label = filter[0];
             let filterValue;
 
-            if (['new_price', 'old_price', 'discount', 'countInStock', 'rating', 'selled'].includes(label)) {
+            if (['new_price', 'old_price', 'countInStock', 'rating', 'selled'].includes(label)) {
                 filterValue = parseInt(filter[1]);
             }
 

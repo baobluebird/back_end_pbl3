@@ -50,7 +50,6 @@
                 <th>Email</th>
                 <th>Name</th>
                 <th>Phone</th>
-                <th>Address</th>
                 <th>Action</th>
             </tr>
 
@@ -68,9 +67,6 @@
                     </td>
                     <td>
                         <%= user.phone %>
-                    </td>
-                    <td>
-                        <%= user.address %>
                     </td>
                     <td>
                         <form action="/admin/user/update/<%= user._id %>" method="get">

@@ -7,7 +7,6 @@ const addToCart = ({ newCart }) => {
     return new Promise(async (resolve, reject) => {
         try {
             const { userID, productID } = newCart;
-
             const user = await User.findById(userID);
             const product = await Product.findById(productID);
 
@@ -28,8 +27,6 @@ const addToCart = ({ newCart }) => {
             }
 
             const itemPrice = product.new_price;
-            const itemDiscount = product.discount;
-            const itemTotalPrice = itemPrice - (itemPrice * itemDiscount) / 100;
             const orderItem = {
                 name: product.name,
                 amount: 1,
@@ -37,7 +34,6 @@ const addToCart = ({ newCart }) => {
                 new_price: product.new_price,
                 price: product.new_price,
                 old_price: product.old_price,
-                discount: product.discount,
                 product: product._id,
             };
 
@@ -47,7 +43,7 @@ const addToCart = ({ newCart }) => {
                 userOrder = new Cart({
                     orderItems: [orderItem],
                     itemsPrice: itemPrice,
-                    totalPrice: itemTotalPrice,
+                    totalPrice: itemPrice,
                     totalItems: 1,
                     user: userID,
                 });
@@ -63,7 +59,7 @@ const addToCart = ({ newCart }) => {
                 }
                 userOrder.totalItems += 1;
                 userOrder.itemsPrice += itemPrice;
-                userOrder.totalPrice += itemTotalPrice;
+                userOrder.totalPrice += itemPrice;
             }
 
             await userOrder.save();
@@ -108,11 +104,7 @@ const decreaseAmountItemFromCart = async (cartId, productId) => {
 
         cart.totalItems = cart.orderItems.reduce((total, item) => total + item.amount, 0);
         cart.itemsPrice = cart.orderItems.reduce((total, item) => total + item.new_price * item.amount, 0);
-
-        cart.totalPrice = cart.orderItems.reduce((total, item) => {
-            const itemTotalPrice = item.new_price * item.amount * ((100 - item.discount) / 100);
-            return isNaN(itemTotalPrice) ? total : total + itemTotalPrice;
-        }, 0);
+        cart.totalPrice = cart.orderItems.reduce((total, item) => total + item.new_price * item.amount, 0);
 
         await cart.save();
 
@@ -151,11 +143,7 @@ const increaseAmountItemFromCart = async (cartId, productId) => {
         cart.orderItems[itemIndex].amount += 1;
         cart.totalItems = cart.orderItems.reduce((total, item) => total + item.amount, 0);
         cart.itemsPrice = cart.orderItems.reduce((total, item) => total + item.new_price * item.amount, 0);
-
-        cart.totalPrice = cart.orderItems.reduce((total, item) => {
-            const itemTotalPrice = item.new_price * item.amount * ((100 - item.discount) / 100);
-            return isNaN(itemTotalPrice) ? total : total + itemTotalPrice;
-        }, 0);
+        cart.totalPrice = cart.orderItems.reduce((total, item) => total + item.new_price * item.amount, 0);
 
         await cart.save();
 
@@ -185,10 +173,7 @@ const deleteItemFromCart = async (cartId, productId) => {
 
         cart.totalItems = cart.orderItems.reduce((total, item) => total + item.amount, 0);
         cart.itemsPrice = cart.orderItems.reduce((total, item) => total + item.new_price * item.amount, 0);
-        cart.totalPrice = cart.orderItems.reduce((total, item) => {
-            const itemTotalPrice = item.new_price * item.amount * ((100 - item.discount) / 100);
-            return isNaN(itemTotalPrice) ? total : total + itemTotalPrice;
-        }, 0);
+        cart.totalPrice = cart.orderItems.reduce((total, item) => total + item.new_price * item.amount, 0);
         await cart.save();
         resolve({ 
             status: "success",

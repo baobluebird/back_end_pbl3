@@ -8,7 +8,6 @@ const orderSchema = new mongoose.Schema({
             image: { type: String, required: true },
             new_price: { type: Number, required: true },
             old_price: { type: Number, required: true },
-            discount: { type: Number },
             product: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Product',
@@ -34,6 +33,10 @@ const orderSchema = new mongoose.Schema({
     addressUser: { type: String, required: true },
     noteUser: { type: String },
     shippingMethod: { type: String, required: true },
+    coupon: {  
+        couponShipping: { type: Number },
+        couponPrice: { type: Number },
+    },
     itemsPrice: { type: Number, required: true },
     shippingPrice: { type: Number, required: true },
     totalPrice: { type: Number, required: true },

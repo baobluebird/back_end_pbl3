@@ -8,7 +8,6 @@ const orderSchema = new mongoose.Schema({
             image: { type: String, required: true },
             new_price: { type: Number, required: true },
             old_price: { type: Number, required: true },
-            discount: { type: Number },
             product: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Product',
