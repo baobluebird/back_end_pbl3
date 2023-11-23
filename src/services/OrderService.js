@@ -2,7 +2,6 @@ const Order = require("../models/OrderModel")
 const Product = require("../models/ProductModel")
 const Cart = require("../models/CartModel")
 const Coupon = require("../models/CouponModel")
-const EmailService = require("../services/EmailService")
 
 const createOrder = (userId, newOrder) => {
     return new Promise(async (resolve, reject) => {
@@ -102,6 +101,8 @@ const createOrder = (userId, newOrder) => {
                 const orderDetails = {
                     orderItems,
                     email,
+                    name: fullName,
+                    phone,
                     addressUser,
                     noteUser,
                     shippingMethod,
@@ -110,7 +111,7 @@ const createOrder = (userId, newOrder) => {
                         couponPrice: valuePriceCoupon
                     },
                     itemsPrice: cart.itemsPrice,
-                    shippingPrice: (shippingMethod === 'nhan tai cua hang') ? 0 : valueShippingCoupon,
+                    shippingPrice: (shippingMethod === 'nhan tai cua hang') ? 0 : (30000 - valueShippingCoupon),
                     totalPrice: cart.totalPrice - (cart.totalPrice * valuePriceCoupon / 100) - valueShippingCoupon,
                     user: cart.user
                 };
@@ -136,13 +137,13 @@ const createOrder = (userId, newOrder) => {
                 const createdOrder = await Order.create(orderDetails);
 
                 if (createdOrder) {
-                    //await EmailService.sendEmailCreateOrder(email, orderItems, createdOrder, newOrder)
+                    
                     resolve({
                         status: 'success',
                         message: 'Successfully create order',
                         itemsPrice: cart.itemsPrice,
                         coupon: `${valuePriceCoupon}%`,
-                        shippingPrice: (shippingMethod === 'nhan tai cua hang') ? 0 : valueShippingCoupon,
+                        shippingPrice: (shippingMethod === 'nhan tai cua hang') ? 0 : 30000 - valueShippingCoupon,
                         totalPrice: cart.totalPrice - (cart.totalPrice * valuePriceCoupon / 100) - valueShippingCoupon,
                     });
                 }
@@ -176,14 +177,14 @@ const getAllOrderDetails = (id) => {
             }).sort({createdAt: -1, updatedAt: -1})
             if (order === null) {
                 resolve({
-                    status: 'ERR',
+                    status: 'error',
                     message: 'The order is not defined'
                 })
             }
 
             resolve({
-                status: 'OK',
-                message: 'SUCESSS',
+                status: 'success',
+                message: 'Get all order by user successfully',
                 data: order
             })
         } catch (e) {
@@ -201,14 +202,14 @@ const getOrderDetails = (id) => {
             })
             if (order === null) {
                 resolve({
-                    status: 'ERR',
+                    status: 'error',
                     message: 'The order is not defined'
                 })
             }
 
             resolve({
-                status: 'OK',
-                message: 'SUCESSS',
+                status: 'success',
+                message: 'Get order detail successfully',
                 data: order
             })
         } catch (e) {

@@ -48,7 +48,7 @@ const getAllOrderDetails = async (req, res) => {
     }
 }
 
-const getDetailsOrder = async (req, res) => {
+const getOrderDetails = async (req, res) => {
     try {
         const orderId = req.params.id
         if (!orderId) {
@@ -102,7 +102,7 @@ const getAllOrder = async (req, res) => {
 module.exports = {
     createOrder,
     getAllOrderDetails,
-    getDetailsOrder,
+    getOrderDetails,
     cancelOrderDetails,
     getAllOrder
 }

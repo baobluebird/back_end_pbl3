@@ -2,9 +2,9 @@ const CouponService = require('../services/CouponService');
 
 const createCoupon = async (req, res) => {
     try {
-    const { name,methodDiscount, description, dateStart, dateEnd, value } = req.body
+    const { name,methodDiscount, description, dateStart, dateEnd, value , image} = req.body
 
-    if (!name || !methodDiscount || !description || !dateStart || !dateEnd || !value) {
+    if (!name || !methodDiscount || !description || !dateStart || !dateEnd || !value || !image) {
         return res.status(200).json({
             status: 'ERR',
             message: 'The input is required'
@@ -79,14 +79,13 @@ const getDetailCoupon = async (req, res) => {
 
 const getAllCoupon = async (req, res) => {
     try {
-        const method = req.body;
+        const method = req.params.method;
         if(!method){
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The input is required'
             })
         }
-        console.log(method)
         const response = await CouponService.getAllCoupon(method)
         return res.status(200).json(response)
     } catch (e) {

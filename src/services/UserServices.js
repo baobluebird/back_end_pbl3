@@ -12,7 +12,7 @@ const createUser = (newUser) => {
         try{
             const checkUser = await User.findOne({email:email});
             if(checkUser){
-                resolve({
+                return resolve({
                     status: 'error',
                     message: 'Email already exists'
                 })
@@ -47,14 +47,14 @@ const loginUser = (userLogin) => {
         try{
             const checkUser = await User.findOne({email:email});
             if(checkUser == null){
-                resolve({
+                return resolve({
                     status: 'error',
                     message: 'The user is not exist'
                 })
             }
             const comparePassword = await bcrypt.compareSync(password, checkUser.password);
             if(!comparePassword){
-                resolve({
+                return resolve({
                     status: 'error',
                     message: 'The password is incorrect'
                 })

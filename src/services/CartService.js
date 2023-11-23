@@ -11,7 +11,7 @@ const addToCart = ({ newCart }) => {
             const product = await Product.findById(productID);
 
             if (!user) {
-                reject({
+                return reject({
                     status: 'error',
                     message: 'Not found user'
                 });
@@ -19,7 +19,7 @@ const addToCart = ({ newCart }) => {
             }
 
             if (!product) {
-                reject({
+                return reject({
                     status: 'error',
                     message: 'Not found product'
                 });

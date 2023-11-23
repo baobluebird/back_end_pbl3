@@ -15,6 +15,13 @@ const orderSchema = new mongoose.Schema({
             },
         },
     ],
+    
+    email: { type: String },
+    name: { type: String, required: true },
+    phone: { type: Number, required: true },
+    addressUser: { type: String, required: true },
+    noteUser: { type: String },
+    shippingMethod: { type: String, required: true },
     shopAddress: {
         fullName: { type: String },
         phone: { type: Number},
@@ -29,10 +36,6 @@ const orderSchema = new mongoose.Schema({
         cityShipping: { type: String },
         noteShipping: { type: String },
     },
-    email: { type: String },
-    addressUser: { type: String, required: true },
-    noteUser: { type: String },
-    shippingMethod: { type: String, required: true },
     coupon: {  
         couponShipping: { type: Number },
         couponPrice: { type: Number },

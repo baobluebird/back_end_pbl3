@@ -7,7 +7,7 @@ const createCoupon = (newCoupon) => {
         try{
             const checkCoupon = await Coupon.findOne({name:name});
             if(checkCoupon){
-                resolve({
+                return resolve({
                     status: 'error',
                     message: 'Coupon already exists'
                 })
@@ -19,7 +19,8 @@ const createCoupon = (newCoupon) => {
                 description,
                 dateStart,
                 dateEnd,
-                value
+                value,
+                image
             })
             if(createCoupon){
                 resolve({
@@ -42,7 +43,7 @@ const updateCoupon = (id,data) => {
             })
 
             if(checkCoupon == null){
-                resolve({
+                return resolve({
                     status: 'error',
                     message: 'The product is not exist'
                 })
@@ -68,7 +69,7 @@ const deleteCoupon = (id) => {
             })
 
             if(checkCoupon == null){
-                resolve({
+                return resolve({
                     status: 'error',
                     message: 'The coupon is not exist'
                 })
@@ -115,7 +116,7 @@ const getAllCoupon = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             let allCoupon;
-            if (data.method === "nhan tai cua hang") {
+            if (data === "store") {
                 allCoupon = await Coupon.find({ methodDiscount: "price" });
             } else {
                 allCoupon = await Coupon.find();
