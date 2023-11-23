@@ -44,37 +44,21 @@
     </div>
     <div class="login">
         <div class="title">Login Page</div>
-        <h2>Login</h2>
-        
-  <form action="/admin/login" method="post">
-    <fieldset>
-        <div class="input-group">
-            <label>
-                Email:
-            </label>
-            <input 
-            type="email" 
-            name="email" 
-            id="email"
-            />
-        </div>
-
-        <div class="input-group">
-            <label>
-                Password:
-            </label>
-            <input 
-            type="password" 
-            name="password" 
-            id="password"
-            />
-        </div>
-        <div>
+        <h1>Login</h1>
+        <% if (error) { %>
+            <p style="color: red;"><%= error %></p>
+        <% } %>
+    <form method="post" action="admin/login">
+        <fieldset>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <br>
             <button type="submit">Login</button>
-            
-        </div>
-    </fieldset>
-  </form>
+            </fieldset>
+    </form>
     </div>
 </body>
 
