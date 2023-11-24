@@ -1,7 +1,8 @@
 const Payment = require('../models/PaymentModel');
 const Order = require("../models/OrderModel")
 const Coupon = require("../models/CouponModel")
-
+const Cart = require("../models/CartModel")
+const Product = require("../models/ProductModel")
 const dotenv = require('dotenv');
 dotenv.config();
 const EmailService = require("../services/EmailService")
@@ -53,7 +54,7 @@ const createPayment = (id,newPayment) => {
                 })
             }
 
-            const checkPayment = await Payment.findOne({isPaid:isPaid});
+            const checkPayment = await Payment.findOne({order:id});
             if(checkPayment){
                 return resolve({
                     status: 'error',
@@ -64,6 +65,7 @@ const createPayment = (id,newPayment) => {
             const createPayment = await Payment.create({
                 user: order.user,  
                 order: order._id,
+                orderItems: order.orderItems,
                 name: order.name,
                 phone: order.phone,
                 shippingMethod: order.shippingMethod,
@@ -134,12 +136,64 @@ const getAllPaymentDetails = (id) => {
     })
 }
 
+const cancelPaymentDetails = (paymentId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const payment = await Payment.findOne({ _id: paymentId });
+            if(!payment){
+                reject({
+                    status:'error',
+                    message:'This user dont have a cart'
+                })
+            }
+            const orderItems = payment.orderItems
 
+
+            const promises = orderItems.map(async (order) => {
+                const productData = await Product.findOneAndUpdate(
+                    {
+                    _id: order.product,
+                    selled: {$gte: order.amount}
+                    },
+                    {$inc: {
+                        countInStock: +order.amount,
+                        selled: -order.amount
+                    }},
+                    {new: true}
+                )
+                if(productData) {
+                    await Payment.findByIdAndDelete(paymentId)
+                } else {
+                    return{
+                        status: 'OK',
+                        message: 'ERR',
+                    }
+                }
+            })
+            const results = await Promise.all(promises)
+            const newData = results && results[0] && results[0].id
+            
+            if(newData) {
+                resolve({
+                    status: 'ERR',
+                    message: `San pham voi id: ${newData} khong ton tai`
+                })
+            }
+            resolve({
+                status: 'OK',
+                message: 'successfully cancel order',
+                //data: order
+            })
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
 
 module.exports = {
     createPayment,
     getAllPaymentDetails,
     getPaymentDetails,
-    // cancelPaymentDetails,
+    cancelPaymentDetails,
     // getAllPayment
 }

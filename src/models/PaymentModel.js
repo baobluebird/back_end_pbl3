@@ -4,6 +4,20 @@ const paymentSchema = new mongoose.Schema(
     {
         user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
         order: { type: mongoose.Schema.Types.ObjectId,ref: 'Order',required: true,},
+        orderItems: [
+            {
+                name: { type: String, required: true },
+                amount: { type: Number, required: true },
+                image: { type: String, required: true },
+                new_price: { type: Number, required: true },
+                old_price: { type: Number, required: true },
+                product: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'Product',
+                    required: true,
+                },
+            },
+        ],
         shippingMethod: { type: String, required: true },
         delivery: { type: String },
         paymentMethod: { type: String, required: true },

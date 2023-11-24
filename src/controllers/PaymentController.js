@@ -60,7 +60,6 @@ const getPaymentDetails = async (req, res) => {
 
 const cancelPaymentDetails = async (req, res) => {
     try {
-        const userId = req.body.userId
         const paymentId= req.params.id
         if (!paymentId) {
             return res.status(200).json({
@@ -68,7 +67,7 @@ const cancelPaymentDetails = async (req, res) => {
                 message: 'The orderId is required'
             })
         }
-        const response = await PaymentService.cancelPaymentDetails(paymentId, userId)
+        const response = await PaymentService.cancelPaymentDetails(paymentId)
         return res.status(200).json(response)
     } catch (e) {
         // console.log(e)
