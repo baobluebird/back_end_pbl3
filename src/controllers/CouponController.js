@@ -53,7 +53,7 @@ const deleteCoupon = async (req, res) => {
     } catch (e) {
         return res.status(404).json({ 
             message: e
-        })
+        }) 
     }
 }
 
