@@ -12,7 +12,7 @@ const sendEmailCreateOrder = async (orderData,paymentMethod, delivery, isPaid, P
   const noteship = orderData.shippingMethod === 'nhan tai cua hang' ? orderData.shopAddress.noteShipping : orderData.shippingAddress.noteShipping
   const ghichu = noteship === null ? noteship : "Không có"
   const paid = isPaid === true ? "Đã thanh toán" : "Chưa thanh toán"
-  const donvivanchuyen = orderData.shippingMethod === 'nhan tai cua hang' ? null : delivery
+  const donvivanchuyen = orderData.shippingMethod === 'nhan tai cua hang' ? "Không có" : delivery
   const cachnhanhang = paymentMethod === 'thanh toan khi nhan hang' ? "Thanh toán khi nhận hàng" : "Thanh toán qua Paypal"
 
 
