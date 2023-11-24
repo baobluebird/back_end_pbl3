@@ -14,6 +14,7 @@ const sendEmailCreateOrder = async (email,orderItems,orderData,paymentMethod, de
   const ghichu = noteship === null ? noteship : "Không có"
   const paid = isPaid === true ? "Đã thanh toán" : "Chưa thanh toán"
   const donvivanchuyen = orderData.shippingMethod === 'nhan tai cua hang' ? null : delivery
+  const cachnhanhang = paymentMethod === 'thanh toan khi nhan hang' ? "Thanh toán khi nhận hàng" : "Thanh toán qua Paypal"
 
   let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -52,8 +53,8 @@ const sendEmailCreateOrder = async (email,orderItems,orderData,paymentMethod, de
     <div><b>Phí vận chuyển (nếu có): ${Payment.shippingPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</b></div>
     <div><b>Đơn vị vận chuyển (nếu có): ${donvivanchuyen}</b></div>
     ${listItem}
-    <div><b>Tổng tiền: ${(orderData.totalPrice + orderData.shippingPrice).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</b></div>
-    <div><b>Phương thức thanh toán: ${paymentMethod}%</b></div>
+    <div><b>Tổng tiền: ${(Payment.totalPrice).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</b></div>
+    <div><b>Phương thức thanh toán: ${cachnhanhang}</b></div>
     <div><b>Trạng thái thanh toán: ${paid}</b></div>
      <div>Bên dưới là hình ảnh của sản phẩm</div>
      `,

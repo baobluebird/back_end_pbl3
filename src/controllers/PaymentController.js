@@ -77,6 +77,25 @@ const cancelPaymentDetails = async (req, res) => {
     }
 }
 
+const getPriceAfterDiscount = async (req, res) => {
+    try {
+        const paymentId= req.params.id
+        if (!paymentId) {
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'The orderId is required'
+            })
+        }
+        const response = await PaymentService.getPriceAfterDiscount(paymentId)
+        return res.status(200).json(response)
+    } catch (e) {
+        // console.log(e)
+        return res.status(404).json({
+            message: e
+        })
+    }
+}
+
 const getAllPayment = async (req, res) => {
     try {
         const data = await PaymentService.getAllPayment()
@@ -93,5 +112,6 @@ module.exports = {
     getAllPaymentDetails,
     getPaymentDetails,
     cancelPaymentDetails,
-    getAllPayment
+    getAllPayment,
+    getPriceAfterDiscount
 }
