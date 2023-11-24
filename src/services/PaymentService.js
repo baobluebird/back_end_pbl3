@@ -1,5 +1,7 @@
 const Payment = require('../models/PaymentModel');
 const Order = require("../models/OrderModel")
+const Coupon = require("../models/CouponModel")
+
 const dotenv = require('dotenv');
 dotenv.config();
 const EmailService = require("../services/EmailService")
@@ -10,10 +12,39 @@ const EmailService = require("../services/EmailService")
 
 const createPayment = (id,newPayment) => {
     return new Promise(async (resolve, reject) => {
-        const {delivery , paymentMethod, isPaid} =  newPayment;
+        const {delivery , paymentMethod, isPaid, idCoupon} =  newPayment;
+        console.log('idCoupon', idCoupon);
+        let valuePriceCoupon = 0;
+        let valueShippingCoupon = 0;
+
         const idOrder = id;
         try{
-            
+
+            const { idPrice, idShipping } = idCoupon;
+
+            if (idPrice) {
+                const couponData = await Coupon.findOne({ _id: idPrice });
+
+                if (couponData) {
+                    valuePriceCoupon = couponData.value;
+                } else {
+                    console.error(`Coupon not found for id: ${idPrice}`);
+                }
+            }
+
+            if (idShipping) {
+                const couponData = await Coupon.findOne({ _id: idShipping });
+
+                if (couponData) {
+                    valueShippingCoupon = couponData.value;
+                } else {
+                    console.error(`Coupon not found for id: ${idShipping}`);
+                }
+            }
+
+            console.log('valuePriceCoupon', valuePriceCoupon / 100);
+            console.log('valueShippingCoupon', valueShippingCoupon);
+
             const order = await Order.findOne({_id:idOrder});
             if(!order){
                 return resolve({
@@ -38,13 +69,16 @@ const createPayment = (id,newPayment) => {
                 shippingMethod: order.shippingMethod,
                 delivery,
                 paymentMethod,
-                coupon: order.coupon,
+                coupon: {
+                    couponShipping: valueShippingCoupon,
+                    couponPrice: valuePriceCoupon
+                },
                 itemsPrice: order.itemsPrice,
-                shippingPrice: order.shippingPrice,
-                totalPrice: order.totalPrice,
+                shippingPrice: (order.shippingMethod === 'nhan tai cua hang') ? 0 : (30000 - valueShippingCoupon),
+                totalPrice: order.totalPrice - (order.totalPrice * valuePriceCoupon / 100) - valueShippingCoupon,
                 isPaid
             })
-            await EmailService.sendEmailCreateOrder(order.email, order.orderItems, order, paymentMethod, delivery, isPaid)
+            await EmailService.sendEmailCreateOrder(order.email, order.orderItems, order, paymentMethod, delivery, isPaid, createPayment)
             if(createPayment){
                 resolve({
                     status: 'success',

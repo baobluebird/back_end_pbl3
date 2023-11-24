@@ -3,7 +3,7 @@ const PaymentService = require('../services/PaymentService')
 const createPayment = async (req, res) => {
     try { 
         const orderId = req.params.id
-        const {delivery , paymentMethod, isPaid} = req.body
+        const {delivery , paymentMethod, isPaid, idCoupon} = req.body
         if (!paymentMethod || isPaid === null ) {
             return res.status(200).json({
                 status: 'ERR',

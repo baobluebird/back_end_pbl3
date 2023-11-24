@@ -36,10 +36,6 @@ const orderSchema = new mongoose.Schema({
         cityShipping: { type: String },
         noteShipping: { type: String },
     },
-    coupon: {  
-        couponShipping: { type: Number },
-        couponPrice: { type: Number },
-    },
     itemsPrice: { type: Number, required: true },
     shippingPrice: { type: Number, required: true },
     totalPrice: { type: Number, required: true },

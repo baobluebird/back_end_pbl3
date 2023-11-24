@@ -1,42 +1,13 @@
 const Order = require("../models/OrderModel")
 const Product = require("../models/ProductModel")
 const Cart = require("../models/CartModel")
-const Coupon = require("../models/CouponModel")
 
 const createOrder = (userId, newOrder) => {
     return new Promise(async (resolve, reject) => {
 
         const { fullName, addressUser, email, phone, noteUser, shippingMethod, addressShipping, cityShipping, addressShop, cityShop, noteShipping, idCoupon } = newOrder;
-        console.log('idCoupon', idCoupon);
-        let valuePriceCoupon = 0;
-        let valueShippingCoupon = 0;
-
+        
         try {
-            const { idPrice, idShipping } = idCoupon;
-
-            if (idPrice) {
-                const couponData = await Coupon.findOne({ _id: idPrice });
-
-                if (couponData) {
-                    valuePriceCoupon = couponData.value;
-                } else {
-                    console.error(`Coupon not found for id: ${idPrice}`);
-                }
-            }
-
-            if (idShipping) {
-                const couponData = await Coupon.findOne({ _id: idShipping });
-
-                if (couponData) {
-                    valueShippingCoupon = couponData.value;
-                } else {
-                    console.error(`Coupon not found for id: ${idShipping}`);
-                }
-            }
-
-            console.log('valuePriceCoupon', valuePriceCoupon / 100);
-            console.log('valueShippingCoupon', valueShippingCoupon);
-
             const cart = await Cart.findOne({ user: userId });
 
             if (!cart) {
@@ -106,13 +77,9 @@ const createOrder = (userId, newOrder) => {
                     addressUser,
                     noteUser,
                     shippingMethod,
-                    coupon: {
-                        couponShipping: valueShippingCoupon,
-                        couponPrice: valuePriceCoupon
-                    },
                     itemsPrice: cart.itemsPrice,
-                    shippingPrice: (shippingMethod === 'nhan tai cua hang') ? 0 : (30000 - valueShippingCoupon),
-                    totalPrice: cart.totalPrice - (cart.totalPrice * valuePriceCoupon / 100) - valueShippingCoupon,
+                    shippingPrice: (shippingMethod === 'nhan tai cua hang') ? 0 : 30000,
+                    totalPrice: cart.totalPrice,
                     user: cart.user
                 };
 
@@ -142,9 +109,8 @@ const createOrder = (userId, newOrder) => {
                         status: 'success',
                         message: 'Successfully create order',
                         itemsPrice: cart.itemsPrice,
-                        coupon: `${valuePriceCoupon}%`,
-                        shippingPrice: (shippingMethod === 'nhan tai cua hang') ? 0 : 30000 - valueShippingCoupon,
-                        totalPrice: cart.totalPrice - (cart.totalPrice * valuePriceCoupon / 100) - valueShippingCoupon,
+                        shippingPrice: (shippingMethod === 'nhan tai cua hang') ? 0 : 30000,
+                        totalPrice:  cart.totalPrice,
                     });
                 }
             }
