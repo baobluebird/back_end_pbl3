@@ -54,7 +54,8 @@ const sendEmailCreateOrder = async (orderData,paymentMethod, delivery, isPaid, P
     <div><b>Phí vận chuyển (nếu có): ${Payment.shippingPrice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</b></div>
     <div><b>Đơn vị vận chuyển (nếu có): ${donvivanchuyen}</b></div>
     ${listItem}
-    <div><b>Tổng tiền: ${(Payment.totalPrice).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</b></div>
+    <div><b>Tạm tính: ${(Payment.itemsPrice).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</b></div>
+    <div><b>Thành tiền: ${(Payment.totalPrice).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</b></div>
     <div><b>Phương thức thanh toán: ${cachnhanhang}</b></div>
     <div><b>Trạng thái thanh toán: ${paid}</b></div>
      <div>Bên dưới là hình ảnh của sản phẩm</div>
