@@ -108,9 +108,7 @@ const createOrder = (userId, newOrder) => {
                     resolve({
                         status: 'success',
                         message: 'Successfully create order',
-                        itemsPrice: cart.itemsPrice,
-                        shippingPrice: (shippingMethod === 'nhan tai cua hang') ? 0 : 30000,
-                        totalPrice:  cart.totalPrice,
+                        data:createdOrder
                     });
                 }
             }

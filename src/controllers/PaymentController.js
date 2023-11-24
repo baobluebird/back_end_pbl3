@@ -23,14 +23,14 @@ const createPayment = async (req, res) => {
 
 const getAllPaymentDetails = async (req, res) => {
     try {
-        const paymentId = req.params.id
+        const userId = req.params.id
         if (!paymentId) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The userId is required'
             })
         }
-        const response = await PaymentService.getAllPaymentDetails(paymentId)
+        const response = await PaymentService.getAllPaymentDetails(userId)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
@@ -41,14 +41,14 @@ const getAllPaymentDetails = async (req, res) => {
 
 const getPaymentDetails = async (req, res) => {
     try {
-        const orderId = req.params.id
-        if (!orderId) {
+        const paymentId = req.params.id
+        if (!paymentId) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The userId is required'
             })
         }
-        const response = await OrderService.getPaymentDetails(orderId)
+        const response = await PaymentService.getPaymentDetails(paymentId)
         return res.status(200).json(response)
     } catch (e) {
         // console.log(e)
@@ -61,14 +61,14 @@ const getPaymentDetails = async (req, res) => {
 const cancelPaymentDetails = async (req, res) => {
     try {
         const userId = req.body.userId
-        const orderId= req.params.id
-        if (!orderId) {
+        const paymentId= req.params.id
+        if (!paymentId) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The orderId is required'
             })
         }
-        const response = await OrderService.cancelPaymentDetails(orderId, userId)
+        const response = await PaymentService.cancelPaymentDetails(paymentId, userId)
         return res.status(200).json(response)
     } catch (e) {
         // console.log(e)
@@ -80,7 +80,7 @@ const cancelPaymentDetails = async (req, res) => {
 
 const getAllPayment = async (req, res) => {
     try {
-        const data = await OrderService.getAllPayment()
+        const data = await PaymentService.getAllPayment()
         return res.status(200).json(data)
     } catch (e) {
         return res.status(404).json({
