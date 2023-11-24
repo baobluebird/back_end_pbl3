@@ -3,8 +3,8 @@ const dotenv = require('dotenv');
 dotenv.config()
 var inlineBase64 = require('nodemailer-plugin-inline-base64');
 
-const sendEmailCreateOrder = async (email,orderItems,orderData,paymentMethod, delivery, isPaid, Payment) => {
-
+const sendEmailCreateOrder = async (orderData,paymentMethod, delivery, isPaid, Payment) => {
+  console.log('orderData', orderData)
   const phuongThuc = orderData.shippingMethod === 'nhan tai cua hang' ? "Nhận tại cửa hàng" : "Giao hàng tận nơi"
   const noteU = orderData.noteUser === null ? orderData.noteUser : ""
 
@@ -15,6 +15,7 @@ const sendEmailCreateOrder = async (email,orderItems,orderData,paymentMethod, de
   const paid = isPaid === true ? "Đã thanh toán" : "Chưa thanh toán"
   const donvivanchuyen = orderData.shippingMethod === 'nhan tai cua hang' ? null : delivery
   const cachnhanhang = paymentMethod === 'thanh toan khi nhan hang' ? "Thanh toán khi nhận hàng" : "Thanh toán qua Paypal"
+
 
   let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -30,7 +31,8 @@ const sendEmailCreateOrder = async (email,orderItems,orderData,paymentMethod, de
   let listItem = '';
   
   const attachImage = []
-  orderItems.forEach((order) => {
+  const orderItemsData = orderData.orderItems
+  orderItemsData.forEach((order) => {
     listItem += `<div>
     <div>
       Bạn đã đặt sản phẩm <b>${order.name}</b> với số lượng: <b>${order.amount}</b> và giá là: <b>${order.new_price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })} </b></div>
@@ -41,7 +43,7 @@ const sendEmailCreateOrder = async (email,orderItems,orderData,paymentMethod, de
   // send mail with defined transport object
   let info = await transporter.sendMail({
     from: process.env.MAIL_ACCOUNT, // sender address
-    to: email, // list of receivers
+    to: orderData.email, // list of receivers
     subject: "Bạn đã đặt hàng tại shop PBL3", // Subject line
     text: "Hello world?", // plain text body
     html: `<div><b>Bạn đã đặt hàng thành công tại shop PBL3</b></div>

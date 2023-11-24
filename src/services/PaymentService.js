@@ -17,8 +17,6 @@ const createPayment = (id,newPayment) => {
         console.log('idCoupon', idCoupon);
         let valuePriceCoupon = 0;
         let valueShippingCoupon = 0;
-
-        const idOrder = id;
         try{
 
             const { idPrice, idShipping } = idCoupon;
@@ -46,7 +44,7 @@ const createPayment = (id,newPayment) => {
             console.log('valuePriceCoupon', valuePriceCoupon / 100);
             console.log('valueShippingCoupon', valueShippingCoupon);
 
-            const order = await Order.findOne({_id:idOrder});
+            const order = await Order.findOne({_id:id});
             if(!order){
                 return resolve({
                     status: 'error',
@@ -80,7 +78,7 @@ const createPayment = (id,newPayment) => {
                 totalPrice: order.totalPrice - (order.totalPrice * valuePriceCoupon / 100) - valueShippingCoupon,
                 isPaid
             })
-            await EmailService.sendEmailCreateOrder(order.email, order.orderItems, order, paymentMethod, delivery, isPaid, createPayment)
+            await EmailService.sendEmailCreateOrder(order, paymentMethod, delivery, isPaid, createPayment)
             if(createPayment){
                 resolve({
                     status: 'success',

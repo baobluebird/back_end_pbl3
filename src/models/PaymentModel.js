@@ -22,6 +22,7 @@ const paymentSchema = new mongoose.Schema(
         delivery: { type: String },
         paymentMethod: { type: String, required: true },
         name : { type: String, required: true },
+        email: { type: String },
         phone : { type: Number, required: true },
         coupon: {  
             couponShipping: { type: Number },
