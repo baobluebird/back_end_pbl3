@@ -71,7 +71,7 @@ const createPayment = (id,newPayment) => {
                 },
                 itemsPrice: order.itemsPrice,
                 shippingPrice: (order.shippingMethod === 'nhan tai cua hang') ? 0 : (30000 - valueShippingCoupon),
-                totalPrice: order.totalPrice - (order.totalPrice * valuePriceCoupon / 100) - valueShippingCoupon,
+                totalPrice: valueShippingCoupon === 30000 ? order.totalPrice - (order.totalPrice * valuePriceCoupon / 100) - valueShippingCoupon : order.totalPrice - (order.totalPrice * valuePriceCoupon / 100) + 30000,
                 isPaid
             })
             await EmailService.sendEmailCreateOrder(order, paymentMethod, delivery, isPaid, createPayment)
