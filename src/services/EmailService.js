@@ -4,7 +4,6 @@ dotenv.config()
 var inlineBase64 = require('nodemailer-plugin-inline-base64');
 
 const sendEmailCreateOrder = async (orderData,paymentMethod, delivery, isPaid, Payment) => {
-  console.log('orderData', orderData)
   const phuongThuc = orderData.shippingMethod === 'nhan tai cua hang' ? "Nhận tại cửa hàng" : "Giao hàng tận nơi"
   const noteU = orderData.noteUser === null ? orderData.noteUser : ""
 

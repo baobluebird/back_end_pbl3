@@ -14,7 +14,6 @@ const EmailService = require("../services/EmailService")
 const createPayment = (id,newPayment) => {
     return new Promise(async (resolve, reject) => {
         const {delivery , paymentMethod, isPaid, idCoupon} =  newPayment;
-        console.log('idCoupon', idCoupon);
         let valuePriceCoupon = 0;
         let valueShippingCoupon = 0;
         try{
@@ -40,9 +39,6 @@ const createPayment = (id,newPayment) => {
                     console.error(`Coupon not found for id: ${idShipping}`);
                 }
             }
-
-            console.log('valuePriceCoupon', valuePriceCoupon / 100);
-            console.log('valueShippingCoupon', valueShippingCoupon);
 
             const order = await Order.findOne({_id:id});
             if(!order){
