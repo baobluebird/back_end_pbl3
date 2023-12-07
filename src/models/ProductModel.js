@@ -10,8 +10,21 @@ const productSchema = new mongoose.Schema(
         image: { type: String, required: true },
         type: { type: String, required: true },
         countInStock: { type: Number, required: true },
-        rating: { type: Number, required: true },
-        selled: { type: Number }
+        selled: { type: Number },
+        total_rate: { type: Number, required: true },
+        comments: [
+            {
+                name: { type: String, required: true },
+                content: { type: String, required: true },
+                rate: { type: Number, required: true },
+                user: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'User',
+                    required: true,
+                },
+            },
+        ],
+        
     },
     {
         timestamps: true,
