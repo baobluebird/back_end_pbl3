@@ -18,13 +18,7 @@ const createRating = (userId,newRating) => {
             const calculateTotalRating = (product.total_rate + rate)/2;
             await Product.findByIdAndUpdate(productId, {total_rate: calculateTotalRating});
 
-            const newComment = {
-                name: user.name,
-                content,
-                rate,
-                user: userId 
-            }
-            await Product.findByIdAndUpdate(productId, { $push: { comments: newComment } });
+            
 
             const createRating = await Rating.create({
                 user: userId,
@@ -32,7 +26,14 @@ const createRating = (userId,newRating) => {
                 rate,
                 content
             });
-
+            const newComment = {
+                name: user.name,
+                content,
+                rate,
+                user: userId ,
+                rating_id: createRating._id
+            }
+            await Product.findByIdAndUpdate(productId, { $push: { comments: newComment } });
             if(createRating){
                 resolve({
                     status: 'success',
@@ -46,8 +47,22 @@ const createRating = (userId,newRating) => {
     })
 }
 
-
+const deleteRating = (ratingId) => {
+    return new Promise(async (resolve, reject) => {
+        try{
+            await Product.findOneAndUpdate({comments: {$elemMatch: {rating_id: ratingId}}}, {$pull: {comments: {rating_id: ratingId}}});
+            await Rating.findByIdAndDelete(ratingId);
+            resolve({
+                status: 'success',
+                message: 'Rating deleted successfully'
+            })
+        }catch(error){
+            reject(error)
+        }
+    })
+}
 
 module.exports = {
     createRating,
+    deleteRating,
 }   
