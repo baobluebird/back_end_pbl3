@@ -50,8 +50,14 @@ const createRating = (userId,newRating) => {
 const deleteRating = (ratingId) => {
     return new Promise(async (resolve, reject) => {
         try{
+            const rating = await Rating.findOne({_id: ratingId});
+            const product = await Product.findOne({_id: rating.product});
+
             await Product.findOneAndUpdate({comments: {$elemMatch: {rating_id: ratingId}}}, {$pull: {comments: {rating_id: ratingId}}});
             await Rating.findByIdAndDelete(ratingId);
+
+            const calculateTotalRating = (product.total_rate * 2) - rating.rate;
+            await Product.findByIdAndUpdate(product._id, {total_rate: calculateTotalRating});
             resolve({
                 status: 'success',
                 message: 'Rating deleted successfully'
