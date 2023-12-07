@@ -24,7 +24,7 @@ const createPayment = async (req, res) => {
 const getAllPaymentDetails = async (req, res) => {
     try {
         const userId = req.params.id
-        if (!paymentId) {
+        if (!userId) {
             return res.status(200).json({
                 status: 'ERR',
                 message: 'The userId is required'

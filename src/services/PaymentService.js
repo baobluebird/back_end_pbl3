@@ -92,11 +92,11 @@ const getPaymentDetails = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
 
-            allPayment = await Payment.find({ _id: id });
+            const payment = await Payment.find({ _id: id });
             resolve({
                 status: 'success',
                 message: 'Get all payment successfully',
-                data: allPayment
+                data: payment
             });
         } catch (error) {
             console.error('Error getting all coupons:', error);
@@ -108,7 +108,7 @@ const getPaymentDetails = (id) => {
 const getAllPaymentDetails = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const payment = await Order.find({
+            const payment = await Payment.find({
                 user: id
             }).sort({createdAt: -1, updatedAt: -1})
             if (payment === null) {
