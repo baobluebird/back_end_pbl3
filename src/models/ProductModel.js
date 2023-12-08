@@ -27,6 +27,7 @@ const productSchema = new mongoose.Schema(
                     ref: 'Rating',
                     required: true,
                 },
+                time_create: { type: Date, required: true },
             },
         ],
         
@@ -37,4 +38,4 @@ const productSchema = new mongoose.Schema(
 );
 const Product = mongoose.model('Product', productSchema);
 
-module.exports = Product;
+module.exports = Product; 

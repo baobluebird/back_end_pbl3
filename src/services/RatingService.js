@@ -32,7 +32,8 @@ const createRating = (userId,newRating) => {
                 content,
                 rate,
                 user: userId ,
-                rating_id: createRating._id
+                rating_id: createRating._id,
+                time_create: createRating.createdAt
             }
             await Product.findByIdAndUpdate(productId, { $push: { comments: newComment } });
             if(createRating){
