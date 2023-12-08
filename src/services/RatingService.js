@@ -14,12 +14,13 @@ const createRating = (userId,newRating) => {
                     message: 'User or Product not found'
                 })
             }
-            
-            const calculateTotalRating = (product.total_rate + rate)/2;
-            await Product.findByIdAndUpdate(productId, {total_rate: calculateTotalRating});
-
-            
-
+            if(product.total_rate == 0){
+                await Product.findByIdAndUpdate(productId, {total_rate: 5});
+            }else{
+                const calculateTotalRating = (product.total_rate + rate)/2;
+                await Product.findByIdAndUpdate(productId, {total_rate: calculateTotalRating});
+            }
+             
             const createRating = await Rating.create({
                 user: userId,
                 product: productId,
