@@ -36,6 +36,17 @@ const productSchema = new mongoose.Schema(
         timestamps: true,
     }
 );
-const Product = mongoose.model('Product', productSchema);
-
-module.exports = Product; 
+productSchema.methods.calculateAverageRating = function () {
+    let totalRate = 0;
+  
+    this.comments.forEach((comment) => {
+      totalRate += comment.rate;
+    });
+  
+    const averageRate = this.comments.length > 0 ? totalRate / this.comments.length : 0;
+  
+    return averageRate;
+  };
+  const Product = mongoose.model('Product', productSchema);
+  
+  module.exports = Product;
