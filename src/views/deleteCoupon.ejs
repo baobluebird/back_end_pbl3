@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete A Product</title>
+    <title>Delete A Coupon</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 
@@ -17,33 +17,42 @@
         <a href="/admin/coupon/create">Create Coupon</a>
         <a href="/admin/logout">Logout</a>
     </div>
-    <div class="form-add-new">
-        <form action="/admin/product/delete-product" method="post">
+    <div class="form-delete">
+        <form action="/admin/coupon/delete-coupon" method="post">
             <fieldset>
-                <legend>Delete Products:</legend>
+                <legend>Delete Coupons:</legend>
                 <div class="input-group d-none">
                     <label>
                         ID:
                     </label>
                     <input 
                     type="text" 
-                    name="productId" 
-                    value="<%= productEdit.id %>"
+                    name="couponId" 
+                    value="<%= couponEdit.id %>"
                     />
                 </div>
-
                 <div class="input-group">
                     <label>
-                        Are you sure to delete this Product with Name:
+                        Are you sure to delete this user with coupon:
                     </label>
                     <input 
                     type="text" 
                     name="name" 
-                    value="<%= productEdit.name %>"
+                    value="<%= couponEdit.name %>"
+                    />
+                </div>
+                <div class="input-group">
+                    <label>
+                        Value:
+                    </label>
+                    <input 
+                    type="text" 
+                    name="value" 
+                    value="<%= couponEdit.value %>"
                     />
                 </div>
                 <div>
-                    <button onclick="alert('Delete product successfully')"> Confirm </button>
+                    <button onclick="alert('Delete coupon successfully')"> Confirm </button>
                 </div>
             </fieldset>
         </form>

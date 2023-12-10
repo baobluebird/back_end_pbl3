@@ -6,6 +6,7 @@ const CouponRouter = require('./CouponRouter')
 const PaymentRouter = require('./PaymentRouter')
 const RatingRouter = require('./RatingRouter')
 
+const adminCouponRouter = require('./adminCouponRouter')
 const adminUserRouter = require('./adminUserRouter')
 const adminProductRouter = require('./adminProductRouter')
 const adminLoginRouter = require('./adminLoginRouter')
@@ -20,6 +21,7 @@ const routes = (app) => {
  
     app.use('/admin/user', adminUserRouter)
     app.use('/admin/product', adminProductRouter)
+    app.use('/admin/coupon', adminCouponRouter)
     app.use('/admin/',adminLoginRouter)
 }
 

@@ -38,20 +38,30 @@
     <div class="topnav">
         <a href="/admin/user">Home User</a>
         <a href="/admin/user/create">Create Users</a>
-        <a href="/admin/product">Home Products</a>
+        <a href="/admin/product/create">Home Products</a>
         <a href="/admin/product/create">Create Product</a>
-        <a class="active" href="/admin/loginPage">Login</a>
+        <a href="/admin/coupon">Home Coupon</a>
+        <a href="/admin/coupon/create">Create Coupon</a>
+        <a class="active" href="/admin">Login</a>
     </div>
     <div class="login">
         <div class="title">Login Page</div>
         <h1>Login</h1>
+        <% var error = error %>
         <% if (error) { %>
             <p style="color: red;"><%= error %></p>
         <% } %>
-    <form method="post" action="admin/login">
+        <% var access_token = access_token %>
+        <% if (access_token) { %>
+            <script>
+                localStorage.setItem('access_token', '<%= access_token %>');
+                window.location.href = '/admin/user/';
+            </script>
+        <% } %>
+    <form method="post" action="/admin/login">
         <fieldset>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required>
             <br>
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
@@ -60,6 +70,9 @@
             </fieldset>
     </form>
     </div>
+    <script>
+        localStorage.removeItem('access_token');
+    </script>
 </body>
 
 </html>

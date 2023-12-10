@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Product</title>
+    <title>Create Coupons</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 
@@ -12,86 +12,53 @@
         <a href="/admin/user">Home</a>
         <a href="/admin/user/create">Create Users</a>
         <a href="/admin/product/">Home Products</a>
-        <a class="active" href="/admin/product/create">Create Product</a>
+        <a href="/admin/product/create">Create Product</a>
         <a href="/admin/coupon">Home Coupon</a>
-        <a href="/admin/coupon/create">Create Coupon</a>
+        <a class="active" href="/admin/coupon/create">Create Coupon</a>
         <a href="/admin/logout">Logout</a>
     </div>
     <div class="form-add-new" id="ListContainer" style="display: none;">
-        <form action="/admin/product/create-product" method="post">
+        <form action="/admin/coupon/create-coupon" method="post">
             <fieldset>
-                <legend>Add new Product:</legend>
+                <legend>Add new Coupons:</legend>
                 <div class="input-group">
                     <label>
                         Name:
                     </label>
                     <input type="text" name="name" />
                 </div>
-
+                <div class="input-group">
+                    <label>
+                        MethodDiscount:
+                    </label>
+                    <input type="text"  name="methodDiscount" />
+                </div>
                 <div class="input-group">
                     <label>
                         Description:
                     </label>
                     <input type="text" name="description" />
                 </div>
-
                 <div class="input-group">
                     <label>
-                        New price:
+                        Date start:
                     </label>
-                    <input type="text" name="new_price" />
+                    <input type="text" name="dateStart" />
                 </div>
-
                 <div class="input-group">
                     <label>
-                        Old Price:
+                        Date end:
                     </label>
-                    <input type="text" name="old_price" />
+                    <input type="text" name="dateEnd" />
                 </div>
-
                 <div class="input-group">
                     <label>
-                        Image:
+                        Value:
                     </label>
-                    <input type="text" name="image" />
-                </div>
-
-                <div class="input-group">
-                    <label>
-                        Type:
-                    </label>
-                    <input type="text" name="type" />
-                </div>
-
-                <div class="input-group">
-                    <label>
-                        Count In Stock:
-                    </label>
-                    <input type="text" name="countInStock" />
-                </div>
-
-                <div class="input-group">
-                    <label>
-                        Total rate:
-                    </label>
-                    <input type="text" name="total_rate" />
-                </div>
-
-                <div class="input-group">
-                    <label>
-                        Discount:
-                    </label>
-                    <input type="text" name="discount" />
-                </div>
-
-                <div class="input-group">
-                    <label>
-                        Selled:
-                    </label>
-                    <input type="text" name="selled" />
+                    <input type="text" name="value" />
                 </div>
                 <div>
-                    <button onclick="alert('Create product successfully')"> Save </button>
+                    <button onclick="alert('Create coupon successfully')"> Save </button>
                 </div>
             </fieldset>
         </form>

@@ -40,9 +40,11 @@
         <a href="/admin/user/create">Create Users</a>
         <a href="/admin/product">Home Products</a>
         <a href="/admin/product/create">Create Product</a>
-        <a href="/admin/loginPage">Login</a>
+        <a href="/admin/coupon">Home Coupon</a>
+        <a href="/admin/coupon/create">Create Coupon</a>
+        <a href="/admin/logout">Logout</a>
     </div>
-    <div class="table-container">
+    <div class="table-container" id="ListContainer" style="display: none;">
         <div class="title">List Users</div>
         <table>
             <tr>
@@ -81,6 +83,27 @@
 
         </table>
     </div>
+    <script>
+        const access_token = localStorage.getItem('access_token');
+        fetch('/admin/auth', {
+            method: 'POST',
+            headers: {
+                'token': access_token,
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            if (data.message === 'Unauthorized') {
+                alert('You are not authorized to access this page');
+                window.location.href = '/admin';
+            } else {
+                document.getElementById('ListContainer').style.display = 'block';
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    </script>
 </body>
 
 </html>

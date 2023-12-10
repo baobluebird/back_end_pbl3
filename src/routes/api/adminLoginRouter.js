@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { getHomeLogin, postLogin} = require('../../controllers/adminLoginController');
+const { getHomeLogin, postLogin,postLogout,postAuth } = require('../../controllers/adminLoginController');
 
 
 
-router.get('/loginPage', getHomeLogin);
+router.get('/', getHomeLogin);
 
 router.post('/login', postLogin);
-
+router.get('/logout', postLogout);
+router.post('/auth', postAuth);
 // router.get('/logoutPage/:id', getLogoutPage);
 
 // router.post('/logout', getLogout);
