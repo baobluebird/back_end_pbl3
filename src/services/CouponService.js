@@ -139,7 +139,20 @@ const increaseCoupon = (id, data) => {
         try {
             let valuePriceCoupon = 0;
             let valueShippingCoupon = 0;
-            const { idPrice, idShipping } = data;
+            let idPrice = null;
+            let idShipping = null;
+
+            for (const element of data) {
+                const idCheck = await Coupon.findOne({_id: element});
+                if (idCheck) {
+                    if (idCheck.methodDiscount === 'price') {
+                        idPrice = element;
+                    } else {
+                        idShipping = element;
+                    }
+                }
+            }
+
             if (idPrice) {
                 const couponData = await Coupon.findOne({ _id: idPrice });
 

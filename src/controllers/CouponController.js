@@ -98,7 +98,7 @@ const getAllCoupon = async (req, res) => {
 const increaseCoupon = async (req, res) => {
     try {
         const orderId = req.params.id;
-        const data = req.body;
+        const data = req.body.idCoupon;
         if(!orderId){
             return res.status(200).json({
                 status: 'ERR',
