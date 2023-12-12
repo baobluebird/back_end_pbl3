@@ -1,4 +1,6 @@
 const User = require('../models/UserModel');
+const Code = require('../models/CodeModel');
+const EmailService = require("../services/EmailService")
 const dotenv = require('dotenv');
 dotenv.config();
 const bcrypt = require('bcrypt');
@@ -248,6 +250,176 @@ const deleteManyUser = (ids) => {
     })
 }
 
+const createCode = (email) => {
+    return new Promise(async (resolve, reject) => {
+        try{
+            const user = await User.findOne({
+                email: email
+            })
+
+            if(user == null){
+                resolve({
+                    status: 'error',
+                    message: 'The email is not exist'
+                })
+            }
+
+            const code = Math.floor(Math.random() * 1000000)
+
+            await EmailService.sendEmailForgotPass(email, code)
+
+            const checkCode = await Code.findOne({
+                user: user._id,
+            })
+
+            if(checkCode){
+                const createCode = await Code.findOneAndUpdate({
+                    user: user._id,
+                },{
+                    code: code
+                })
+                if(createCode){
+                    resolve({
+                        status: 'success',
+                        message: 'Create code successfully',
+                        data: {
+                            user: user.user,
+                            id: createCode._id,
+                            name: "Forgot password",
+                        }
+                    })
+                }
+            }else{
+                const createCode = await Code.create({
+                    user: user._id,
+                    name: "Forgot password",
+                    code: code
+                })
+    
+                if(createCode){
+                    resolve({
+                        status: 'success',
+                        message: 'Create code successfully',
+                        data: {
+                            user: user.user,
+                            id: createCode._id,
+                            name: "Forgot password",
+                        }
+                    })
+                }
+            }
+        }catch(error){
+            reject(error) 
+        }
+    })
+}
+
+const checkCode = (id, code) => {
+    return new Promise(async (resolve, reject) => {
+        try{
+            const checkCode = await Code.findOne({
+                _id: id,
+                code: code
+            })
+
+            if(checkCode == null){
+                resolve({
+                    status: 'error',
+                    message: 'The code is not exist'
+                })
+            }
+
+            resolve({
+                status: 'success',
+                message: 'Check code successfully',
+                data: {
+                    user: checkCode.user,
+                    id: checkCode._id,
+                    name: "Forgot password",
+                }
+            })
+        }catch(error){
+            reject(error) 
+        }
+    })
+}
+
+const createTokenEmail = (email) => {
+    return new Promise(async (resolve, reject) => {
+        try{
+            const checkEmail = await User.findOne({
+                email: email
+            })
+
+            if(checkEmail == null){
+                resolve({
+                    status: 'error',
+                    message: 'The email is not exist'
+                })
+            }
+
+            const access_token = await generalAccessToken({
+                id: checkEmail._id, 
+                isAuth : true
+            });
+
+            const sendToken = await EmailService.sendEmailAuth(email, access_token)
+
+            if(sendToken){
+                resolve({
+                    status: 'success',
+                    message: 'Send token to email successfully',
+                    data: checkEmail
+                })
+            }
+
+        }catch(error){
+            reject(error) 
+        }
+    })
+}
+
+const checkTokenEmail = (token) => {
+    return new Promise(async (resolve, reject) => {
+        try{
+            jwt.verify(token, process.env.ACCESS_TOKEN, async(err, user) =>{
+                if(err){
+                    resolve({
+                        status: 'error',
+                        message: 'Unauthorized'
+                    })
+                }
+                const checkUser = await User.findOne({
+                    _id: user.id
+                })
+
+                if(checkUser == null){
+                    resolve({
+                        status: 'error',
+                        message: 'The user is not exist'
+                    })
+                }
+
+                if(user.isAuth == false){
+                    resolve({
+                        status: 'error',
+                        message: 'The user is not authenticated'
+                    })
+                }else{
+                    const data = await User.findByIdAndUpdate(user.id, {isAuth: true})
+                    resolve({
+                        status: 'success',
+                        message: 'Email is authenticated',
+                        data: data
+                    })
+                }
+            })
+        }catch(error){
+            reject(error) 
+        }
+    })
+}
+
 module.exports = {
     createUser,
     loginUser,
@@ -256,5 +428,9 @@ module.exports = {
     getAllUser,
     getDetailsUser,
     deleteManyUser,
-    getDetailsUserWithCart
+    getDetailsUserWithCart,
+    createCode,
+    checkCode,
+    createTokenEmail,
+    checkTokenEmail
 }

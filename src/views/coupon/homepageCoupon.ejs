@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page Product</title>
+    <title>Home Page Coupon</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <style>
@@ -36,69 +36,56 @@
 
 <body>
     <div class="topnav">
-        <a href="/admin/user">Home User</a>
+        <a href="/admin/user">Home Users</a>
         <a href="/admin/user/create">Create User</a>
-        <a class="active" href="/admin/product/create">Home Products</a>
+        <a href="/admin/product">Home Products</a>
         <a href="/admin/product/create">Create Product</a>
-        <a href="/admin/coupon">Home Coupons</a>
+        <a class="active" href="/admin/coupon">Home Coupons</a>
         <a href="/admin/coupon/create">Create Coupon</a>
         <a href="/admin/logout">Logout</a>
     </div>
     <div class="table-container" id="ListContainer" style="display: none;">
-        <div class="title">List Users</div>
+        <div class="title">List Coupons</div>
         <table>
             <tr>
                 <th>ID</th>
                 <th>name</th>
+                <th>methodDiscount</th>
                 <th>description</th>
-                <th>new_price</th>
-                <th>old_price</th>
-                <th>type</th>
-                <th>countInStock</th>
-                <th>total_rate</th>
-                <!-- <th>image</th> -->
-                <th>selled</th>
-                <th>Action</th>
+                <th>dateStart</th>
+                <th>dateEnd</th>
+                <th>value</th>
             </tr>
 
             <!-- loop for each  -->
-            <% listProducts.forEach(function(product){ %>
+            <% listCoupons.forEach(function(coupon){ %>
                 <tr>
                     <td>
-                        <%= product._id %>
+                        <%= coupon._id %>
                     </td>
                     <td>
-                        <%= product.name %>
+                        <%= coupon.name %>
                     </td>
                     <td>
-                        <%= product.description %>
+                        <%= coupon.methodDiscount %>
                     </td>
                     <td>
-                        <%= product.new_price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) %>
+                        <%= coupon.description %>
                     </td>
                     <td>
-                        <%= product.old_price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) %>
+                        <%= coupon.dateStart %>
                     </td>
                     <td>
-                        <%= product.type %>
+                        <%= coupon.dateEnd %>
                     </td>
                     <td>
-                        <%= product.countInStock %>
+                        <%= coupon.value %>
                     </td>
                     <td>
-                        <%= product.total_rate %>
-                    </td>
-                    <!-- <td>
-                        <%= product.image %>
-                    </td> -->
-                    <td>
-                        <%= product.selled %>
-                    </td>
-                    <td>
-                        <form action="/admin/product/update/<%= product._id %>" method="get">
+                        <form action="/admin/coupon/update/<%= coupon._id %>" method="get">
                             <button type="submit">Edit</button>
                         </form>
-                        <form action="/admin/product/delete-product/<%= product._id %>" method="post">
+                        <form action="/admin/coupon/delete-coupon/<%= coupon._id %>" method="post">
                             <button type="submit">Delete</button>
                         </form>
                     </td>

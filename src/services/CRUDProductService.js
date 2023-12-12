@@ -86,6 +86,43 @@ const getDetailsProduct = (id) => {
     })
 }
 
+const sortProduct = async (sort, filter) => {
+    try {
+        const totalProduct = await Product.countDocuments();
+        let allProduct;
+
+        if (filter) {
+            const label = filter[0];
+            let filterValue;
+
+            if (['new_price', 'old_price', 'countInStock', 'total_rate', 'selled'].includes(label)) {
+                filterValue = parseInt(filter[1]);
+            }
+
+            const filterQuery = filterValue
+                ? { [label]: filterValue }
+                : { [label]: { '$regex': filter[1] } };
+
+            allProduct = await Product.find(filterQuery).sort({ createdAt: -1, updatedAt: -1 });
+        } else if (sort) {
+            const objectSort = { [sort[1]]: sort[0] };
+            allProduct = await Product.find().sort(objectSort);
+        } else if (!limit) {
+            allProduct = await Product.find().sort({ createdAt: -1, updatedAt: -1 });
+        } else {
+            allProduct = await Product.find().sort({ createdAt: -1, updatedAt: -1 });
+        }
+
+        return {
+            status: 'success',
+            message: 'Successfully get all product',
+            data: allProduct,
+            total: totalProduct,
+        };
+    } catch (e) {
+        throw e;
+    }
+};
 
 const deleteManyProduct = (ids) => {
     return new Promise(async (resolve, reject) => {
@@ -108,5 +145,6 @@ module.exports = {
     deleteProduct,
     getAllProduct,
     getDetailsProduct,
-    deleteManyProduct
+    deleteManyProduct,
+    sortProduct
 }

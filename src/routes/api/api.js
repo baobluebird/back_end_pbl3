@@ -5,6 +5,7 @@ const CartRouter = require('./CartRouter')
 const CouponRouter = require('./CouponRouter')
 const PaymentRouter = require('./PaymentRouter')
 const RatingRouter = require('./RatingRouter')
+const CodeRouter = require('./CodeRouter')
 
 const adminCouponRouter = require('./adminCouponRouter')
 const adminUserRouter = require('./adminUserRouter')
@@ -18,7 +19,9 @@ const routes = (app) => {
     app.use('/api/coupon', CouponRouter) 
     app.use('/api/payment', PaymentRouter)
     app.use('/api/rating', RatingRouter)
- 
+    app.use('/api/forgot-pass', CodeRouter)
+    app.use('/api/auth-email', CodeRouter)
+
     app.use('/admin/user', adminUserRouter)
     app.use('/admin/product', adminProductRouter)
     app.use('/admin/coupon', adminCouponRouter)

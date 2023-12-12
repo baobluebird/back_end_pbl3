@@ -64,6 +64,54 @@ const sendEmailCreateOrder = async (orderData,paymentMethod, delivery, isPaid, P
   });
 }
 
+const sendEmailForgotPass = async (email, code) => {
+  let transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true, 
+    auth: {
+      user: process.env.MAIL_ACCOUNT, 
+      pass: process.env.MAIL_PASSWORD, 
+    },
+  });
+  transporter.use('compile', inlineBase64({cidPrefix: 'somePrefix_'}));
+
+  // send mail with defined transport object
+  let info = await transporter.sendMail({
+    from: process.env.MAIL_ACCOUNT, 
+    to: email, 
+    subject: "Reset Password", 
+    text: "Hello world?", 
+    html: `<div><b>Bạn đã yêu cầu reset mật khẩu tại shop PBL3</b></div>
+    <div><b>Mã code để reset mật khẩu:</b> ${code}</div>
+     `,
+  });
+}
+
+const sendEmailAuth = async (email,token) => {
+  let transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true, 
+    auth: {
+      user: process.env.MAIL_ACCOUNT, 
+      pass: process.env.MAIL_PASSWORD, 
+    },
+  });
+  transporter.use('compile', inlineBase64({cidPrefix: 'somePrefix_'}));
+
+  let info = await transporter.sendMail({
+    from: process.env.MAIL_ACCOUNT, 
+    to: email, 
+    subject: "Xác thực tài khoản", 
+    text: "Hello world?", 
+    html: `<div><b>Vui lòng xác thực email bằng đường dẫn phía dưới:</b></div>
+    <div><p><a href="http://localhost:3002/api/auth-email/check-token/${token}">Verify Email</a></p> </div>
+     `,
+  });
+}
 module.exports = {
-  sendEmailCreateOrder
+  sendEmailCreateOrder,
+  sendEmailForgotPass,
+  sendEmailAuth
 }

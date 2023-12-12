@@ -2,7 +2,7 @@ const CRUDUserService = require('../services/CRUDUserService');
 const getHomepage = async (req, res) => {
     try {
         const listUsers = await CRUDUserService.getAllUser();
-        return res.render('homepageUser.ejs', { listUsers: listUsers });
+        return res.render('user/homepageUser.ejs', { listUsers: listUsers });
     } catch (e) {
         return res.status(404).json({
             message: e.message || 'Error fetching users',
@@ -16,7 +16,7 @@ const postCreateUser = async (req, res) => {
 }
 
 const getCreateUser = (req, res) => {
-    res.render('createUser.ejs');
+    res.render('user/createUser.ejs');
 }
 
 const getUpdatePage = async (req, res) => {
@@ -25,7 +25,7 @@ const getUpdatePage = async (req, res) => {
 
     let user = await CRUDUserService.getDetailsUser(userId);
 
-    res.render('editUser.ejs', { userEdit : user });//{userEdit : user} = {userEdit : results[0]}
+    res.render('user/editUser.ejs', { userEdit : user });//{userEdit : user} = {userEdit : results[0]}
 }
 
 const postUpdateUser = async (req, res) => {
@@ -42,7 +42,7 @@ const postDeleteUser = async (req, res) => {
     const userId = req.params.id;
     let user = await CRUDUserService.getDetailsUser(userId);
 
-    res.render('deleteUser.ejs', { userEdit : user });
+    res.render('user/deleteUser.ejs', { userEdit : user });
 }
 
 const postHandleRemoveUser = async (req, res) => {

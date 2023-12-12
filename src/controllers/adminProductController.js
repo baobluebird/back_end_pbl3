@@ -3,7 +3,7 @@ const CRUDProductService = require('../services/CRUDProductService');
 const getHomepage = async (req, res) => {
     try {
         const listProducts = await CRUDProductService.getAllProduct();
-        return res.render('homepageProduct.ejs', { listProducts: listProducts });
+        return res.render('product/homepageProduct.ejs', { listProducts: listProducts });
     } catch (e) {
         return res.status(404).json({
             message: e.message || 'Error fetching users',
@@ -18,7 +18,7 @@ const postCreateProduct = async (req, res) => {
 }
 
 const getCreateProduct = (req, res) => {
-    res.render('createProduct.ejs');
+    res.render('product/createProduct.ejs');
 }
 
 const getUpdatePage = async (req, res) => {
@@ -27,7 +27,7 @@ const getUpdatePage = async (req, res) => {
 
     let product = await CRUDProductService.getDetailsProduct(productId);
 
-    res.render('editProduct.ejs', { productEdit : product });//{userEdit : user} = {userEdit : results[0]}
+    res.render('product/editProduct.ejs', { productEdit : product });//{userEdit : user} = {userEdit : results[0]}
 }
 
 const postUpdateProduct = async (req, res) => {
@@ -43,7 +43,7 @@ const postDeleteProduct = async (req, res) => {
     const productId = req.params.id;
     let product = await CRUDProductService.getDetailsProduct(productId);
 
-    res.render('deleteProduct.ejs', { productEdit : product });
+    res.render('product/deleteProduct.ejs', { productEdit : product });
 }
 
 const postHandleRemoveProduct = async (req, res) => {
@@ -53,6 +53,18 @@ const postHandleRemoveProduct = async (req, res) => {
     return res.redirect('/admin/product/');
 }
 
+const sortProduct = async (req, res) => {
+    try {
+        const {sort, filter } = req.query
+        const response = await CRUDProductService.getAllProduct(sort, filter)
+        return res.status(200).json(response)
+    } catch (e) {
+        return res.status(404).json({
+            message: e
+        })
+    }
+}
+
 module.exports = {
     getHomepage,
     postCreateProduct,
@@ -60,5 +72,6 @@ module.exports = {
     getUpdatePage,
     postUpdateProduct,
     postDeleteProduct,
-    postHandleRemoveProduct
+    postHandleRemoveProduct,
+    sortProduct
 }
