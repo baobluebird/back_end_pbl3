@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { generalAccessToken } = require('./JwtService');
+const { generalAccessToken ,generalAccessTokenForEmail} = require('./JwtService');
 
 const createUser = (newUser) => {
     return new Promise(async (resolve, reject) => {
@@ -358,20 +358,16 @@ const createTokenEmail = (email) => {
                 })
             }
 
-            const access_token = await generalAccessToken({
+            const access_token = await generalAccessTokenForEmail({
                 id: checkEmail._id, 
                 isAuth : true
             });
 
-            const sendToken = await EmailService.sendEmailAuth(email, access_token)
-
-            if(sendToken){
-                resolve({
-                    status: 'success',
-                    message: 'Send token to email successfully',
-                    data: checkEmail
-                })
-            }
+           await EmailService.sendEmailAuth(email, access_token)
+            resolve({
+                status: 'success',
+                message: 'Send token to email successfully',
+            })
 
         }catch(error){
             reject(error) 
@@ -384,13 +380,14 @@ const checkTokenEmail = (token) => {
         try{
             jwt.verify(token, process.env.ACCESS_TOKEN, async(err, user) =>{
                 if(err){
-                    resolve({
+                    return resolve({
                         status: 'error',
                         message: 'Unauthorized'
                     })
                 }
+                const  {payload} = user
                 const checkUser = await User.findOne({
-                    _id: user.id
+                    _id: payload.id
                 })
 
                 if(checkUser == null){
@@ -400,17 +397,16 @@ const checkTokenEmail = (token) => {
                     })
                 }
 
-                if(user.isAuth == false){
+                if(payload.isAuth == false){
                     resolve({
                         status: 'error',
                         message: 'The user is not authenticated'
                     })
                 }else{
-                    const data = await User.findByIdAndUpdate(user.id, {isAuth: true})
+                    await User.findByIdAndUpdate(payload.id, {isAuth: true})
                     resolve({
                         status: 'success',
                         message: 'Email is authenticated',
-                        data: data
                     })
                 }
             })
