@@ -89,6 +89,27 @@ const updateUser = async (req, res) => {
     }
 }
 
+const changePassword = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const {password} = req.body;
+        console.log(userId)
+        console.log(password)
+        if(!userId || !password){
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'The input is required'
+            })
+        }
+        const response = await UserService.changePassword(userId, password)
+        return res.status(200).json(response)
+    } catch (e) {
+        return res.status(404).json({
+            message: e
+        })
+    }
+}
+
 const deleteUser = async (req, res) => {
     try {
         const userId = req.params.id;
@@ -276,6 +297,7 @@ module.exports = {
     loginUser,
     logoutUser,
     updateUser,
+    changePassword,
     deleteUser,
     getAllUser,
     getDetailsUser,

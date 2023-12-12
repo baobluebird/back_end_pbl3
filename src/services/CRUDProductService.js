@@ -54,11 +54,17 @@ const deleteProduct = async (id) => {
     }
 }
 
-const getAllProduct = () => {
+const getAllProduct = (sort) => {
     return new Promise(async (resolve, reject) => {
         try{
-            const allProduct = await Product.find()
-                resolve(allProduct)
+            let allProduct;
+            if (sort) {
+                const objectSort = { [sort[1]]: sort[0] };
+                allProduct = await Product.find().sort(objectSort);
+            }else{
+                allProduct = await Product.find().sort({ createdAt: -1, updatedAt: -1 });
+            }
+            resolve(allProduct)
         }catch(error){
             reject(error) 
         }

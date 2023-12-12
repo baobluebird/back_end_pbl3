@@ -2,7 +2,10 @@ const CRUDProductService = require('../services/CRUDProductService');
 
 const getHomepage = async (req, res) => {
     try {
-        const listProducts = await CRUDProductService.getAllProduct();
+        const sort = req.query.sort;
+        console.log('sort',sort);
+        console.log('req.query', req.query);
+        const listProducts = await CRUDProductService.getAllProduct(sort||null);
         return res.render('product/homepageProduct.ejs', { listProducts: listProducts });
     } catch (e) {
         return res.status(404).json({
@@ -53,18 +56,6 @@ const postHandleRemoveProduct = async (req, res) => {
     return res.redirect('/admin/product/');
 }
 
-const sortProduct = async (req, res) => {
-    try {
-        const {sort, filter } = req.query
-        const response = await CRUDProductService.getAllProduct(sort, filter)
-        return res.status(200).json(response)
-    } catch (e) {
-        return res.status(404).json({
-            message: e
-        })
-    }
-}
-
 module.exports = {
     getHomepage,
     postCreateProduct,
@@ -73,5 +64,4 @@ module.exports = {
     postUpdateProduct,
     postDeleteProduct,
     postHandleRemoveProduct,
-    sortProduct
 }

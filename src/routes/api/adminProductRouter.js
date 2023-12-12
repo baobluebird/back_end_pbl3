@@ -16,4 +16,5 @@ router.post('/delete-product/:id', postDeleteProduct);
 
 router.post('/delete-product', postHandleRemoveProduct);
 
+router.get('/sort', getHomepage);
 module.exports = router; //export default router

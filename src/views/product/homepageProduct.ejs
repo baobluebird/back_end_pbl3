@@ -45,20 +45,31 @@
         <a href="/admin/logout">Logout</a>
     </div>
     <div class="table-container" id="ListContainer" style="display: none;">
+        <script>
+            function updateSortAction() {
+                var sortSelect = document.getElementById("sort");
+                var selectedSort = sortSelect.options[sortSelect.selectedIndex].value;
+                var form = document.getElementById("sortForm");
+        
+                // Extract field and order from the selected value
+                var [field, order] = selectedSort.split('-');
+                console.log(field, order);
+                // Update the form action accordingly
+                form.action = `/admin/product/sort?sort=${field}&sort=${order}`;
+            }
+        </script>
         <div class="title">List Products
-            <form action="/action_page.php"></form>
-            <label for="sort">Sắp xếp theo:</label>
-            <select id="sort" name="sort">
-                <option value="name">Tên</option>
-                <option value="new_price">Giá thấp đến cao</option>
-                <option value="new_price">Giá cao đến thấp</option>
-                <option value="countInStock"></option>
-                <option value="total_rate">Đánh gia</option>
-                <option value="selled">Nho</option>
-            </select>
-            <br><br>
-            <input type="submit" value="Submit">
-          </form>
+            <form id="sortForm" action="/admin/product/sort" method="get">
+                <label for="sort">Sắp xếp theo:</label>
+                <select id="sort" name="sort" onchange="updateSortAction()">
+                    <option value="name-asc">Tên A - Z</option>
+                    <option value="name-desc">Tên Z - A</option>
+                    <option value="price-asc">Giá thấp đến cao</option>
+                    <option value="price-desc">Giá cao đến thấp</option>
+                </select>
+                <br><br>
+                <input type="submit" value="Submit">
+            </form>
         </div>
         <table>
             <tr>
