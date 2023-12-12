@@ -10,7 +10,6 @@ const createPayment = async (req, res) => {
                 message: 'The input is required'
             })
         }
-        
         const data = req.body;
         const response = await PaymentService.createPayment(orderId, data)
         return res.status(200).json(response)

@@ -1,5 +1,5 @@
 const Coupon = require('../models/CouponModel');
-
+const Order = require('../models/OrderModel');
 const createCoupon = (newCoupon) => {
     return new Promise(async (resolve, reject) => {
         const { name,methodDiscount,description, dateStart, dateEnd, value } = newCoupon;
@@ -134,10 +134,117 @@ const getAllCoupon = (data) => {
     });
 };
 
+const increaseCoupon = (id, data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let valuePriceCoupon = 0;
+            let valueShippingCoupon = 0;
+            const { idPrice, idShipping } = data;
+            if (idPrice) {
+                const couponData = await Coupon.findOne({ _id: idPrice });
+
+                if (couponData) {
+                    valuePriceCoupon = couponData.value;
+                } else {
+                    console.error(`Coupon not found for id: ${idPrice}`);
+                }
+            }
+
+            if (idShipping) {
+                const couponData = await Coupon.findOne({ _id: idShipping });
+
+                if (couponData) {
+                    valueShippingCoupon = couponData.value;
+                } else {
+                    console.error(`Coupon not found for id: ${idShipping}`);
+                }
+            }
+
+            const order = await Order.findOne({_id:id});
+            if(!order){
+                return resolve({
+                    status: 'error',
+                    message: 'Order not found'
+                })
+            }   
+            let total_price = 0;
+            if(valuePriceCoupon){
+                total_price = order.totalPrice - (order.totalPrice * valuePriceCoupon / 100)
+            }
+            if(valueShippingCoupon){
+                total_price = order.totalPrice - (order.totalPrice * valuePriceCoupon / 100) - valueShippingCoupon
+            }
+            
+            resolve({
+                status: 'success',
+                message: 'Calculate coupon successfully',
+                data: {
+                    old_total_price: order.totalPrice,
+                    total_price: total_price,
+                    idPrice: idPrice,
+                    valuePriceCoupon: valuePriceCoupon,
+                    idShipping: idShipping,
+                    valueShippingCoupon: valueShippingCoupon
+                }
+            });
+        } catch (error) {
+            console.error('Error getting all coupons:', error);
+            reject(error);
+        }
+    });
+
+}
+
+const decreaseCoupon = (id,data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            console.log('id',id)
+            console.log('data',data)
+            let total = 0;
+            let idPrice = null;
+            let valuePriceCoupon = 0;
+            let idShipping = null;
+            let valueShippingCoupon = 0;
+           if(data.idPrice && data.idShipping){
+                if(id === data.idPrice){
+                    total = data.old_total_price - data.valueShippingCoupon
+                    idShipping = data.idShipping
+                    valueShippingCoupon = data.valueShippingCoupon
+                }
+                if(id === data.idShipping){
+                    total = data.old_total_price - (data.old_total_price * data.valuePriceCoupon / 100)
+                    idPrice = data.idPrice
+                    valuePriceCoupon = data.valuePriceCoupon
+                }
+           }else if(data.idPrice){
+                total = data.old_total_price
+           }else if(data.idShipping){
+                total = data.old_total_price
+           }
+            resolve({
+                status: 'success',
+                message: 'Calculate coupon successfully',
+                data: {
+                    old_total_price: data.old_total_price,
+                    total_price: total,
+                    idPrice: idPrice,
+                    valuePriceCoupon: valuePriceCoupon,
+                    idShipping: idShipping,
+                    valueShippingCoupon: valueShippingCoupon
+                }
+            });
+        } catch (error) {
+            console.error('Error getting all coupons:', error);
+            reject(error);
+        }
+    })
+}
 module.exports = {
     createCoupon,
     updateCoupon,
     deleteCoupon,
     getDetailCoupon,
-    getAllCoupon
+    getAllCoupon,
+    increaseCoupon,
+    decreaseCoupon
 }

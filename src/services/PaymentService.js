@@ -14,12 +14,32 @@ const EmailService = require("../services/EmailService")
 const createPayment = (id,newPayment) => {
     return new Promise(async (resolve, reject) => {
         const {delivery , paymentMethod, isPaid, idCoupon} =  newPayment;
+        console.log('idCoupon',idCoupon)
         let valuePriceCoupon = 0;
         let valueShippingCoupon = 0;
+        let CalculateTotalPrice = 0;
+        let idPrice = null;
+        let idShipping = null;
         try{
 
-            const { idPrice, idShipping } = idCoupon;
+            for (const element of idCoupon) {
+                const idCheck = await Coupon.findOne({_id: element});
+                if (idCheck) {
+                    if (idCheck.methodDiscount === 'price') {
+                        idPrice = element;
+                    } else {
+                        idShipping = element;
+                    }
+                }
+            }
 
+            console.log('idPrice',idPrice)
+            if(idPrice === null && idShipping === null){
+                return resolve({
+                    status: 'error',
+                    message: 'Coupon not found'
+                })
+            }
             if (idPrice) {
                 const couponData = await Coupon.findOne({ _id: idPrice });
 
@@ -56,6 +76,12 @@ const createPayment = (id,newPayment) => {
                 })
             }
 
+            if(order.shippingMethod === 'nhan tai cua hang'){
+                CalculateTotalPrice = order.totalPrice - (order.totalPrice * valuePriceCoupon / 100)
+            }else{
+                CalculateTotalPrice = valueShippingCoupon === 30000 ? order.totalPrice - (order.totalPrice * valuePriceCoupon / 100) - valueShippingCoupon : order.totalPrice - (order.totalPrice * valuePriceCoupon / 100) + 30000
+            }
+
             const createPayment = await Payment.create({
                 user: order.user,  
                 order: order._id,
@@ -71,7 +97,7 @@ const createPayment = (id,newPayment) => {
                 },
                 itemsPrice: order.itemsPrice,
                 shippingPrice: (order.shippingMethod === 'nhan tai cua hang') ? 0 : (30000 - valueShippingCoupon),
-                totalPrice: valueShippingCoupon === 30000 ? order.totalPrice - (order.totalPrice * valuePriceCoupon / 100) - valueShippingCoupon : order.totalPrice - (order.totalPrice * valuePriceCoupon / 100) + 30000,
+                totalPrice: CalculateTotalPrice,
                 isPaid
             })
             await EmailService.sendEmailCreateOrder(order, paymentMethod, delivery, isPaid, createPayment)

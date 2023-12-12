@@ -29,7 +29,7 @@ const createOrder = (userId, newOrder) => {
             const promises = orderItems.map(async (order) => {
                 const productData = await Product.findOneAndUpdate(
                     {
-                        _id: order.product,
+                        _id: order.product, 
                         countInStock: { $gte: order.amount }
                     },
                     {

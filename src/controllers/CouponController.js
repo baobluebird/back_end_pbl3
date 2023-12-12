@@ -95,10 +95,49 @@ const getAllCoupon = async (req, res) => {
     }
 }
 
+const increaseCoupon = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        const data = req.body;
+        if(!orderId){
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'The input is required'
+            })
+        }
+        const response = await CouponService.increaseCoupon(orderId, data)
+        return res.status(200).json(response)
+    } catch (e) {
+        return res.status(404).json({ 
+            message: e
+        })
+    }
+}
+
+const decreaseCoupon = async (req, res) => {
+    try {
+        const couponId = req.params.id;
+        const data = req.body.data;
+        if(!couponId){
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'The input is required'
+            })
+        }
+        const response = await CouponService.decreaseCoupon(couponId, data)
+        return res.status(200).json(response)
+    } catch (e) {
+        return res.status(404).json({ 
+            message: e
+        }) 
+    }
+}
 module.exports = {
     createCoupon,
     updateCoupon,
     deleteCoupon,
     getDetailCoupon,
-    getAllCoupon
+    getAllCoupon,
+    increaseCoupon,
+    decreaseCoupon
 }
