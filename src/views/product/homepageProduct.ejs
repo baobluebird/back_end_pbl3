@@ -38,38 +38,27 @@
     <div class="topnav">
         <a href="/admin/user">Home User</a>
         <a href="/admin/user/create">Create User</a>
-        <a class="active" href="/admin/product/create">Home Products</a>
+        <a class="active" href="/admin/product">Home Products</a>
         <a href="/admin/product/create">Create Product</a>
         <a href="/admin/coupon">Home Coupons</a>
         <a href="/admin/coupon/create">Create Coupon</a>
         <a href="/admin/logout">Logout</a>
     </div>
     <div class="table-container" id="ListContainer" style="display: none;">
-        <script>
-            function updateSortAction() {
-                var sortSelect = document.getElementById("sort");
-                var selectedSort = sortSelect.options[sortSelect.selectedIndex].value;
-                var form = document.getElementById("sortForm");
-        
-                // Extract field and order from the selected value
-                var [field, order] = selectedSort.split('-');
-                console.log(field, order);
-                // Update the form action accordingly
-                form.action = `/admin/product/sort?sort=${field}&sort=${order}`;
-            }
-        </script>
         <div class="title">List Products
-            <form id="sortForm" action="/admin/product/sort" method="get">
-                <label for="sort">Sắp xếp theo:</label>
-                <select id="sort" name="sort" onchange="updateSortAction()">
-                    <option value="name-asc">Tên A - Z</option>
-                    <option value="name-desc">Tên Z - A</option>
-                    <option value="price-asc">Giá thấp đến cao</option>
-                    <option value="price-desc">Giá cao đến thấp</option>
-                </select>
-                <br><br>
-                <input type="submit" value="Submit">
-            </form>
+            <!-- Add a div to display the selected option -->
+            <div id="selectedOption">Selected Option:</div>
+            <!-- Remove the form element -->
+            <label for="sort">Sắp xếp theo:</label>
+            <select id="sort" name="sort">
+                <option>Chọn kiểu sắp xếp</option>
+                <option value="name-asc">Tên A - Z</option>
+                <option value="name-desc">Tên Z - A</option>
+                <option value="new_price-asc">Giá thấp đến cao</option>
+                <option value="new_price-desc">Giá cao đến thấp</option>
+            </select>
+            <br><br>
+            <!-- Remove the submit button -->
         </div>
         <table>
             <tr>
@@ -152,6 +141,17 @@
                 }
             })
             .catch(error => console.error('Error:', error));
+            document.getElementById('sort').addEventListener('change', function (event) {
+                const sortValue = event.target.value;
+                console.log('Sort value:', sortValue);
+                const [sortName, sortType] = sortValue.split('-');
+                console.log('Sort name:', sortName);
+                console.log('Sort type:', sortType);
+    
+                window.location.href = `/admin/product/sort?sort=${sortName}&sort=${sortType}&sort=${sortValue}`;
+                selectedOptionDiv.innerText = 'Selected Option: ' + event.target.options[event.target.selectedIndex].text;
+
+            });
     </script>
 </body>
 

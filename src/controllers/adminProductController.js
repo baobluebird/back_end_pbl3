@@ -2,17 +2,26 @@ const CRUDProductService = require('../services/CRUDProductService');
 
 const getHomepage = async (req, res) => {
     try {
-        const sort = req.query.sort;
-        console.log('sort',sort);
-        console.log('req.query', req.query);
-        const listProducts = await CRUDProductService.getAllProduct(sort||null);
-        return res.render('product/homepageProduct.ejs', { listProducts: listProducts });
+        let sortName = null;
+        let sortType = null;
+        let name = "";
+        if (req.query.sort && typeof req.query.sort === 'object') {
+            sortName = req.query.sort[0];
+            sortType = req.query.sort[1];
+            name = req.query.sort[2]
+        }
+
+        console.log('Sorting by:', sortName, sortType);
+
+        const listProducts = await CRUDProductService.getAllProduct(sortName, sortType);
+
+        return res.render('product/homepageProduct.ejs', { listProducts: listProducts , name: name});
     } catch (e) {
         return res.status(404).json({
-            message: e.message || 'Error fetching users',
+            message: e.message || 'Error fetching products',
         });
     }
-}
+};
 
 const postCreateProduct = async (req, res) => {
     console.log(req.body);

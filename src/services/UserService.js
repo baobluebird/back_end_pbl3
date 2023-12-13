@@ -167,11 +167,16 @@ const changePassword = (id, password) => {
           message: "The new password must be different from the old password",
         });
       }
-
       const hashPassword = await bcrypt.hash(password, 10);
-      password = hashPassword;
+      const updatedUser = await User.findByIdAndUpdate(
+        {
+          _id: id,
+        },
+        {
+          password: hashPassword,
+        }
+      );;
 
-      const updatedUser = await User.findByIdAndUpdate(id, password, { new: true });
       resolve({
         status: "success",
         message: "User change password successfully",

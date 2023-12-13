@@ -93,8 +93,6 @@ const changePassword = async (req, res) => {
     try {
         const userId = req.params.id;
         const {password} = req.body;
-        console.log(userId)
-        console.log(password)
         if(!userId || !password){
             return res.status(200).json({
                 status: 'ERR',

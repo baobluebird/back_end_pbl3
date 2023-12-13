@@ -54,22 +54,24 @@ const deleteProduct = async (id) => {
     }
 }
 
-const getAllProduct = (sort) => {
+const getAllProduct = (sortName, sortType) => {
     return new Promise(async (resolve, reject) => {
-        try{
+        try {
             let allProduct;
-            if (sort) {
-                const objectSort = { [sort[1]]: sort[0] };
+
+            if (sortName !== null && sortType !== null) {
+                const objectSort = { [sortName]: sortType };
                 allProduct = await Product.find().sort(objectSort);
-            }else{
+            } else {
                 allProduct = await Product.find().sort({ createdAt: -1, updatedAt: -1 });
             }
-            resolve(allProduct)
-        }catch(error){
-            reject(error) 
+
+            resolve(allProduct);
+        } catch (error) {
+            reject(error);
         }
-    })
-}
+    });
+};
 
 const getDetailsProduct = (id) => {
     return new Promise(async (resolve, reject) => {
