@@ -1,7 +1,6 @@
 const Coupon = require('../models/CouponModel');
 const dotenv = require('dotenv');
 dotenv.config();
-const bcrypt = require('bcrypt');
 
 const createCoupon = async (newCoupon) => {
 

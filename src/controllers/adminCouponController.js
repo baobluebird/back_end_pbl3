@@ -1,7 +1,7 @@
-const CRUDUserService = require('../services/CRUDCouponService');  
+const CRUDCouponService = require('../services/CRUDCouponService');  
 const getHomepage = async (req, res) => {
     try {
-        const listCoupons = await CRUDUserService.getAllCoupon();
+        const listCoupons = await CRUDCouponService.getAllCoupon();
         return res.render('coupon/homepageCoupon.ejs', { listCoupons: listCoupons });
     } catch (e) {
         return res.status(404).json({
@@ -11,7 +11,7 @@ const getHomepage = async (req, res) => {
 }
 
 const postCreateCoupon = async (req, res) => {
-    await CRUDUserService.createCoupon(req.body); 
+    await CRUDCouponService.createCoupon(req.body); 
     res.redirect('/admin/coupon/');
 }
 
@@ -23,7 +23,7 @@ const getUpdatePage = async (req, res) => {
 
     const couponId = req.params.id;
 
-    let coupon = await CRUDUserService.getDetailsCoupon(couponId);
+    let coupon = await CRUDCouponService.getDetailsCoupon(couponId);
 
     res.render('coupon/editCoupon.ejs', { couponEdit : coupon });
 }
@@ -32,7 +32,7 @@ const postUpdateCoupon = async (req, res) => {
     const couponId = req.body.couponId;
     const data = req.body;
 
-    await CRUDUserService.updateCoupon(couponId, data)
+    await CRUDCouponService.updateCoupon(couponId, data)
 
     res.redirect('/admin/coupon/');
 
@@ -40,14 +40,14 @@ const postUpdateCoupon = async (req, res) => {
 
 const postDeleteCoupon = async (req, res) => {
     const couponId = req.params.id;
-    let coupon = await CRUDUserService.getDetailsCoupon(couponId);
+    let coupon = await CRUDCouponService.getDetailsCoupon(couponId);
 
     res.render('coupon/deleteCoupon.ejs', { couponEdit : coupon });
 }
 
 const postHandleRemoveCoupon = async (req, res) => {
     const couponId = req.body.couponId;
-    await CRUDUserService.deleteCoupon(couponId)
+    await CRUDCouponService.deleteCoupon(couponId)
     
     return res.redirect('/admin/coupon/');
 }

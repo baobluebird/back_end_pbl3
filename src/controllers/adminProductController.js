@@ -16,9 +16,6 @@ const getHomepage = async (req, res) => {
         if (req.query.search) {
             searchName = req.query.search;
         }
-        console.log('Sorting by:', sortName, sortType);
-        console.log('Searching by:', searchName);
-        console.log('req.query.search', req.query.search)
         switch (nameSort){
             case 'name-asc':
                 nameSort = 'Tên A - Z';
@@ -65,7 +62,6 @@ const getHomepage = async (req, res) => {
                 break;
         }
         const listProducts = await CRUDProductService.getAllProduct(sortName, sortType, searchName);
-        console.log(nameSort);
         return res.render('product/homepageProduct.ejs', { listProducts: listProducts , nameSort: nameSort, nameSearch: searchName});
     } catch (e) {
         return res.status(404).json({
@@ -76,7 +72,6 @@ const getHomepage = async (req, res) => {
 
 const getRatingPage = async (req, res) => {
     const productId = req.params.id;
-    console.log(productId);
     let product = await CRUDProductService.getRatingProduct(productId);
     res.render('product/ratingProduct.ejs', { product : product });
 }

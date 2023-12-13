@@ -42,41 +42,54 @@
         <a href="/admin/product/create">Create Product</a>
         <a href="/admin/coupon">Home Coupons</a>
         <a href="/admin/coupon/create">Create Coupon</a>
-        <a href="/admin/logout">Logout</a>
         <a class="active" href="/admin/order">Home Orders</a>
+        <a href="/admin/logout">Logout</a>
+        
     </div>
     <div class="table-container" id="ListContainer" style="display: none;">
-        <div class="title">List Users</div>
+        <div class="title">List Orders</div>
         <table>
             <tr>
                 <th>ID</th>
                 <th>Email</th>
                 <th>Name</th>
                 <th>Phone</th>
+                <th>Address</th>
+                <th>Shipping Method</th>
+                <th>Total Price</th>
                 <th>Action</th>
             </tr>
 
             <!-- loop for each  -->
-            <% listUsers.forEach(function(user){ %>
+            <% listOrders.forEach(function(order){ %>
                 <tr>
                     <td>
-                        <%= user._id %>
+                        <%= order._id %>
                     </td>
                     <td>
-                        <%= user.email %>
+                        <%= order.email %>
                     </td>
                     <td>
-                        <%= user.name %>
+                        <%= order.name %>
                     </td>
                     <td>
-                        <%= user.phone %>
+                        <%= order.phone %>
                     </td>
                     <td>
-                        <form action="/admin/user/update/<%= user._id %>" method="get">
-                            <button type="submit">Edit</button>
+                        <%= order.addressUser %>
+                    </td>
+                    <td>
+                        <%= order.shippingMethod %>
+                    </td>
+                    <td>
+                        <%= order.totalPrice %>
+                    </td>
+                    <td>
+                        <form action="/admin/order/details-item/<%= order._id %>" method="get">
+                            <button type="submit">Order Items</button>
                         </form>
-                        <form action="/admin/user/delete-user/<%= user._id %>" method="post">
-                            <button type="submit">Delete</button>
+                        <form action="/admin/order/details-address/<%= order._id %>" method="get">
+                            <button type="submit">Address Receive </button>
                         </form>
                     </td>
                 </tr>

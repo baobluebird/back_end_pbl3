@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rating A Product</title>
+    <title>Order Items</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <style>
@@ -45,9 +45,7 @@
         <a href="/admin/logout">Logout</a>
     </div>
     <div class="table-container">
-        <div class="title">List Rating </div>
-        <% var nameProduct = product.name %>
-        <div><strong><%= nameProduct %></strong></div>
+        <div class="title">List Items </div>
                 <table>
                     <tr>
                         <th>ID</th>
@@ -58,23 +56,23 @@
                     </tr>
         
                     <!-- loop for each  -->
-                    <% var listComment = product.comments %>
-                    <% listComment.forEach(function(comment){ %>
+                    <% var orderItems = product.orderItems %>
+                    <% orderItems.forEach(function(item){ %>
                         <tr>
                             <td>
-                                <%= comment._id %>
+                                <%= item._id %>
                             </td>
                             <td>
-                                <%= comment.name %>
+                                <%= item.name %>
                             </td>
                             <td>
-                                <%= comment.content %>
+                                <%= item.amount %>
                             </td>
                             <td>
-                                <%= comment.rate %>
+                                <%= item.new_price %>
                             </td>
                             <td>
-                                <%= comment.time_create %>
+                                <%= item.time_create %>
                             </td>
                         </tr>
                         <% }) %>

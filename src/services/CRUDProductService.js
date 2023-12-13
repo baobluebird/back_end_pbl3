@@ -36,8 +36,6 @@ const createProduct = async (newProduct) => {
 
 
 const updateProduct = async (id,data) => {
-    console.log(id)
-    console.log(data)
     try{
         await Product.findByIdAndUpdate(id,data, {new: true})
     }catch(error){
@@ -59,7 +57,6 @@ const getAllProduct = (sortName, sortType, searchName) => {
         try {
             let allProduct;
             if (searchName) {
-                console.log(searchName);
                 const regex = new RegExp(searchName, 'i');
                 allProduct = await Product.find({
                     $or: [
