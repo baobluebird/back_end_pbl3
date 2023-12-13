@@ -54,12 +54,22 @@ const deleteProduct = async (id) => {
     }
 }
 
-const getAllProduct = (sortName, sortType) => {
+const getAllProduct = (sortName, sortType, searchName) => {
     return new Promise(async (resolve, reject) => {
         try {
             let allProduct;
-
-            if (sortName !== null && sortType !== null) {
+            if (searchName) {
+                console.log(searchName);
+                const regex = new RegExp(searchName, 'i');
+                allProduct = await Product.find({
+                    $or: [
+                        { name: { $regex: regex } },
+                        { description: { $regex: regex } },
+                        { type	: { $regex: regex } },
+                    ]
+                });
+            }
+            else if (sortName && sortType) {
                 const objectSort = { [sortName]: sortType };
                 allProduct = await Product.find().sort(objectSort);
             } else {
@@ -132,6 +142,27 @@ const sortProduct = async (sort, filter) => {
     }
 };
 
+const getRatingProduct = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try{
+            const product = await Product.findOne({
+                _id: id
+            })
+
+            if(product == null){
+                resolve({
+                    status: 'error',
+                    message: 'The user is not exist'
+                })
+            }
+
+            resolve(product)
+        }catch(error){
+            reject(error) 
+        }
+    })
+}
+
 const deleteManyProduct = (ids) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -154,5 +185,6 @@ module.exports = {
     getAllProduct,
     getDetailsProduct,
     deleteManyProduct,
-    sortProduct
+    sortProduct,
+    getRatingProduct
 }

@@ -404,12 +404,19 @@ const createTokenEmail = (email) => {
       });
 
       if (checkEmail == null) {
-        resolve({
+        return resolve({
           status: "error",
           message: "The email is not exist",
         });
       }
 
+      if(checkEmail.isAuth == true){
+        return resolve({
+          status: "error",
+          message: "The email is authenticated",
+        });
+      }
+      
       const access_token = await generalAccessTokenForEmail({
         id: checkEmail._id,
         isAuth: true,

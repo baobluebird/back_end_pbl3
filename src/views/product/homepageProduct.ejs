@@ -46,32 +46,48 @@
     </div>
     <div class="table-container" id="ListContainer" style="display: none;">
         <div class="title">List Products
-            <!-- Add a div to display the selected option -->
-            <div id="selectedOption">Selected Option:</div>
-            <!-- Remove the form element -->
-            <label for="sort">Sắp xếp theo:</label>
+            <br>
+            <label for="search">Tìm kiếm:</label>
+            <input type="text" id="search" name="search" placeholder="Nhập từ khóa...">
+            <button onclick="performSearch()">Tìm kiếm</button>
+            <label for="sort"><br>Sắp xếp theo:</label>
             <select id="sort" name="sort">
                 <option>Chọn kiểu sắp xếp</option>
                 <option value="name-asc">Tên A - Z</option>
                 <option value="name-desc">Tên Z - A</option>
+                <option value="createdAt-asc">Cũ đến mới</option>
+                <option value="createdAt-desc">Mới đến cũ</option>
                 <option value="new_price-asc">Giá thấp đến cao</option>
                 <option value="new_price-desc">Giá cao đến thấp</option>
+                <option value="countInStock-asc">Số lượng trong kho thấp đến cao</option>
+                <option value="countInStock-desc">Số lượng trong kho cao đến thấp</option>
+                <option value="total_rate-asc">Đánh giá sao thấp đến cao</option>
+                <option value="total_rate-desc">Đánh giá sao cao đến thấp</option>
+                <option value="selled-asc">Đã bán ít đến nhiều</option>
+                <option value="selled-desc">Đã bán nhiều đến ít</option>
+                <option value="comments-asc">Lượt đánh giá ít đến nhiều</option>
+                <option value="comments-desc">Lượt đánh giá nhiêu đến ít</option>
             </select>
-            <br><br>
-            <!-- Remove the submit button -->
         </div>
+
+        <% var nameSearch %>
+        <div><strong>Từ khoá tìm kiếm:</strong> <%= nameSearch %></div>
+        <br>
+        <% var nameSort %>
+        <div><strong>Selected Option:</strong> <%= nameSort %></div>
+
         <table>
             <tr>
                 <th>ID</th>
-                <th>name</th>
-                <th>description</th>
-                <th>new_price</th>
-                <th>old_price</th>
-                <th>type</th>
-                <th>countInStock</th>
-                <th>total_rate</th>
-                <!-- <th>image</th> -->
-                <th>selled</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>New Price</th>
+                <th>Old Price</th>
+                <th>Type</th>
+                <th>Count In Stock</th>
+                <th>Total Rate</th>
+                <th>Total Comment</th>
+                <th>Sold</th>
                 <th>Action</th>
             </tr>
 
@@ -102,13 +118,16 @@
                     <td>
                         <%= product.total_rate %>
                     </td>
-                    <!-- <td>
-                        <%= product.image %>
-                    </td> -->
+                    <td>
+                        <%= product.comments.length %>
+                    </td>
                     <td>
                         <%= product.selled %>
                     </td>
                     <td>
+                        <form action="/admin/product/rating/<%= product._id %>" method="get">
+                            <button type="submit">Rating</button>
+                        </form>
                         <form action="/admin/product/update/<%= product._id %>" method="get">
                             <button type="submit">Edit</button>
                         </form>
@@ -147,11 +166,13 @@
                 const [sortName, sortType] = sortValue.split('-');
                 console.log('Sort name:', sortName);
                 console.log('Sort type:', sortType);
-    
                 window.location.href = `/admin/product/sort?sort=${sortName}&sort=${sortType}&sort=${sortValue}`;
-                selectedOptionDiv.innerText = 'Selected Option: ' + event.target.options[event.target.selectedIndex].text;
-
             });
+            function performSearch() {
+                const searchName = document.getElementById('search').value;
+                console.log('Performing search for:', searchName);
+                window.location.href = `/admin/product/search?search=${searchName}`;
+            }
     </script>
 </body>
 

@@ -274,7 +274,6 @@ const createTokenEmail = async (req, res) => {
 const checkTokenEmail = async (req, res) => {
     try {
         const token = req.params.id
-        console.log(token)
         if(!token){
             return res.status(200).json({
                 status: 'ERR',

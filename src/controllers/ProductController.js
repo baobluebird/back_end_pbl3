@@ -99,6 +99,17 @@ const getAllType = async (req, res) => {
     }
 }
 
+const searchProduct = async (req, res) => {
+    try {
+        const { limit, page,searchName } = req.query
+        const response = await ProductService.searchProduct(Number(limit) || null, Number(page) || 0, searchName)
+        return res.status(200).json(response)
+    } catch (e) {
+        return res.status(404).json({
+            message: e
+        })
+    }
+}
 
 module.exports = {
     createProduct,
@@ -106,5 +117,6 @@ module.exports = {
     getDetailsProduct,
     deleteProduct,
     getAllProduct,
-    getAllType
+    getAllType,
+    searchProduct
 }
