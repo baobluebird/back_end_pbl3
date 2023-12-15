@@ -5,8 +5,8 @@ dotenv.config();
 
 const createProduct = async (newProduct) => {
 
-    const {name, description, new_price, old_price, image, type, countInStock, total_rate, discount, selled} = newProduct;
-
+    const {name, new_price, old_price, image, type, countInStock, total_rate, discount, sold} = newProduct;
+    const {name_description, product_code, product_type, connection, switch_type, durability, format} = newProduct;
         try{
             const checkProduct = await Product.findOne({name:name});
             if(checkProduct){
@@ -18,7 +18,15 @@ const createProduct = async (newProduct) => {
 
             await Product.create({
                 name, 
-                description, 
+                description:{
+                    name_description, 
+                    product_code, 
+                    product_type, 
+                    connection, 
+                    switch_type, 
+                    durability, 
+                    format
+                }, 
                 new_price, 
                 old_price, 
                 image, 
@@ -26,7 +34,7 @@ const createProduct = async (newProduct) => {
                 countInStock: Number(countInStock), 
                 total_rate, 
                 discount: Number(discount),
-                selled
+                sold
             })
 
         }catch(error){

@@ -3,14 +3,21 @@ const mongoose = require('mongoose')
 const productSchema = new mongoose.Schema(
     {
         name: { type: String, required: true, unique: true },
-        description: { type: String },
+        description: { 
+            name_description: { type: String, required: true },
+            product_code: { type: String, required: true },
+            product_type: { type: String, required: true },
+            connection: { type: String, required: true },
+            switch_type: { type: String, required: true },
+            durability: { type: String, required: true },
+            format: { type: String, required: true },
+        },
         new_price: { type: Number, required: true },
         old_price: { type: Number, required: true },
-
         image: { type: String, required: true },
         type: { type: String, required: true },
         countInStock: { type: Number, required: true },
-        selled: { type: Number },
+        sold: { type: Number },
         total_rate: { type: Number, required: true },
         comments: [
             {
@@ -19,7 +26,7 @@ const productSchema = new mongoose.Schema(
                 rate: { type: Number, required: true },
                 user: {
                     type: mongoose.Schema.Types.ObjectId,
-                    ref: 'User',
+                    ref: 'User', 
                     required: true,
                 },
                 rating_id: {

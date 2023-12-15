@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { getHomepage} = require('../../controllers/adminOrderController');
+const { getHomepage, getDetailsOrderItems, getDetailsOrderAddress} = require('../../controllers/adminOrderController');
 
 router.get('/', getHomepage);
 
-// router.get('/create', getCreateCoupon);
+router.get('/details/:id', getDetailsOrderItems);
 
-// router.get('/update/:id', getUpdatePage);
+router.get('/sort', getHomepage);
 
 // router.post('/create-coupon', postCreateCoupon);
 

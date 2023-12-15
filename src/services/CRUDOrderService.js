@@ -2,11 +2,27 @@ const Order = require('../models/OrderModel');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const getAllOrder = () => {
+const getAllOrder = (sortName, sortType, nameSort) => {
     return new Promise(async (resolve, reject) => {
         try{
-            const allOrder = await Order.find()
-                resolve(allOrder)
+            let allOrder;
+            if(nameSort === 'Nhận tại cửa hàng'){
+                allOrder = await Order.find({
+                    shippingMethod: 'nhan tai cua hang'
+                });
+            }else if(nameSort === 'Giao hàng tận nơi'){
+                allOrder = await Order.find({
+                    shippingMethod: 'giao hang tan noi'
+                });
+            }
+            else if (sortName && sortType) {
+                const objectSort = { [sortName]: sortType };
+                allOrder = await Order.find().sort(objectSort);
+            } else {
+                allOrder = await Order.find().sort({ createdAt: -1, updatedAt: -1 });
+            }
+
+            resolve(allOrder);
         }catch(error){
             reject(error) 
         }

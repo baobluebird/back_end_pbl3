@@ -64,8 +64,8 @@ const getHomepage = async (req, res) => {
         const listProducts = await CRUDProductService.getAllProduct(sortName, sortType, searchName);
         return res.render('product/homepageProduct.ejs', { listProducts: listProducts , nameSort: nameSort, nameSearch: searchName});
     } catch (e) {
-        return res.status(404).json({
-            message: e.message || 'Error fetching products',
+        return res.render('product/homepageProduct.ejs',{
+            errorMes: 'Error search products',
         });
     }
 };

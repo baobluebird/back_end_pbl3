@@ -44,58 +44,68 @@
         <a href="/admin/coupon/create">Create Coupon</a>
         <a class="active" href="/admin/order">Home Orders</a>
         <a href="/admin/logout">Logout</a>
-        
+
     </div>
     <div class="table-container" id="ListContainer" style="display: none;">
-        <div class="title">List Orders</div>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Email</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Address</th>
-                <th>Shipping Method</th>
-                <th>Total Price</th>
-                <th>Action</th>
-            </tr>
-
-            <!-- loop for each  -->
-            <% listOrders.forEach(function(order){ %>
+        <div class="title">List Orders
+            <label for="sort"><br>Sắp xếp theo:</label>
+            <select id="sort" name="sort">
+                <option>Chọn kiểu sắp xếp</option>
+                <option value="method-asc">Nhận tại cửa hàng</option>
+                <option value="method-desc">Giao hàng tận nơi</option>
+                <option value="totalPrice-asc">Tổng tiền thấp đến cao</option>
+                <option value="totalPrice-desc">Tổng tiền cao đến thấp</option>
+            </select>
+        </div>
+        <% var nameSort %>
+            <div><strong>Selected Option:</strong>
+                <%= nameSort %>
+            </div>
+            <table>
                 <tr>
-                    <td>
-                        <%= order._id %>
-                    </td>
-                    <td>
-                        <%= order.email %>
-                    </td>
-                    <td>
-                        <%= order.name %>
-                    </td>
-                    <td>
-                        <%= order.phone %>
-                    </td>
-                    <td>
-                        <%= order.addressUser %>
-                    </td>
-                    <td>
-                        <%= order.shippingMethod %>
-                    </td>
-                    <td>
-                        <%= order.totalPrice %>
-                    </td>
-                    <td>
-                        <form action="/admin/order/details-item/<%= order._id %>" method="get">
-                            <button type="submit">Order Items</button>
-                        </form>
-                        <form action="/admin/order/details-address/<%= order._id %>" method="get">
-                            <button type="submit">Address Receive </button>
-                        </form>
-                    </td>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Shipping Method</th>
+                    <th>Total Price</th>
+                    <th>Action</th>
                 </tr>
-            <% }) %>
 
-        </table>
+                <!-- loop for each  -->
+                <% listOrders.forEach(function(order){ %>
+                    <tr>
+                        <td>
+                            <%= order._id %>
+                        </td>
+                        <td>
+                            <%= order.email %>
+                        </td>
+                        <td>
+                            <%= order.name %>
+                        </td>
+                        <td>
+                            <%= order.phone %>
+                        </td>
+                        <td>
+                            <%= order.addressUser %>
+                        </td>
+                        <td>
+                            <%= order.shippingMethod %>
+                        </td>
+                        <td>
+                            <%= order.totalPrice %>
+                        </td>
+                        <td>
+                            <form action="/admin/order/details/<%= order._id %>" method="get">
+                                <button type="submit">Details</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <% }) %>
+
+            </table>
     </div>
     <script>
         const access_token = localStorage.getItem('access_token');
@@ -106,17 +116,25 @@
                 'Content-Type': 'application/json'
             },
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            if (data.message === 'Unauthorized') {
-                alert('You are not authorized to access this page');
-                window.location.href = '/admin';
-            } else {
-                document.getElementById('ListContainer').style.display = 'block';
-            }
-        })
-        .catch(error => console.error('Error:', error));
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.message === 'Unauthorized') {
+                    alert('You are not authorized to access this page');
+                    window.location.href = '/admin';
+                } else {
+                    document.getElementById('ListContainer').style.display = 'block';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+            document.getElementById('sort').addEventListener('change', function (event) {
+                const sortValue = event.target.value;
+                console.log('Sort value:', sortValue);
+                const [sortName, sortType] = sortValue.split('-');
+                console.log('Sort name:', sortName);
+                console.log('Sort type:', sortType);
+                window.location.href = `/admin/order/sort?sort=${sortName}&sort=${sortType}&sort=${sortValue}`;
+            });
     </script>
 </body>
 

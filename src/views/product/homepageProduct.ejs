@@ -70,76 +70,89 @@
                 <option value="comments-desc">Lượt đánh giá nhiêu đến ít</option>
             </select>
         </div>
+        <% var errorMes=errorMes %>
+            <% if (errorMes) { %>
+                <script>
+                    alert('<%= errorMes %>');
+                </script>
+                <% } %>
+                    <% var nameSearch %>
+                        <div><strong>Từ khoá tìm kiếm:</strong>
+                            <%= nameSearch %>
+                        </div>
+                        <br>
+                        <% var nameSort %>
+                            <div><strong>Selected Option:</strong>
+                                <%= nameSort %>
+                            </div>
+                            <table>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>New Price</th>
+                                    <th>Old Price</th>
+                                    <th>Type</th>
+                                    <th>Count In Stock</th>
+                                    <th>Total Rate</th>
+                                    <th>Total Comment</th>
+                                    <th>Sold</th>
+                                    <th>Action</th>
+                                </tr>
 
-        <% var nameSearch %>
-        <div><strong>Từ khoá tìm kiếm:</strong> <%= nameSearch %></div>
-        <br>
-        <% var nameSort %>
-        <div><strong>Selected Option:</strong> <%= nameSort %></div>
-
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>New Price</th>
-                <th>Old Price</th>
-                <th>Type</th>
-                <th>Count In Stock</th>
-                <th>Total Rate</th>
-                <th>Total Comment</th>
-                <th>Sold</th>
-                <th>Action</th>
-            </tr>
-
-            <!-- loop for each  -->
-            <% listProducts.forEach(function(product){ %>
-                <tr>
-                    <td>
-                        <%= product._id %>
-                    </td>
-                    <td>
-                        <%= product.name %>
-                    </td>
-                    <td>
-                        <%= product.description %>
-                    </td>
-                    <td>
-                        <%= product.new_price.toLocaleString('vi-VN', { style: 'currency' , currency: 'VND' }) %>
-                    </td>
-                    <td>
-                        <%= product.old_price.toLocaleString('vi-VN', { style: 'currency' , currency: 'VND' }) %>
-                    </td>
-                    <td>
-                        <%= product.type %>
-                    </td>
-                    <td>
-                        <%= product.countInStock %>
-                    </td>
-                    <td>
-                        <%= product.total_rate %>
-                    </td>
-                    <td>
-                        <%= product.comments.length %>
-                    </td>
-                    <td>
-                        <%= product.selled %>
-                    </td>
-                    <td>
-                        <form action="/admin/product/rating/<%= product._id %>" method="get">
-                            <button type="submit">Rating</button>
-                        </form>
-                        <form action="/admin/product/update/<%= product._id %>" method="get">
-                            <button type="submit">Edit</button>
-                        </form>
-                        <form action="/admin/product/delete-product/<%= product._id %>" method="post">
-                            <button type="submit">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                <% }) %>
-
-        </table>
+                                <!-- loop for each  -->
+                                <% var listProducts %>
+                                <% if(listProducts) {%>
+                                <% listProducts.forEach(function(product){ %>
+                                    <tr>
+                                        <td>
+                                            <%= product._id %>
+                                        </td>
+                                        <td>
+                                            <%= product.name %>
+                                        </td>
+                                        <td>
+                                            <%= product.description %>
+                                        </td>
+                                        <td>
+                                            <%= product.new_price.toLocaleString('vi-VN', { style: 'currency' ,
+                                                currency: 'VND' }) %>
+                                        </td>
+                                        <td>
+                                            <%= product.old_price.toLocaleString('vi-VN', { style: 'currency' ,
+                                                currency: 'VND' }) %>
+                                        </td>
+                                        <td>
+                                            <%= product.type %>
+                                        </td>
+                                        <td>
+                                            <%= product.countInStock %>
+                                        </td>
+                                        <td>
+                                            <%= product.total_rate %>
+                                        </td>
+                                        <td>
+                                            <%= product.comments.length %>
+                                        </td>
+                                        <td>
+                                            <%= product.sold %>
+                                        </td>
+                                        <td>
+                                            <form action="/admin/product/rating/<%= product._id %>" method="get">
+                                                <button type="submit">Rating</button>
+                                            </form>
+                                            <form action="/admin/product/update/<%= product._id %>" method="get">
+                                                <button type="submit">Edit</button>
+                                            </form>
+                                            <form action="/admin/product/delete-product/<%= product._id %>"
+                                                method="post">
+                                                <button type="submit">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                                <%}%>
+                            </table>
     </div>
     <script>
         const access_token = localStorage.getItem('access_token');
@@ -161,19 +174,19 @@
                 }
             })
             .catch(error => console.error('Error:', error));
-            document.getElementById('sort').addEventListener('change', function (event) {
-                const sortValue = event.target.value;
-                console.log('Sort value:', sortValue);
-                const [sortName, sortType] = sortValue.split('-');
-                console.log('Sort name:', sortName);
-                console.log('Sort type:', sortType);
-                window.location.href = `/admin/product/sort?sort=${sortName}&sort=${sortType}&sort=${sortValue}`;
-            });
-            function performSearch() {
-                const searchName = document.getElementById('search').value;
-                console.log('Performing search for:', searchName);
-                window.location.href = `/admin/product/search?search=${searchName}`;
-            }
+        document.getElementById('sort').addEventListener('change', function (event) {
+            const sortValue = event.target.value;
+            console.log('Sort value:', sortValue);
+            const [sortName, sortType] = sortValue.split('-');
+            console.log('Sort name:', sortName);
+            console.log('Sort type:', sortType);
+            window.location.href = `/admin/product/sort?sort=${sortName}&sort=${sortType}&sort=${sortValue}`;
+        });
+        function performSearch() {
+            const searchName = document.getElementById('search').value;
+            console.log('Performing search for:', searchName);
+            window.location.href = `/admin/product/search?search=${searchName}`;
+        }
     </script>
 </body>
 

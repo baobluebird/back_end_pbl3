@@ -47,14 +47,47 @@
 
                 <div class="input-group">
                     <label>
-                        Description:
+                        Description Name:
                     </label>
-                    <input 
-                    type="text" 
-                    name="description" 
-                    value="<%= productEdit.description %>"
-                    />
+                    <input type="text" name="name_description" value="<%= productEdit.description.name_description %>" />
                 </div>
+                <div class="input-group">
+                    <label>
+                        Product Code:
+                    </label>
+                    <input type="text" name="product_code" value="<%= productEdit.description.product_code %>"/>
+                </div>
+                <div class="input-group">
+                    <label>
+                        Product Type: 
+                    </label>
+                    <input type="text" name="product_type" value="<%= productEdit.description.product_type %>"/>
+                </div>
+                <div class="input-group">
+                    <label>
+                        Connection Standard: 
+                    </label>
+                    <input type="text" name="connection" value="<%= productEdit.description.connection %>" />
+                </div>
+                <div class="input-group">
+                    <label>
+                        Switch Type: 
+                    </label>
+                    <input type="text" name="switch_type" value="<%= productEdit.description.switch_type %>"/>
+                </div>
+                <div class="input-group">
+                    <label>
+                        Durability: 
+                    </label>
+                    <input type="text" name="durability" value="<%= productEdit.description.durability %>"/>
+                </div>
+                <div class="input-group">
+                    <label>
+                        Format:
+                    </label>
+                    <input type="text" name="format" value="<%= productEdit.description.format %>"/>
+                </div>
+
                 <div class="input-group">
                     <label>
                         New Price:
@@ -117,12 +150,12 @@
                 </div>
                 <div class="input-group">
                     <label>
-                        Selled:
+                        Sold:
                     </label>
                     <input 
                     type="text" 
                     name="selled" 
-                    value="<%= productEdit.selled %>"
+                    value="<%= productEdit.sold %>"
                     />
                 </div>
                 

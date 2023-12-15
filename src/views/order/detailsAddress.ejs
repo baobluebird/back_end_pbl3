@@ -3,10 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete A User</title>
+    <title>Address Order</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
+<style>
+    .title {
+        font-size: 25px;
+        font-weight: 600;
+        padding-bottom: 10px;
+    }
 
+    .table-container {
+        padding: 15px 20px;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th,
+    td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+        background-color: rgb(180, 178, 178);
+    }
+</style>
 <body>
     <div class="topnav">
         <a href="/admin/user">Home Users</a>
@@ -18,36 +44,9 @@
         <a href="/admin/order">Home Orders</a>
         <a href="/admin/logout">Logout</a>
     </div>
-    <div class="form-delete">
-        <form action="/admin/user/delete-user" method="post">
-            <fieldset>
-                <legend>Delete Users:</legend>
-                <div class="input-group d-none">
-                    <label>
-                        ID:
-                    </label>
-                    <input 
-                    type="text" 
-                    name="userId" 
-                    value="<%= userEdit.id %>"
-                    />
-                </div>
-
-                <div class="input-group">
-                    <label>
-                        Are you sure to delete this user with Email:
-                    </label>
-                    <input 
-                    type="text" 
-                    name="email" 
-                    value="<%= userEdit.email %>"
-                    />
-                </div>
-                <div>
-                    <button onclick="alert('Delete user successfully')"> Confirm </button>
-                </div>
-            </fieldset>
-        </form>
+    <div class="table-container">
+        <div class="title">Address Receive </div>
+        <div><strong>Tên người order:</strong><strong><%= order.name %></strong></div>
     </div>
 </body>
 
