@@ -5,7 +5,7 @@ dotenv.config();
 
 const createProduct = async (newProduct) => {
 
-    const {name, new_price, old_price, image, type, countInStock, total_rate, discount, sold} = newProduct;
+    const {name, guarantee, new_price, old_price, image, type, countInStock, total_rate, discount, sold} = newProduct;
     const {name_description, product_code, product_type, connection, switch_type, durability, format} = newProduct;
         try{
             const checkProduct = await Product.findOne({name:name});
@@ -27,6 +27,7 @@ const createProduct = async (newProduct) => {
                     durability, 
                     format
                 }, 
+                guarantee,
                 new_price, 
                 old_price, 
                 image, 
@@ -60,7 +61,7 @@ const deleteProduct = async (id) => {
     }
 }
 
-const getAllProduct = (sortName, sortType, searchName) => {
+const getAllProduct = (sortName, sortType, searchName, type, brand) => {
     return new Promise(async (resolve, reject) => {
         try {
             let allProduct;
@@ -73,6 +74,26 @@ const getAllProduct = (sortName, sortType, searchName) => {
                         { type	: { $regex: regex } },
                     ]
                 });
+            }
+            else if (type) {
+                const regex = new RegExp(type, 'i');
+                allProduct = await Product.find({
+                    $or: [
+                        { name: { $regex: regex } },
+                        { description: { $regex: regex } },
+                        { type	: { $regex: regex } },
+                    ]
+                });
+            }else if(brand){
+                const regex = new RegExp(brand, 'i');
+                const objectSort = { [sortName]: sortType };
+                allProduct = await Product.find({
+                    $or: [
+                        { name: { $regex: regex } },
+                        { description: { $regex: regex } },
+                        { type	: { $regex: regex } },
+                    ]
+                }).sort(objectSort);
             }
             else if (sortName && sortType) {
                 const objectSort = { [sortName]: sortType };
@@ -192,4 +213,4 @@ module.exports = {
     deleteManyProduct,
     sortProduct,
     getRatingProduct
-}
+} 

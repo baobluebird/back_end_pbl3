@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema(
             durability: { type: String, required: true },
             format: { type: String, required: true },
         },
+        guarantee: { type: String, required: true },
         new_price: { type: Number, required: true },
         old_price: { type: Number, required: true },
         image: { type: String, required: true },

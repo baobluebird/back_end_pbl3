@@ -69,6 +69,25 @@
                 <option value="comments-asc">Lượt đánh giá ít đến nhiều</option>
                 <option value="comments-desc">Lượt đánh giá nhiêu đến ít</option>
             </select>
+            <label for="markBrand">RAZER</label>
+            <input type="checkbox" id="markBrand1" name="RAZER"> 
+            <label for="markBrand">LOGITECH</label>
+            <input type="checkbox" id="markBrand2" name="LOGITECH"> 
+            <label for="markBrand">CORSAIR</label>
+            <input type="checkbox" id="markBrand3" name="CORSAIR"> 
+            <label for="markBrand">STEELSERIES</label>
+            <input type="checkbox" id="markBrand4" name="STEELSERIES"> 
+            <label for="markBrand">DUCKY</label>
+            <input type="checkbox" id="markBrand5" name="DUCKY"> 
+            <label for="type"><br>Hãng:</label>
+            <select id="type" name="type">
+                <option>Chọn hãng</option>
+                <option value="RAZER">RAZER</option>
+                <option value="LOGITECH">LOGITECH</option>
+                <option value="CORSAIR">CORSAIR</option>
+                <option value="STEELSERIES">STEELSERIES</option>
+                <option value="DUCKY">DUCKY</option>
+            </select>
         </div>
         <% var errorMes=errorMes %>
             <% if (errorMes) { %>
@@ -82,14 +101,25 @@
                         </div>
                         <br>
                         <% var nameSort %>
-                            <div><strong>Selected Option:</strong>
+                            <div><strong>Sắp xếp theo:</strong>
                                 <%= nameSort %>
+                            </div>
+                            <br>
+                        <% var type %>
+                            <div><strong>Hãng:</strong>
+                                <%= type %>
+                            </div>
+                            <br>
+                        <% var count %>
+                            <div><strong>Số lượng:</strong>
+                                <%= count %>
                             </div>
                             <table>
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Description</th>
+                                    <th>Guarantee</th>
                                     <th>New Price</th>
                                     <th>Old Price</th>
                                     <th>Type</th>
@@ -113,6 +143,9 @@
                                         </td>
                                         <td>
                                             <%= product.description %>
+                                        </td>
+                                        <td>
+                                            <%= product.guarantee %>
                                         </td>
                                         <td>
                                             <%= product.new_price.toLocaleString('vi-VN', { style: 'currency' ,
@@ -176,11 +209,43 @@
             .catch(error => console.error('Error:', error));
         document.getElementById('sort').addEventListener('change', function (event) {
             const sortValue = event.target.value;
+            const brandCheckbox1 = document.getElementById('markBrand1');
+            const brandCheckbox2 = document.getElementById('markBrand2');
+            const brandCheckbox3 = document.getElementById('markBrand3');
+            const brandCheckbox4 = document.getElementById('markBrand4');
+            const brandCheckbox5 = document.getElementById('markBrand5');
+
             console.log('Sort value:', sortValue);
+
             const [sortName, sortType] = sortValue.split('-');
             console.log('Sort name:', sortName);
             console.log('Sort type:', sortType);
-            window.location.href = `/admin/product/sort?sort=${sortName}&sort=${sortType}&sort=${sortValue}`;
+
+            if(brandCheckbox1.checked){
+                const brand = brandCheckbox1.name;
+                window.location.href = `/admin/product/sort?sort=${sortName}&sort=${sortType}&sort=${sortValue}&brand=${brand}`;
+            }else if(brandCheckbox2.checked){
+                const brand = brandCheckbox2.name;
+                window.location.href = `/admin/product/sort?sort=${sortName}&sort=${sortType}&sort=${sortValue}&brand=${brand}`;
+            }else if(brandCheckbox3.checked){
+                const brand = brandCheckbox3.name;
+                window.location.href = `/admin/product/sort?sort=${sortName}&sort=${sortType}&sort=${sortValue}&brand=${brand}`;
+            }else if(brandCheckbox4.checked){
+                const brand = brandCheckbox4.name;
+                window.location.href = `/admin/product/sort?sort=${sortName}&sort=${sortType}&sort=${sortValue}&brand=${brand}`;
+            }else if(brandCheckbox5.checked){
+                const brand = brandCheckbox5.name;
+                window.location.href = `/admin/product/sort?sort=${sortName}&sort=${sortType}&sort=${sortValue}&brand=${brand}`;
+            }
+            else{
+                window.location.href = `/admin/product/sort?sort=${sortName}&sort=${sortType}&sort=${sortValue}`;
+            }
+        });
+        document.getElementById('type').addEventListener('change', function (event) {
+            const type = event.target.value;
+            let searchName = "";
+            console.log('type:', type);
+            window.location.href = `/admin/product/search?type=${type}`;
         });
         function performSearch() {
             const searchName = document.getElementById('search').value;
