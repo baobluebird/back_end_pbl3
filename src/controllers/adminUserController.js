@@ -2,7 +2,7 @@ const CRUDUserService = require('../services/CRUDUserService');
 const getHomepage = async (req, res) => {
     try {
         const listUsers = await CRUDUserService.getAllUser();
-        return res.render('user/homepageUser.ejs', { listUsers: listUsers });
+        return res.render('user/homepageUser.ejs', { listUsers: listUsers , count : listUsers.length});
     } catch (e) {
         return res.status(404).json({
             message: e.message || 'Error fetching users',

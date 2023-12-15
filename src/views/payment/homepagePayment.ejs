@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page Order</title>
+    <title>Home Page Payment</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <style>
@@ -42,12 +42,13 @@
         <a href="/admin/product/create">Create Product</a>
         <a href="/admin/coupon">Home Coupons</a>
         <a href="/admin/coupon/create">Create Coupon</a>
-        <a class="active" href="/admin/order">Home Orders</a>
+        <a href="/admin/order">Home Orders</a>
+        <a class="active" href="/admin/order">Home Payments</a>
         <a href="/admin/logout">Logout</a>
 
     </div>
     <div class="table-container" id="ListContainer" style="display: none;">
-        <div class="title">List Orders
+        <div class="title">List Payments
             <label for="sort"><br>Sắp xếp theo:</label>
             <select id="sort" name="sort">
                 <option>Chọn kiểu sắp xếp</option>
@@ -73,33 +74,38 @@
                     <th>Phone</th>
                     <th>Address</th>
                     <th>Shipping Method</th>
+                    <th>Payment Method</th>
+                    <th>Coupon</th>
+                    <th>Shipping Price</th>
+                    <th>Price</th>
                     <th>Total Price</th>
+                    <th>isPaid</th>
                     <th>Action</th>
                 </tr>
 
                 <!-- loop for each  -->
-                <% listOrders.forEach(function(order){ %>
+                <% listPayments.forEach(function(payment){ %>
                     <tr>
                         <td>
-                            <%= order._id %>
+                            <%= payment._id %>
                         </td>
                         <td>
-                            <%= order.email %>
+                            <%= payment.email %>
                         </td>
                         <td>
-                            <%= order.name %>
+                            <%= payment.name %>
                         </td>
                         <td>
-                            <%= order.phone %>
+                            <%= payment.phone %>
                         </td>
                         <td>
-                            <%= order.addressUser %>
+                            <%= payment.addressUser %>
                         </td>
                         <td>
-                            <%= order.shippingMethod %>
+                            <%= payment.shippingMethod %>
                         </td>
                         <td>
-                            <%= order.totalPrice %>
+                            <%= payment.totalPrice %>
                         </td>
                         <td>
                             <form action="/admin/order/details/<%= order._id %>" method="get">

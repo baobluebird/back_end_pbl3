@@ -25,7 +25,7 @@ const getUpdatePage = async (req, res) => {
 
     let coupon = await CRUDCouponService.getDetailsCoupon(couponId);
 
-    res.render('coupon/editCoupon.ejs', { couponEdit : coupon });
+    res.render('coupon/editCoupon.ejs', { couponEdit : coupon , count : coupon.length});
 }
 
 const postUpdateCoupon = async (req, res) => {

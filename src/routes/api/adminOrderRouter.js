@@ -8,6 +8,7 @@ router.get('/details/:id', getDetailsOrderItems);
 
 router.get('/sort', getHomepage);
 
+router.get('/details-payment/:id', getHomepage);
 // router.post('/create-coupon', postCreateCoupon);
 
 // router.post('/update-coupon', postUpdateCoupon);

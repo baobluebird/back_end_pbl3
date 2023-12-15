@@ -46,7 +46,13 @@
         <a href="/admin/logout">Logout</a>
     </div>
     <div class="table-container" id="ListContainer" style="display: none;">
-        <div class="title">List Users</div>
+        <div class="title">List Users
+
+        </div>
+        <% var count %>
+        <div><strong>Số lượng:</strong>
+            <%= count %>
+        </div>
         <table>
             <tr>
                 <th>ID</th>
@@ -77,6 +83,9 @@
                         </form>
                         <form action="/admin/user/delete-user/<%= user._id %>" method="post">
                             <button type="submit">Delete</button>
+                        </form>
+                        <form action="/admin/user/delete-user/<%= user._id %>" method="post">
+                            <button type="submit">Details Payment</button>
                         </form>
                     </td>
                 </tr>
