@@ -101,23 +101,6 @@ const createPayment = (id,newPayment) => {
                 totalPrice: CalculateTotalPrice,
                 isPaid
             })
-            if (order.shippingMethod === 'nhan tai cua hang') {
-                orderDetails.shopAddress = {
-                    fullName,
-                    phone,
-                    addressShop,
-                    cityShop,
-                    noteShipping
-                };
-            } else {
-                orderDetails.shippingAddress = {
-                    fullName,
-                    phone,
-                    addressShipping,
-                    cityShipping,
-                    noteShipping
-                };
-            }
             await EmailService.sendEmailCreateOrder(order, paymentMethod, delivery, isPaid, createPayment)
             if(createPayment){
                 resolve({

@@ -43,7 +43,7 @@
         <a href="/admin/coupon">Home Coupons</a>
         <a href="/admin/coupon/create">Create Coupon</a>
         <a href="/admin/order">Home Orders</a>
-        <a class="active" href="/admin/order">Home Payments</a>
+        <a class="active" href="/admin/payment">Home Payments</a>
         <a href="/admin/logout">Logout</a>
 
     </div>
@@ -72,7 +72,6 @@
                     <th>Email</th>
                     <th>Name</th>
                     <th>Phone</th>
-                    <th>Address</th>
                     <th>Shipping Method</th>
                     <th>Payment Method</th>
                     <th>Coupon</th>
@@ -99,17 +98,29 @@
                             <%= payment.phone %>
                         </td>
                         <td>
-                            <%= payment.addressUser %>
+                            <%= payment.shippingMethod %>
                         </td>
                         <td>
-                            <%= payment.shippingMethod %>
+                            <%= payment.paymentMethod %>
+                        </td>
+                        <td>
+                            <%= payment.coupon %>
+                        </td>
+                        <td>
+                            <%= payment.shippingPrice %>
+                        </td>
+                        <td>
+                            <%= payment.itemsPrice %>
                         </td>
                         <td>
                             <%= payment.totalPrice %>
                         </td>
                         <td>
-                            <form action="/admin/order/details/<%= order._id %>" method="get">
-                                <button type="submit">Details</button>
+                            <%= payment.isPaid %>
+                        </td>
+                        <td>
+                            <form action="/admin/order/details/<%= payment.order %>" method="get">
+                                <button type="submit">Order Details</button>
                             </form>
                         </td>
                     </tr>

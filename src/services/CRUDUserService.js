@@ -1,4 +1,6 @@
 const User = require('../models/UserModel');
+const Order = require('../models/OrderModel');
+const Payment = require('../models/PaymentModel');
 const dotenv = require('dotenv');
 dotenv.config();
 const bcrypt = require('bcrypt');
@@ -59,6 +61,44 @@ const getAllUser = () => {
     })
 }
 
+const getOrderUser = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const order = await Order.find({
+                user: id
+            }).sort({createdAt: -1, updatedAt: -1})
+            if (order === null) {
+                resolve({
+                    status: 'error',
+                    message: 'The order is not defined'
+                })
+            }
+            resolve(order)
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+const getPaymentUser = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const payment = await Payment.find({
+                user: id
+            }).sort({createdAt: -1, updatedAt: -1})
+            if (payment === null) {
+                resolve({
+                    status: 'error',
+                    message: 'The order is not defined'
+                })
+            }
+            resolve(payment)
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 const getDetailsUser = (id) => {
     return new Promise(async (resolve, reject) => {
         try{
@@ -102,5 +142,7 @@ module.exports = {
     deleteUser,
     getAllUser,
     getDetailsUser,
-    deleteManyUser
+    deleteManyUser,
+    getOrderUser,
+    getPaymentUser
 }

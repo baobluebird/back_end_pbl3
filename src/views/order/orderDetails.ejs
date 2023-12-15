@@ -49,6 +49,7 @@
         <a href="/admin/coupon">Home Coupons</a>
         <a href="/admin/coupon/create">Create Coupon</a>
         <a href="/admin/order">Home Orders</a>
+        <a href="/admin/payment">Home Payments</a>
         <a href="/admin/logout">Logout</a>
     </div>
     <div class="table-container">
@@ -78,6 +79,9 @@
         <div class = "list"><strong>Tổng tiền order: </strong><%= order.totalPrice %></div>
         <div class = "list"><strong>Thời gian order: </strong><%= order.createdAt %></div>
         <div class = "list"><strong>Danh sách order: </strong></div>
+        <div class = "list"><strong>Số lượng:</strong>
+            <%= count %>
+        </div>
                 <table>
                     <tr>
                         <th>ID</th>

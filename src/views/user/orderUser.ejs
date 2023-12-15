@@ -43,39 +43,62 @@
         <a href="/admin/coupon/create">Create Coupon</a>
         <a href="/admin/order">Home Orders</a>
         <a href="/admin/payment">Home Payments</a>
-        <a href="/admin/order/all-order">Home Order Management</a>
         <a href="/admin/logout">Logout</a>
     </div>
     <div class="table-container">
-        <div class="title">List Rating </div>
-        <div><strong><%= product.name %></strong></div>
+        <div class="title">List Order </div>
+        <div><strong><%= nameUser %></strong></div>
+        <div><strong>Số lượng:</strong>
+            <%= count %>
+        </div>
                 <table>
                     <tr>
                         <th>ID</th>
-                        <th>name</th>
-                        <th>content</th>
-                        <th>rate</th>
-                        <th>time_create</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Address User</th>
+                        <th>Note User</th>
+                        <th>Order Quantity</th>
+                        <th>Shipping Method</th>
+                        <th>Total Price</th>
+                        <th>Action</th>
                     </tr>
         
                     <!-- loop for each  -->
-                    <% var listComment = product.comments %>
-                    <% listComment.forEach(function(comment){ %>
+                    <% listOrders.forEach(function(order){ %>
                         <tr>
                             <td>
-                                <%= comment._id %>
+                                <%= order._id %>
                             </td>
                             <td>
-                                <%= comment.name %>
+                                <%= order.name %>
                             </td>
                             <td>
-                                <%= comment.content %>
+                                <%= order.email %>
                             </td>
                             <td>
-                                <%= comment.rate %>
+                                <%= order.phone %>
                             </td>
                             <td>
-                                <%= comment.time_create %>
+                                <%= order.addressUser %>
+                            </td>
+                            <td>
+                                <%= order.noteUser %>
+                            </td>
+                            <td>
+                                <%= order.orderItems.length %>
+                            </td>
+                            <td>
+                                <%= order.shippingMethod %>
+                            </td>
+                            <td>
+                                <%= order.totalPrice %>
+                            </td>
+                            <td>
+                                <form action="/admin/order/details/<%= order._id %>" method="get">
+                                    <button type="submit">Order Details</button>
+                                </form>
                             </td>
                         </tr>
                         <% }) %>

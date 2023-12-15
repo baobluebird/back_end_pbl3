@@ -28,7 +28,7 @@ const getHomepage = async (req, res) => {
                 break;
         }
         const listOrders = await CRUDOrderService.getAllOrder(sortName, sortType, nameSort);
-        return res.render('order/homepageOrder.ejs', { listOrders: listOrders , nameSort: nameSort});
+        return res.render('order/homepageOrder.ejs', { listOrders: listOrders , nameSort: nameSort, count : listOrders.length});
     } catch (e) {
         return res.status(404).json({
             message: e.message || 'Error fetching coupon',
@@ -40,7 +40,18 @@ const getDetailsOrderItems = async (req, res) => {
     try {
         const orderId = req.params.id;
         const order = await CRUDOrderService.getDetailsOrder(orderId);
-        return res.render('order/orderDetails.ejs', { order: order });
+        return res.render('order/orderDetails.ejs', { order: order , count : order.orderItems.length});
+    } catch (e) {
+        return res.status(404).json({
+            message: e.message || 'Error fetching coupon',
+        });
+    }
+}
+
+const getAllOrderManagement = async (req, res) => {
+    try {
+        const allOrder = await CRUDOrderService.getAllOrderManagement();
+        return res.render('order/orderManagement.ejs', { allOrder: allOrder , count : allOrder.length});
     } catch (e) {
         return res.status(404).json({
             message: e.message || 'Error fetching coupon',
@@ -63,5 +74,6 @@ const getDetailsOrderAddress = async (req, res) => {
 module.exports = {
     getHomepage,
     getDetailsOrderItems,
-    getDetailsOrderAddress
+    getDetailsOrderAddress,
+    getAllOrderManagement
 }

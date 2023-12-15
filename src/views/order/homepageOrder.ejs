@@ -43,6 +43,7 @@
         <a href="/admin/coupon">Home Coupons</a>
         <a href="/admin/coupon/create">Create Coupon</a>
         <a class="active" href="/admin/order">Home Orders</a>
+        <a href="/admin/payment">Home Payments</a>
         <a href="/admin/logout">Logout</a>
 
     </div>
@@ -72,6 +73,8 @@
                     <th>Name</th>
                     <th>Phone</th>
                     <th>Address</th>
+                    <th>Note User</th>
+                    <th>Order Quantity</th>
                     <th>Shipping Method</th>
                     <th>Total Price</th>
                     <th>Action</th>
@@ -96,6 +99,12 @@
                             <%= order.addressUser %>
                         </td>
                         <td>
+                            <%= order.noteUser %>
+                        </td>
+                        <td>
+                            <%= order.orderItems.length %>
+                        </td>
+                        <td>
                             <%= order.shippingMethod %>
                         </td>
                         <td>
@@ -103,7 +112,7 @@
                         </td>
                         <td>
                             <form action="/admin/order/details/<%= order._id %>" method="get">
-                                <button type="submit">Details</button>
+                                <button type="submit">Order Details</button>
                             </form>
                         </td>
                     </tr>

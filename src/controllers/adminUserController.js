@@ -1,4 +1,5 @@
 const CRUDUserService = require('../services/CRUDUserService');  
+const User = require('../models/UserModel');
 const getHomepage = async (req, res) => {
     try {
         const listUsers = await CRUDUserService.getAllUser();
@@ -18,6 +19,22 @@ const postCreateUser = async (req, res) => {
 const getCreateUser = (req, res) => {
     res.render('user/createUser.ejs');
 }
+
+const getOrderUser = async (req, res) => {
+    const userId = req.params.id;
+    const user = await User.findOne({ _id: userId }); 
+    const listOrders = await CRUDUserService.getOrderUser(userId);
+    return res.render('user/orderUser.ejs', { listOrders: listOrders , count : listOrders.length, nameUser : user.name});
+}
+
+const getPaymentUser = async (req, res) => {
+    const userId = req.params.id;
+    const user = await User.findOne({ _id: userId }); 
+    const listPayments = await CRUDUserService.getPaymentUser(userId);
+    return res.render('user/paymentUser.ejs', { listPayments: listPayments , count : listPayments.length, nameUser : user.name});
+}
+
+
 
 const getUpdatePage = async (req, res) => {
 
@@ -56,8 +73,10 @@ module.exports = {
     getHomepage,
     postCreateUser,
     getCreateUser,
+    getOrderUser,
     getUpdatePage,
     postUpdateUser,
     postDeleteUser,
-    postHandleRemoveUser
+    postHandleRemoveUser,
+    getPaymentUser
 }

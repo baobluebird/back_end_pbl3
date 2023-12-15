@@ -43,6 +43,7 @@
         <a href="/admin/coupon">Home Coupons</a>
         <a href="/admin/coupon/create">Create Coupon</a>
         <a href="/admin/order">Home Orders</a>
+        <a href="/admin/payment">Home Payments</a>
         <a href="/admin/logout">Logout</a>
     </div>
     <div class="table-container" id="ListContainer" style="display: none;">
@@ -84,8 +85,11 @@
                         <form action="/admin/user/delete-user/<%= user._id %>" method="post">
                             <button type="submit">Delete</button>
                         </form>
-                        <form action="/admin/user/delete-user/<%= user._id %>" method="post">
-                            <button type="submit">Details Payment</button>
+                        <form action="/admin/user/order/<%= user._id %>" method="get">
+                            <button type="submit">Order Details</button>
+                        </form>
+                        <form action="/admin/user/payment/<%= user._id %>" method="get">
+                            <button type="submit">Payment Details</button>
                         </form>
                     </td>
                 </tr>

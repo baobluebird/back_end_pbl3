@@ -1,11 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { getHomepage, getCreateUser, getUpdatePage, postCreateUser, postUpdateUser, postDeleteUser, postHandleRemoveUser } = require('../../controllers/adminUserController');
+const { getHomepage, getCreateUser, getOrderUser, getPaymentUser, getUpdatePage, postCreateUser, postUpdateUser, postDeleteUser, postHandleRemoveUser } = require('../../controllers/adminUserController');
 const { authMiddleware} = require('../../middleware/authMiddleware');
 
 router.get('/', getHomepage);
 
 router.get('/create', getCreateUser);
+
+router.get('/order/:id', getOrderUser);
+
+router.get('/payment/:id', getPaymentUser);
 
 router.get('/update/:id', getUpdatePage);
 

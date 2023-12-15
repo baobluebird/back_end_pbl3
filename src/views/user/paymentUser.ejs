@@ -1,0 +1,118 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rating A Product</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<style>
+    .title {
+        font-size: 25px;
+        font-weight: 600;
+        padding-bottom: 10px;
+    }
+
+    .table-container {
+        padding: 15px 20px;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th,
+    td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+        background-color: rgb(180, 178, 178);
+    }
+</style>
+<body>
+    <div class="topnav">
+        <a href="/admin/user">Home Users</a>
+        <a href="/admin/user/create">Create User</a>
+        <a href="/admin/product">Home Products</a>
+        <a href="/admin/product/create">Create Product</a>
+        <a href="/admin/coupon">Home Coupons</a>
+        <a href="/admin/coupon/create">Create Coupon</a>
+        <a href="/admin/order">Home Orders</a>
+        <a href="/admin/payment">Home Payments</a>
+        <a href="/admin/logout">Logout</a>
+    </div>
+    <div class="table-container">
+        <div class="title">List Payment </div>
+        <div><strong><%= nameUser %></strong></div>
+        <div><strong>Số lượng:</strong>
+            <%= count %>
+        </div>
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Shipping Method</th>
+                        <th>Payment Method</th>
+                        <th>Coupon</th>
+                        <th>Shipping Price</th>
+                        <th>Price</th>
+                        <th>Total Price</th>
+                        <th>isPaid	</th>
+                        <th>Action</th>
+                    </tr>
+        
+                    <!-- loop for each  -->
+                    <% listPayments.forEach(function(payment){ %>
+                        <tr>
+                            <td>
+                                <%= payment._id %>
+                            </td>
+                            <td>
+                                <%= payment.name %>
+                            </td>
+                            <td>
+                                <%= payment.email %>
+                            </td>
+                            <td>
+                                <%= payment.phone %>
+                            </td>
+                            <td>
+                                <%= payment.shippingMethod %>
+                            </td>
+                            <td>
+                                <%= payment.paymentMethod %>
+                            </td>
+                            <td>
+                                <%= payment.coupon %>
+                            </td>
+                            <td>
+                                <%= payment.shippingPrice %>
+                            </td>
+                            <td>
+                                <%= payment.itemsPrice %>
+                            </td>
+                            <td>
+                                <%= payment.totalPrice %>
+                            </td>
+                            <td>
+                                <%= payment.isPaid %>
+                            </td>
+                            <td>
+                                <form action="/admin/order/details/<%= payment.order %>" method="get">
+                                    <button type="submit">Order Details</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <% }) %>
+        
+        </table>
+    </div>
+</body>
+
+</html>
