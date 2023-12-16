@@ -53,17 +53,30 @@ const getDetailsOrder = (id) => {
 const getAllOrderManagement = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            const allOrder = await Order.find().sort({createdAt: -1, updatedAt: -1})
-            resolve({
-                status: 'OK',
-                message: 'Success',
-                data: allOrder
-            })
+            const allOrder = await Order.aggregate([
+                {
+                    $project: {
+                        month: { $month: "$createdAt" },
+                        year: { $year: "$createdAt" },
+                    },
+                },
+                {
+                    $group: {
+                        _id: { month: "$month", year: "$year" },
+                        orderCount: { $sum: 1 },
+                    },
+                },
+                {
+                    $sort: { "_id.year": 1, "_id.month": 1 },
+                },
+            ]);
+            resolve(allOrder);
         } catch (e) {
-            reject(e)
+            reject(e);
         }
-    })
-}
+    });
+};
+
 
 module.exports = {
     getAllOrder,

@@ -1,0 +1,103 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page Order Management</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<style>
+    .title {
+        font-size: 25px;
+        font-weight: 600;
+        padding-bottom: 10px;
+    }
+
+    .table-container {
+        padding: 15px 20px;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th,
+    td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+        background-color: rgb(180, 178, 178);
+    }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+<body>
+    <div class="topnav">
+        <a href="/admin/user">Home Users</a>
+        <a href="/admin/user/create">Create User</a>
+        <a href="/admin/product">Home Products</a>
+        <a href="/admin/product/create">Create Product</a>
+        <a href="/admin/coupon">Home Coupons</a>
+        <a href="/admin/coupon/create">Create Coupon</a>
+        <a href="/admin/order">Home Orders</a>
+        <a href="/admin/payment">Home Payments</a>
+        <a class="active" href="/admin/order/all-order">Home Order Management</a>
+        <a href="/admin/logout">Logout</a>
+    </div>
+    <canvas id="myChart" style="width:100%; max-width:600px; margin: 0 auto;"></canvas>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            updateChart(<%- JSON.stringify(allOrder) %>); 
+        });
+        function getDefaultBarColor(index) {
+            const defaultColors = [
+                "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
+                "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf",
+                "#9edae5", "#c7c7c7"
+            ];
+    
+            return defaultColors[index % defaultColors.length];
+        }
+        function updateChart(orderData) {
+            const allMonths = Array.from({ length: 12 }, (_, index) => index + 1); 
+        
+            const orderCountMap = new Map(orderData.map(order => [order._id.month, order.orderCount]));
+            
+            const year = orderData.length > 0 && orderData[0]._id ? orderData[0]._id.year : 'N/A';
+        
+            const xValues = allMonths.map(month => month);
+            const yValues = allMonths.map(month => orderCountMap.get(month) || 0);
+            const barColors = allMonths.map((month, index) => {
+                const order = orderData.find(order => order._id === month);
+                return order ? order.barColor || getDefaultBarColor(index) : getDefaultBarColor(index);
+            });
+        
+            const myChart = new Chart("myChart", {
+                type: "bar",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: barColors,
+                        data: yValues
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: `Số lượng order trong năm ${year}`
+                    }
+                }
+            });
+        }
+        
+    </script>
+
+</body>
+
+</html>

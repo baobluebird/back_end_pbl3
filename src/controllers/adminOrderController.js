@@ -51,7 +51,10 @@ const getDetailsOrderItems = async (req, res) => {
 const getAllOrderManagement = async (req, res) => {
     try {
         const allOrder = await CRUDOrderService.getAllOrderManagement();
-        return res.render('order/orderManagement.ejs', { allOrder: allOrder , count : allOrder.length});
+        console.log(allOrder);
+        const months = allOrder.map(item => item._id);
+        console.log("Months:", months);
+        return res.render('orderManagement.ejs', { allOrder: allOrder});
     } catch (e) {
         return res.status(404).json({
             message: e.message || 'Error fetching coupon',

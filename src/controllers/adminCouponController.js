@@ -2,7 +2,7 @@ const CRUDCouponService = require('../services/CRUDCouponService');
 const getHomepage = async (req, res) => {
     try {
         const listCoupons = await CRUDCouponService.getAllCoupon();
-        return res.render('coupon/homepageCoupon.ejs', { listCoupons: listCoupons });
+        return res.render('coupon/homepageCoupon.ejs', { listCoupons: listCoupons , count : listCoupons.length});
     } catch (e) {
         return res.status(404).json({
             message: e.message || 'Error fetching coupon',
@@ -25,7 +25,7 @@ const getUpdatePage = async (req, res) => {
 
     let coupon = await CRUDCouponService.getDetailsCoupon(couponId);
 
-    res.render('coupon/editCoupon.ejs', { couponEdit : coupon , count : coupon.length});
+    res.render('coupon/editCoupon.ejs', { couponEdit : coupon });
 }
 
 const postUpdateCoupon = async (req, res) => {
