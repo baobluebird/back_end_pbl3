@@ -50,7 +50,34 @@ const getDetailsOrder = (id) => {
     })
 }
 
-const getAllOrderManagement = () => {
+const getUniqueYears = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const uniqueYears = await Order.aggregate([
+                {
+                    $group: {
+                        _id: { $year: "$createdAt" }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        year: "$_id"
+                    }
+                },
+                {
+                    $sort: { year: 1 }
+                }
+            ]);
+
+            resolve(uniqueYears.map(entry => entry.year));
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+const getAllOrderManagement = async () => {
     return new Promise(async (resolve, reject) => {
         try {
             const allOrder = await Order.aggregate([
@@ -81,5 +108,6 @@ const getAllOrderManagement = () => {
 module.exports = {
     getAllOrder,
     getDetailsOrder,
-    getAllOrderManagement
+    getAllOrderManagement,
+    getUniqueYears
 }

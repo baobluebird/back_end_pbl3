@@ -53,8 +53,8 @@
             <label for="sort"><br>Sắp xếp theo:</label>
             <select id="sort" name="sort">
                 <option>Chọn kiểu sắp xếp</option>
-                <option value="method-asc">Nhận tại cửa hàng</option>
-                <option value="method-desc">Giao hàng tận nơi</option>
+                <option value="method-asc">Thanh toán khi nhận hàng</option>
+                <option value="method-desc">Thanh toán bằng Paypal</option>
                 <option value="totalPrice-asc">Tổng tiền thấp đến cao</option>
                 <option value="totalPrice-desc">Tổng tiền cao đến thấp</option>
             </select>
@@ -155,7 +155,7 @@
                 const [sortName, sortType] = sortValue.split('-');
                 console.log('Sort name:', sortName);
                 console.log('Sort type:', sortType);
-                window.location.href = `/admin/order/sort?sort=${sortName}&sort=${sortType}&sort=${sortValue}`;
+                window.location.href = `/admin/payment/sort?sort=${sortName}&sort=${sortType}&sort=${sortValue}`;
             });
     </script>
 </body>

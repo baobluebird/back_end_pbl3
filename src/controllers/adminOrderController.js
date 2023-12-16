@@ -1,5 +1,5 @@
 const CRUDOrderService = require('../services/CRUDOrderService');  
-
+const CRUDPaymentService = require('../services/CRUDPaymentService');
 const getHomepage = async (req, res) => {
     try {
         let sortName = null;
@@ -51,10 +51,10 @@ const getDetailsOrderItems = async (req, res) => {
 const getAllOrderManagement = async (req, res) => {
     try {
         const allOrder = await CRUDOrderService.getAllOrderManagement();
+        const allPayment = await CRUDPaymentService.getAllPaymentManagement();
+        const distinctYears = await CRUDOrderService.getUniqueYears();
         console.log(allOrder);
-        const months = allOrder.map(item => item._id);
-        console.log("Months:", months);
-        return res.render('orderManagement.ejs', { allOrder: allOrder});
+        return res.render('orderManagement.ejs', { allOrder: allOrder, allPayment : allPayment, distinctYears: distinctYears});
     } catch (e) {
         return res.status(404).json({
             message: e.message || 'Error fetching coupon',

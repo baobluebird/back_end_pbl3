@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page Order Management</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 <style>
     .title {
@@ -32,6 +33,10 @@
     tr:hover {
         background-color: rgb(180, 178, 178);
     }
+
+    .chart-container {
+        display: flex;
+    }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
@@ -48,11 +53,21 @@
         <a class="active" href="/admin/order/all-order">Home Order Management</a>
         <a href="/admin/logout">Logout</a>
     </div>
-    <canvas id="myChart" style="width:100%; max-width:600px; margin: 0 auto;"></canvas>
-
+    <div>
+        <select id="yearSelect" onchange="updateCharts()">
+            <% distinctYears.forEach(year => { %>
+                <option value="<%= year %>"><%= year %></option>
+            <% }); %>
+        </select>
+    </div>
+    <div class="chart-container">
+        <canvas id="myChartColumn" style="max-width: 900px "></canvas>
+        <div id="myChartPie" style="max-width: 600px; "></div>
+    </div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            updateChart(<%- JSON.stringify(allOrder) %>); 
+            updateColumnChart(<%- JSON.stringify(allOrder) %>); 
+            updatePieChart(<%- JSON.stringify(allPayment) %>, <%- JSON.stringify(allOrder) %>);
         });
         function getDefaultBarColor(index) {
             const defaultColors = [
@@ -63,7 +78,7 @@
     
             return defaultColors[index % defaultColors.length];
         }
-        function updateChart(orderData) {
+        function updateColumnChart(orderData) {
             const allMonths = Array.from({ length: 12 }, (_, index) => index + 1); 
         
             const orderCountMap = new Map(orderData.map(order => [order._id.month, order.orderCount]));
@@ -77,7 +92,7 @@
                 return order ? order.barColor || getDefaultBarColor(index) : getDefaultBarColor(index);
             });
         
-            const myChart = new Chart("myChart", {
+            const myChart = new Chart("myChartColumn", {
                 type: "bar",
                 data: {
                     labels: xValues,
@@ -90,14 +105,34 @@
                     legend: { display: false },
                     title: {
                         display: true,
-                        text: `Số lượng order trong năm ${year}`
+                        text: `Số lượng order trong năm ${year}`,
+                        fontSize: 20
                     }
                 }
             });
         }
-        
-    </script>
+        function updatePieChart(paymentData, yearData) {
+            google.charts.load('current', {'packages':['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
 
+            const year = yearData.length > 0 && yearData[0]._id ? yearData[0]._id.year : 'N/A';
+            function drawChart() {
+                // Set Data
+                const data = google.visualization.arrayToDataTable([
+                    ['isPaid', 'Mhl'],
+                    ['Paid', paymentData.paidPayments],
+                    ['Not Paid', paymentData.unpaidPayments],
+                ]);
+                const options = {
+                    title: `Số lượng người đã mua hàng trong năm ${year}`,
+                    fontSize: 20,
+                    legend: { position: 'bottom' }
+                };
+                const chart = new google.visualization.PieChart(document.getElementById('myChartPie'));
+                chart.draw(data, options);
+            }
+        }
+    </script>
 </body>
 
 </html>

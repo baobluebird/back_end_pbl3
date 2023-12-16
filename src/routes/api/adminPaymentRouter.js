@@ -4,4 +4,6 @@ const { getHomepage} = require('../../controllers/adminPaymentController');
 
 router.get('/', getHomepage);
 
+router.get('/sort', getHomepage);
+
 module.exports = router;
