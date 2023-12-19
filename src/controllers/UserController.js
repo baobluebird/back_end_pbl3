@@ -279,7 +279,7 @@ const checkTokenEmail = async (req, res) => {
                 message: 'The input is required'
             })
         }
-        const response = await UserService.checkTokenEmail(token)
+        const response = await UserService.checkTokenEmail(token,res)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({

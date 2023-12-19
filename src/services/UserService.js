@@ -433,7 +433,7 @@ const createTokenEmail = (email) => {
   });
 };
 
-const checkTokenEmail = (token) => {
+const checkTokenEmail = (token, res) => {
   return new Promise(async (resolve, reject) => {
     try {
       jwt.verify(token, process.env.ACCESS_TOKEN, async (err, user) => {
