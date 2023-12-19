@@ -106,7 +106,7 @@ const sendEmailAuth = async (email,token) => {
     subject: "Xác thực tài khoản", 
     text: "Hello world?", 
     html: `<div><b>Vui lòng xác thực email bằng đường dẫn phía dưới:</b></div>
-    <div><p><a href="http://localhost:3002/api/auth-email/check-token/${token}">Verify Email</a></p> </div>
+    <div><p><a href="https://be-web-mn5x.onrender.com/api/auth-email/check-token/${token}">Verify Email</a></p> </div>
      `,
   });
 }

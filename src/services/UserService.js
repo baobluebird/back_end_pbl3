@@ -462,10 +462,7 @@ const checkTokenEmail = (token) => {
           });
         } else {
           await User.findByIdAndUpdate(payload.id, { isAuth: true });
-          resolve({
-            status: "success",
-            message: "Email is authenticated",
-          });
+          return res.render('backWeb.ejs');
         }
       });
     } catch (error) {
