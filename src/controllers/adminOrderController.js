@@ -53,7 +53,6 @@ const getAllOrderManagement = async (req, res) => {
         const allOrder = await CRUDOrderService.getAllOrderManagement();
         const allPayment = await CRUDPaymentService.getAllPaymentManagement();
         const distinctYears = await CRUDOrderService.getUniqueYears();
-        console.log(allOrder);
         return res.render('orderManagement.ejs', { allOrder: allOrder, allPayment : allPayment, distinctYears: distinctYears});
     } catch (e) {
         return res.status(404).json({

@@ -14,7 +14,6 @@ const EmailService = require("../services/EmailService")
 const createPayment = (id,newPayment) => {
     return new Promise(async (resolve, reject) => {
         const {delivery , paymentMethod, isPaid, idCoupon} =  newPayment;
-        console.log('idCoupon',idCoupon)
         let valuePriceCoupon = 0;
         let valueShippingCoupon = 0;
         let CalculateTotalPrice = 0;
@@ -33,7 +32,6 @@ const createPayment = (id,newPayment) => {
                 }
             }
 
-            console.log('idPrice',idPrice)
             if(idPrice === null && idShipping === null){
                 return resolve({
                     status: 'error',
