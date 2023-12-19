@@ -124,7 +124,6 @@ const searchProduct = (limit, page,searchName) => {
         try {
             let allProduct;
             if (searchName) {
-                console.log(searchName);
                 const regex = new RegExp(searchName, 'i');
                 allProduct = await Product.find({
                     $or: [

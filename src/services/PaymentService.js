@@ -85,6 +85,8 @@ const createPayment = (id,newPayment) => {
                 delivery,
                 paymentMethod,
                 coupon: {
+                    idCouponShipping: idShipping,
+                    idCouponPrice: idPrice,
                     couponShipping: valueShippingCoupon,
                     couponPrice: valuePriceCoupon
                 },

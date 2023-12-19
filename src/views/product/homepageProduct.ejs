@@ -200,7 +200,6 @@
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 if (data.message === 'Unauthorized') {
                     alert('You are not authorized to access this page');
                     window.location.href = '/admin';
@@ -217,11 +216,7 @@
             const brandCheckbox4 = document.getElementById('markBrand4');
             const brandCheckbox5 = document.getElementById('markBrand5');
 
-            console.log('Sort value:', sortValue);
-
             const [sortName, sortType] = sortValue.split('-');
-            console.log('Sort name:', sortName);
-            console.log('Sort type:', sortType);
 
             if(brandCheckbox1.checked){
                 const brand = brandCheckbox1.name;
@@ -246,12 +241,10 @@
         document.getElementById('type').addEventListener('change', function (event) {
             const type = event.target.value;
             let searchName = "";
-            console.log('type:', type);
             window.location.href = `/admin/product/search?type=${type}`;
         });
         function performSearch() {
             const searchName = document.getElementById('search').value;
-            console.log('Performing search for:', searchName);
             window.location.href = `/admin/product/search?search=${searchName}`;
         }
     </script>

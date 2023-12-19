@@ -140,7 +140,6 @@
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
                 if (data.message === 'Unauthorized') {
                     alert('You are not authorized to access this page');
                     window.location.href = '/admin';
@@ -151,10 +150,7 @@
             .catch(error => console.error('Error:', error));
             document.getElementById('sort').addEventListener('change', function (event) {
                 const sortValue = event.target.value;
-                console.log('Sort value:', sortValue);
                 const [sortName, sortType] = sortValue.split('-');
-                console.log('Sort name:', sortName);
-                console.log('Sort type:', sortType);
                 window.location.href = `/admin/payment/sort?sort=${sortName}&sort=${sortType}&sort=${sortValue}`;
             });
     </script>
