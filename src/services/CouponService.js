@@ -211,8 +211,6 @@ const increaseCoupon = (id, data) => {
 const decreaseCoupon = (id,data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log('id',id)
-            console.log('data',data)
             let total = 0;
             let idPrice = null;
             let valuePriceCoupon = 0;

@@ -8,7 +8,6 @@ fetch('/admin/auth', {
 })
 .then(response => response.json())
 .then(data => {
-    console.log(data);
     if (data.message === 'Unauthorized') {
         alert('You are not authorized to access this page');
         window.location.href = '/admin';

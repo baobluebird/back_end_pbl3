@@ -218,7 +218,6 @@ const deleteMany = async (req, res) => {
 const createCode = async (req, res) => {
     try {
         const email = req.body.email
-        console.log(email)
         if(!email){
             return res.status(200).json({
                 status: 'ERR',

@@ -32,12 +32,6 @@ const createPayment = (id,newPayment) => {
                 }
             }
 
-            if(idPrice === null && idShipping === null){
-                return resolve({
-                    status: 'error',
-                    message: 'Coupon not found'
-                })
-            }
             if (idPrice) {
                 const couponData = await Coupon.findOne({ _id: idPrice });
 

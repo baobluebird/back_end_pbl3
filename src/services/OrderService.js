@@ -176,7 +176,6 @@ const getOrderDetails = (id) => {
                 data: order
             })
         } catch (e) {
-            // console.log('e', e)
             reject(e)
         }
     })

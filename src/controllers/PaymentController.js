@@ -50,7 +50,6 @@ const getPaymentDetails = async (req, res) => {
         const response = await PaymentService.getPaymentDetails(paymentId)
         return res.status(200).json(response)
     } catch (e) {
-        // console.log(e)
         return res.status(404).json({
             message: e
         })
@@ -69,7 +68,6 @@ const cancelPaymentDetails = async (req, res) => {
         const response = await PaymentService.cancelPaymentDetails(paymentId)
         return res.status(200).json(response)
     } catch (e) {
-        // console.log(e)
         return res.status(404).json({
             message: e
         })
@@ -88,7 +86,6 @@ const getPriceAfterDiscount = async (req, res) => {
         const response = await PaymentService.getPriceAfterDiscount(paymentId)
         return res.status(200).json(response)
     } catch (e) {
-        // console.log(e)
         return res.status(404).json({
             message: e
         })
