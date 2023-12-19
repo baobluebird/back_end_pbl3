@@ -28,12 +28,10 @@ const paymentSchema = new mongoose.Schema(
             idCouponPrice: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Coupon',
-                required: true,
             },
             idCouponShipping: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Coupon',
-                required: true,
             },
             couponShipping: { type: Number },
             couponPrice: { type: Number },
