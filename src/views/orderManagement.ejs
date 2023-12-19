@@ -120,8 +120,8 @@
                 // Set Data
                 const data = google.visualization.arrayToDataTable([
                     ['isPaid', 'Mhl'],
-                    ['Paid', paymentData.paidPayments],
-                    ['Not Paid', paymentData.unpaidPayments],
+                    ['Paypal', paymentData.paidPayments],
+                    ['COD', paymentData.unpaidPayments],
                 ]);
                 const options = {
                     title: `Số lượng người đã mua hàng trong năm ${year}`,
