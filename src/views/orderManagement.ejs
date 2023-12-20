@@ -54,10 +54,14 @@
         <a href="/admin/logout">Logout</a>
     </div>
     <div>
-        <select id="yearSelect" onchange="updateCharts()">
-            <% distinctYears.forEach(year => { %>
-                <option value="<%= year %>"><%= year %></option>
-            <% }); %>
+        <label for="yearSelect"><br> <strong> Hiển thị theo:</strong></label>
+        <select id="yearSelect" name="yearSelect">
+            <option value="totalPrice-desc">Chọn năm</option>
+            <% distinctYears.forEach(year=> { %>
+                <option value="<%= year %>">
+                    <%= year %>
+                </option>
+                <% }); %>
         </select>
     </div>
     <div class="chart-container">
@@ -65,9 +69,16 @@
         <div id="myChartPie" style="max-width: 600px; "></div>
     </div>
     <script>
+        document.getElementById('yearSelect').addEventListener('change', function (event) {
+            const yearValue = event.target.value;
+            window.location.href = `/admin/order/all-order-by-year?year=${yearValue}`;
+        });
+
         document.addEventListener("DOMContentLoaded", function () {
-            updateColumnChart(<%- JSON.stringify(allOrder) %>); 
-            updatePieChart(<%- JSON.stringify(allPayment) %>, <%- JSON.stringify(allOrder) %>);
+            var yearSelected;
+            updateColumnChart(<%- JSON.stringify(allOrder) %>, yearSelected); 
+            updatePieChart(<%- JSON.stringify(allPayment) %>, <%- JSON.stringify(allOrder) %>, yearSelected);
+
         });
         function getDefaultBarColor(index) {
             const defaultColors = [
@@ -75,23 +86,23 @@
                 "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf",
                 "#9edae5", "#c7c7c7"
             ];
-    
+
             return defaultColors[index % defaultColors.length];
         }
-        function updateColumnChart(orderData) {
-            const allMonths = Array.from({ length: 12 }, (_, index) => index + 1); 
-        
+        function updateColumnChart(orderData, yearSelected) {
+            const allMonths = Array.from({ length: 12 }, (_, index) => index + 1);
+
             const orderCountMap = new Map(orderData.map(order => [order._id.month, order.orderCount]));
-            
-            const year = orderData.length > 0 && orderData[0]._id ? orderData[0]._id.year : 'N/A';
-        
+
+            const year = orderData.length > 0 && orderData[0]._id ? orderData[0]._id.year : yearSelected;
+
             const xValues = allMonths.map(month => month);
             const yValues = allMonths.map(month => orderCountMap.get(month) || 0);
             const barColors = allMonths.map((month, index) => {
                 const order = orderData.find(order => order._id === month);
                 return order ? order.barColor || getDefaultBarColor(index) : getDefaultBarColor(index);
             });
-        
+
             const myChart = new Chart("myChartColumn", {
                 type: "bar",
                 data: {
@@ -111,20 +122,19 @@
                 }
             });
         }
-        function updatePieChart(paymentData, yearData) {
-            google.charts.load('current', {'packages':['corechart']});
+        function updatePieChart(paymentData, orderData, yearSelected) {
+            google.charts.load('current', { 'packages': ['corechart'] });
             google.charts.setOnLoadCallback(drawChart);
 
-            const year = yearData.length > 0 && yearData[0]._id ? yearData[0]._id.year : 'N/A';
+            const year = orderData.length > 0 && orderData[0]._id ? orderData[0]._id.year : yearSelected;
             function drawChart() {
-                // Set Data
                 const data = google.visualization.arrayToDataTable([
                     ['isPaid', 'Mhl'],
                     ['Paypal', paymentData.paidPayments],
                     ['COD', paymentData.unpaidPayments],
                 ]);
                 const options = {
-                    title: `Số lượng người đã mua hàng trong năm ${year}`,
+                    title: `Tổng số khách hàng đã mua hàng trong năm ${year}: ${paymentData.count}`,
                     fontSize: 20,
                     legend: { position: 'bottom' }
                 };
@@ -132,6 +142,24 @@
                 chart.draw(data, options);
             }
         }
+        const access_token = localStorage.getItem('access_token');
+        fetch('/admin/auth', {
+            method: 'POST',
+            headers: {
+                'token': access_token,
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === 'Unauthorized') {
+                alert('You are not authorized to access this page');
+                window.location.href = '/admin';
+            } else {
+                document.getElementById('ListContainer').style.display = 'block';
+            }
+        })
+        .catch(error => console.error('Error:', error));
     </script>
 </body>
 

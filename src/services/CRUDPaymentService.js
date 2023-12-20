@@ -37,6 +37,7 @@ const getAllPaymentManagement = () => {
             const result = {
                 paidPayments: paidPaymentsCount,
                 unpaidPayments: unpaidPaymentsCount,
+                count: allPayments.length
             };
             resolve(result);
         } catch (e) {
@@ -45,7 +46,39 @@ const getAllPaymentManagement = () => {
     });
 }
 
+const getAllPaymentManagementByYear = async (selectedYear) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let paymentQuery = {};
+
+            if (selectedYear) {
+                paymentQuery = {
+                    ...paymentQuery,
+                    createdAt: {
+                        $gte: new Date(`${selectedYear}-01-01`),
+                        $lt: new Date(`${selectedYear + 1}-01-01`)
+                    }
+                };
+            }
+
+            const allPayments = await Payment.find(paymentQuery); 
+            const paidPaymentsCount = allPayments.filter(payment => payment.isPaid === true).length;
+            const unpaidPaymentsCount = allPayments.filter(payment => payment.isPaid === false).length;
+
+            const result = {
+                paidPayments: paidPaymentsCount,
+                unpaidPayments: unpaidPaymentsCount,
+                count: allPayments.length
+            };
+            resolve(result);
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
 module.exports = {
     getAllPayment,
-    getAllPaymentManagement
+    getAllPaymentManagement,
+    getAllPaymentManagementByYear
 }

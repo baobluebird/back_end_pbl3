@@ -77,6 +77,46 @@ const getUniqueYears = () => {
     });
 };
 
+const getAllOrderManagementByYear = async (selectedYear) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const matchStage = {
+                $match: {
+                    createdAt: {
+                        $gte: new Date(selectedYear, 0, 1),
+                        $lt: new Date(selectedYear + 1, 0, 1)
+                    }
+                },
+            };
+
+            const allOrder = await Order.aggregate([
+                matchStage,
+                {
+                    $project: {
+                        month: { $month: "$createdAt" },
+                        year: { $year: "$createdAt" },
+                    },
+                },
+                {
+                    $group: {
+                        _id: { month: "$month", year: "$year" },
+                        orderCount: { $sum: 1 },
+                    },
+                },
+                {
+                    $sort: { "_id.year": 1, "_id.month": 1 },
+                },
+            ]);
+
+            resolve(allOrder);
+        } catch (e) {
+            console.error("Error in getAllOrderManagementByYear:", e);
+            reject(e);
+        }
+    });
+};
+
+
 const getAllOrderManagement = async () => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -109,5 +149,6 @@ module.exports = {
     getAllOrder,
     getDetailsOrder,
     getAllOrderManagement,
-    getUniqueYears
+    getUniqueYears,
+    getAllOrderManagementByYear
 }

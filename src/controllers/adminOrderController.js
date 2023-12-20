@@ -61,6 +61,21 @@ const getAllOrderManagement = async (req, res) => {
     }
 }
 
+
+const getAllOrderManagementByYear = async (req, res) => {
+    try {
+        const year = req.query.year;
+        const allOrder = await CRUDOrderService.getAllOrderManagementByYear(year);
+        const allPayment = await CRUDPaymentService.getAllPaymentManagementByYear(year);
+        const distinctYears = await CRUDOrderService.getUniqueYears();
+        return res.render('orderManagement.ejs', { allOrder: allOrder, allPayment : allPayment, distinctYears: distinctYears, yearSelected: year});
+    } catch (e) {
+        return res.status(404).json({
+            message: e.message || 'Error fetching coupon',
+        });
+    }
+}
+
 const getDetailsOrderAddress = async (req, res) => {
     try {
         const orderId = req.params.id;
@@ -77,5 +92,6 @@ module.exports = {
     getHomepage,
     getDetailsOrderItems,
     getDetailsOrderAddress,
-    getAllOrderManagement
+    getAllOrderManagement,
+    getAllOrderManagementByYear
 }
