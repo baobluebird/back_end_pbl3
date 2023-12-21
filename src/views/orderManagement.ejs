@@ -53,6 +53,7 @@
         <a class="active" href="/admin/order/all-order">Home Order Management</a>
         <a href="/admin/logout">Logout</a>
     </div>
+    
     <div>
         <label for="yearSelect"><br> <strong> Hiển thị theo:</strong></label>
         <select id="yearSelect" name="yearSelect">
@@ -64,9 +65,11 @@
                 <% }); %>
         </select>
     </div>
-    <div class="chart-container">
-        <canvas id="myChartColumn" style="max-width: 900px "></canvas>
-        <div id="myChartPie" style="max-width: 600px; "></div>
+    <div class="chart-container" id="ListContainer" style="display: none;">
+        <div style="display: flex;">
+            <canvas id="myChartColumn" style="max-width: 800px "></canvas>
+            <div id="myChartPie" style="max-width: 900px; "></div>
+        </div>
     </div>
     <script>
         document.getElementById('yearSelect').addEventListener('change', function (event) {
